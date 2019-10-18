@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>ICL Detail Search View</h2>
+<form name="myFormDash" id="myFormDash" class="form" ng-controller="iclViewSearchCtrl" ng-app="indexApp">
+    <div style="height: 500px; overflow: auto;">
+        <table border="0" ng-model="tblDisplay" ng-table="tblDisplay" name="tblDisplay" id="tblDisplay" class="table-light table" style="border-bottom-width:thin;">
+            <tr>
+                <td colspan="1" style="font-size:inherit">Input ICL #: </td>
+                <td colspan="3"><input type="text" id="txtICL" required name="txtICL" ng-model="txtICLModel" ng-focus="focus()" width="100" class="form-control ng-pristine ng-valid ng-empty ng-touched" /></td>
+                <td>
+                    <button type="button" name="btnSearch" id="btnSearch" class="btn btn-info" ng-click="btnSearchClick()">
+                        Search
+                    </button>
+                </td>
+            </tr>
+            <tr style="background-color:#0168b3">
+                <th style="font-size:small; text-align:center; color:whitesmoke">Branch</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">Check Number</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">Amount</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">Check Scan Time</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">User Amount Keying</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">Debit Account</th>
+                <th style="font-size:small; text-align:center; color:whitesmoke">Credit Account</th>
+
+            </tr>
+            <tr align="center" ng-repeat="x in display">
+                <td align="left">{{ x.BRANCH }}</td>
+                <td>{{ x.CHECK_NUMBER }}</td>
+                <td>{{ x.AMOUNT }}</td>
+                <td>{{ x.CHECK_SCAN_TIME }}</td>
+                <td>{{ x.USER_AMT_KEYING }}</td>
+                <td>{{ x.DEBIT_ACCOUNT }}</td>
+                <td>{{ x.CREDIT_ACCOUNT }}</td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<script src="~/ScriptsNg/Controller/Reference/iclViewSearchCtrl.js"></script>
