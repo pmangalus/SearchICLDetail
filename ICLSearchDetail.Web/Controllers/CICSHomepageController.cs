@@ -8,7 +8,7 @@ namespace ICLSearchDetail.Web.Controllers
 {
     public class CICSHomepageController : Controller
     {
-        // GET: CICSHomepage
+        // GET: CICSHomepage this is a change
         public ActionResult CICSHomepage()
         {
             return View();
