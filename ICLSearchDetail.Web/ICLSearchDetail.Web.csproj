@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\api\Loans\LoansSummaryController.cs" />
     <Compile Include="Controllers\api\SearchIclController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumDetailsModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumModel.cs" />
     <Compile Include="DBManager\Service\ICLSearchService.cs" />
+    <Compile Include="DBManager\Service\Loans\LoansSearchService.cs" />
     <Compile Include="DBManager\Service\OutwardCheckService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1259,6 +1261,7 @@
     <Folder Include="DBManager\Repository\" />
     <Folder Include="Scripts\bootstrap-datepicker-master\js\locales\" />
     <Folder Include="Scripts\bootstrap-datepicker-master\less\" />
+    <Folder Include="Views\LoansSummary\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
