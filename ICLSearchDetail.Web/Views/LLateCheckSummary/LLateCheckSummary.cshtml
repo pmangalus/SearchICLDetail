@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "LLateCheckSummary";
+}
+<style type='text/css'>
+    .header {
+        position: relative;
+        float: left;
+        left: 8.50%;
+        width: 83.00%;
+        overflow: hidden;
+        background-color: #f4f4f4
+    }
+
+    .wrapper {
+        position: relative;
+        left: .50%;
+        width: 99.50%;
+        margin-top: 80px;
+        overflow: hidden;
+        background-color: white
+    }
+
+    .left {
+        position: relative;
+        float: left;
+        left: 0.50%;
+        width: 40.00%;
+        height: 500px;
+        overflow: hidden;
+        background-color: floralwhite
+    }
+
+    .right {
+        position: relative;
+        float: right;
+        right: 0.50%;
+        width: 79.00%;
+        height: 500px;
+        overflow: hidden;
+        background-color: floralwhite
+    }
+
+    .footer {
+        position: relative;
+        float: left;
+        left: 8.50%;
+        width: 83.00%;
+        background-color: #cfcfcf
+    }
+
+    .body {
+        border-width: 0px;
+        padding: 0px;
+        margin: 0px;
+        font-size: 90%;
+        background-color: white
+    }
+
+    .radio label, .radio1 label {
+        font-size: 14px;
+        margin: 10px
+    }
+
+    .results {
+        position: relative;
+        height: 450px;
+        overflow-y: scroll
+    }
+
+    .error {
+        position: relative;
+        height: 250px;
+        padding-top: 30px;
+        margin-left: 10px
+    }
+
+    .options {
+        position: relative;
+        height: 250px;
+    }
+
+    .radio {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: relative;
+        background-color: burlywood;
+        min-width: 220px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+
+    .dropdown-content {
+        display: block;
+    }
+</style>
+<form name="yourId" id="yourId" class="form" ng-controller="lateCheckSummary" ng-app="lateCheckSummaryApp">
+    <!--     <div class="header">
+       </div>-->
+    <div class="wrapper" style="border:dotted">
+        <div class="left" style="border:double">
+            <div class="options">
+                <table width="90%" border="1">
+                    <tr>
+                        <td>
+                            <!--<input type="radio" name="searchBatch" >  Search Batch <br>-->
+                            <div class="radio">
+                                <label for="radioSearchBatch">
+                                    <input type="radio" name="radioSearchBatch" id="radioSearchBatch" value="1" ng-model="radioSearchBatch">
+                                    Search Batch
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-4">
+                                <select id="selectResult" name="selectResult" class="form-control">
+                                    <option value="Option one">Option one</option>
+                                    <option value="Option two">Option two</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                       <td><input type="text" id="mySearch" onkeyup="" placeholder="Search.." title="Type in a category" class="form-control input-sm"></td>
+                       </tr>-->
+                    <tr>
+                        <td>
+                            <!--<input type="radio" name="exportReport">  Export Report<br>-->
+                            <div class="radio">
+                                <label for="radioExport">
+                                    <input type="radio" name="radioExport" id="radioExport" value="2">
+                                    Export Report
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" style="background-color: lightgreen;float:right" class="btn btn-info" name="btnGo" id="btnGo" ng-model="btnGo" ng-click="btnGoModal()">GO!</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="error">
+                <table width="90%" border="1">
+                    <tr>
+                        <th> LIST OF INCOMPLETE BATCH</th>
+                    </tr>
+                    <tr>
+                        <td>sample</td>
+                    </tr>
+                    <tr>
+                        <td>Total Count:</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="right">
+            <div class="results">
+            </div>
+            <div class="export">
+                <table style="margin:10px;" width="95%">
+                    <tr>
+                        <td><button type="button" style="background-color: indianred;float:right" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport">EXPORT</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--<div class="footer">
+       footer
+       </div>-->
+</form>
+<script src="~/ScriptsNg/Controller/Reference/Loans/lateCheckSummary.js"></script>
