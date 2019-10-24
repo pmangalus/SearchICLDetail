@@ -157,6 +157,7 @@
     <Compile Include="Controllers\CICSHomepageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ICLSearchController.cs" />
+    <Compile Include="Controllers\Loans\LLateCheckSummaryController.cs" />
     <Compile Include="Controllers\OutwardCheckStatusController.cs" />
     <Compile Include="DBManager\Model\ICLModels\ICLDataModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumDetailsModel.cs" />
@@ -277,6 +278,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="ScriptsNg\Controller\Loans\lateCheckSummary.js" />
     <Content Include="ScriptsNg\Controller\Reference\outwardCheckSummary.js" />
     <Content Include="ScriptsNg\Module\indexApp.js" />
     <Content Include="ScriptsNg\Controller\Reference\iclViewSearchCtrl.js" />
@@ -1252,6 +1254,7 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Views\OutwardCheckStatus\Index.cshtml" />
     <Content Include="Views\CICSHomepage\CICSHomepage.cshtml" />
+    <Content Include="Views\LLateCheckSummary\LLateCheckSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
