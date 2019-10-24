@@ -161,6 +161,7 @@
     <Compile Include="Controllers\Loans\LLateCheckSummaryController.cs" />
     <Compile Include="Controllers\OutwardCheckStatusController.cs" />
     <Compile Include="DBManager\Model\ICLModels\ICLDataModel.cs" />
+    <Compile Include="DBManager\Model\LoansModels\LoanBatchIdModel.cs" />
     <Compile Include="DBManager\Model\LoansModels\LoanDataModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumDetailsModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumModel.cs" />
