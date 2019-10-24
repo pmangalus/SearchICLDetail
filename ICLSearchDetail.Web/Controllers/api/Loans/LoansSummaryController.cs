@@ -26,8 +26,26 @@ namespace ICLSearchDetail.Web.Controllers.api.Loans
             return Ok(returnSummaryDetails);
              
         }
-        
-        [System.Web.Http.Route("api/loans/summaryLoan/")]
+
+        [System.Web.Http.Route("api/loans/summaryLoan/all")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetSummaryLoanAll()
+        {
+            String returnDates;
+
+            LoansSearchService loansService = new LoansSearchService();
+
+            //returnDates = loansService.GetDates();
+
+            returnDates = "2019-10-21|2019-10-18";
+            string returnSummaryDetails = loansService.getSummaryDetails2(returnDates);
+
+            return Ok(returnSummaryDetails);
+
+        }
+
+
+        [System.Web.Http.Route("api/loans/summaryLoan/getBatchIds")]
         [System.Web.Http.HttpGet]
         public IHttpActionResult GetBatchIDs()
         {
