@@ -128,6 +128,77 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
 
         }
 
+        public string getSummaryDetails2(string neededDates)
+        {
+
+            string[] arrDates;
+            arrDates = neededDates.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
+
+
+            List<LoanDataModel> loanDataResult = new List<LoanDataModel>();
+
+            string ret = "";
+            string sqlString = @"SELECT
+                                TOW.BATCH_ID AS 'BATCH ID NO.',
+                                TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                                TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
+                                TOW.BOFD_SORTCODE AS 'BRSTN',
+                                TBK.NAME AS 'DRAWEE BANK',
+                                TOW.SCAN_MICR_ACNO AS 'ACCOUNT NUMBER',
+                                TIQ.IQA_FAILED_REASON AS 'IQA STATUS'
+                                FROM TBL_OUTWARD TOW INNER JOIN TBL_BANK TBK
+                                ON TOW.SCAN_PAYEE_BANK_CITY_CODE = TBK.MICR_CITY_CODE AND
+                                TOW.SCAN_PAYEE_BANK_CODE = TBK.MICR_CODE
+                                INNER JOIN TBL_IQA_FAILED_REASON TIQ
+                                ON TOW.IQA_FLAG = TIQ.IQA_ID
+                                WHERE TOW.TRANSACTION_DATE ='" + txnDate +
+                                "' AND TOW.CREATE_TIME > '" + createTime + " " + createTimeSeconds1 + "' " +
+                                " AND TOW.CREATE_TIME < '" + createTime + " " + createTimeSeconds2 + 
+                                "' AND TOW.BOFD_SORTCODE = '" + BOFD_SORTCODE + "' ORDER BY TOW.CREATE_TIME ASC";
+
+            try
+            {
+                using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
+
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        LoanDataModel loanDataResultList = new LoanDataModel();
+                         
+                        loanDataResultList.CAR_AMOUNT = reader["CHECK AMOUNT"].ToString();
+                        loanDataResultList.SCAN_INSTRUMENT_NUMBER = reader["CHECK NUMBER"].ToString();
+                        loanDataResultList.BOFD_SORTCODE = reader["BRSTN"].ToString();
+                        loanDataResultList.NAME = reader["DRAWEE BANK"].ToString();
+                        loanDataResultList.SCAN_MICR_ACNO = reader["ACCOUNT NUMBER"].ToString();
+                        loanDataResultList.IQA_FAILED_REASON = reader["IQA STATUS"].ToString();
+
+                        loanDataResult.Add(loanDataResultList);
+                    }
+                    ret = JsonConvert.SerializeObject(loanDataResult);
+                }
+            }
+            catch (Exception e)
+            {
+
+                LoanDataModel loanDataResultList = new LoanDataModel();
+                loanDataResultList.ERROR_MSG = e.Message;
+                loanDataResult.Add(loanDataResultList);
+                ret = JsonConvert.SerializeObject(loanDataResult);
+                return ret;
+            }
+            return ret;
+
+
+        }
+
+
         public string getBatchIds (string neededDates2)
         {
             
