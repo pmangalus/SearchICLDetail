@@ -14,11 +14,18 @@ namespace ICLSearchDetail.Web.Controllers.api.Loans
         [System.Web.Http.HttpGet]
         public IHttpActionResult GetSummaryLoan(String batchIdNum)
         {
+           String returnDates;
+           
             LoansSearchService loansService = new LoansSearchService();
-            batchIdNum = loansService.GetDateCurrentDate();  
 
-            return Ok(batchIdNum);
-        } 
+            returnDates = loansService.GetDates();
+            
+            //returnDates = "2019-10-21|2019-10-18";
+            string returnSummaryDetails = loansService.getSummaryDetails(returnDates, batchIdNum);
+
+            return Ok(returnSummaryDetails);
+             
+        }
 
     }
 }
