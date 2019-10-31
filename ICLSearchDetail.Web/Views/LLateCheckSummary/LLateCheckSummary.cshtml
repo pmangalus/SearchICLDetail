@@ -1,20 +1,47 @@
 ﻿@{ ViewBag.Title = "LLateCheckSummary"; }
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/jquery.table2excel.min.js"></script>
+<script src="~/Scripts/FileSaver.js"></script>
+<script src="~/ScriptsNg/Controller/Loans/lateCheckSummary.js"></script>
 <style type='text/css'>
     #container {
-        width: 100%;
-        float: right;
-        margin-right: -400px;
+        /*width: 100%;
+        float: right;*/
+        /*margin-right: -390px;*/
     }
 
     #content {
+        padding-left: 2%;
         height: 500px;
-        width: 75%;
-        overflow-x: scroll;
+        width: 70%;
+        overflow-x: hidden;
     }
 
     #sidebar {
-        width: 20%;
+        width: 30%;
         float: left;
+        height: 100%;
+    }
+    #sidebar-bottom {
+        
+        width: 30%;
+        bottom: 0;
+        position: absolute;
+        padding-bottom: 3%;
+       
+    }
+
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: block;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
     }
 
     .modalTr td,
@@ -34,7 +61,7 @@
 
     .table tbody tr:hover td,
     .table tbody tr:hover th {
-        background-color: lawngreen;
+        background-color: lightgreen;
     }
 
     .radio label,
@@ -77,113 +104,215 @@
     }
 
     .dropdown-content a:hover {
-        background-color: #ddd;
+            background-color: #ddd;
     }
 
     .dropdown-content {
         display: block;
     }
+
+    .testingCSS {
+        font-size: smaller;
+        text-align: center;
+        color: whitesmoke;
+    }
+
+    .less {
+        border-radius: 15px;
+        background-color: red;
+    }
+
+    .equal {
+        border-radius: 15px;
+        background-color: blue;
+    }
+    input::-webkit-calendar-picker-indicator {
+        opacity: 100;
+    }
+
 </style>
-<form name="yourId" id="yourId" class="form" ng-controller="lateCheckSummary" ng-app="indexApp" >
+<form name="yourId" id="yourId" class="form" ng-controller="lateCheckSummary" ng-app="indexApp" autocomplete="off">
     <!--     <div class="header">
        </div>-->
     <br />
     <br />
     <div class="header">
-        <h1>Loans- Late Check Inquiry Summary</h1>
+        <h1>Loans - Late Check Inquiry Summary</h1>
         <p><i>&nbsp; Displays the summary and details of Late Checks for the day.</i></p>
     </div>
     <div class="sidebar" id="sidebar" style="border:thin;">
-        <table border="0" style="width:100%">
-            <tr>
-                <td>
-                    <div class="radio">
-                        <label for="radioSearchBatch">
-                            <input type="radio" name="radioSearchBatch" id="radioSearchBatch" value="1" ng-model="radioSearchBatch"> Search Batch
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <!--  <select id="selectResult" name="selectResult" ng-model="selectResult" class="form-control">
-                           <option value="Option one">Option one</option>
-                           <option value="Option two">Option two</option>
-                            </select>-->
-                    <input list="browsers" name="browser" class="form-control">
-                    <datalist id="browsers">
-                        <option value="Internet Explorer">
-                        <option value="Firefox">
-                        <option value="Chrome">
-                        <option value="Opera">
-                        <option value="Safari">
-                    </datalist>
-                </td>
-            </tr>
+        <div class="">
+            <div class="radio">
+                <table style="width:100%" border="0">
+                    <tr>
+                        <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="radios-0">
+                                <input type="radio" name="radios" id="radios-0" value="true" checked="checked" ng-click="radioSearchBatchClick()">
+                                Search Per Batch
+                            </label>
+                        </td>
+                        <td >
+                            <input list="resultBatch" name="listBatch" id="listBatch" class="form-control" ng-focus="listBatchFocus()" style="width:100%" placeholder="Select Batch ID here" >
+                            <datalist id="resultBatch" name="resultBatch"  onselect="listBatchClick()">
+                                <option ng-repeat="x in listBatch" placeholder="choose batch here.." >{{x.BATCH_ID}} cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                            </datalist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-top: 5%; padding-left: 7%">
+                            <div class="" style="width:100%">
+                                <table border="0" style="width:100%">
+                                    <tr>
+                                        <td style="font-size:larger; color: red;">
+                                            <b> Inconsistent Count:</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 
+                                            <select id="selectmultiple" name="selectmultiple" class="form-control" multiple="multiple" style="width:100%">
+                                                <option ng-repeat="x in listInconsistentCount" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                        </td>
 
-            <tr>
-                <td colspan="2">
-                    <div class="radio">
-                        <label for="radioExport">
-                            <input type="radio" name="radioExport" id="radioExport" value="2"> Export Report
-                        </label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button type="button" style="float:right" class="btn btn-info" name="btnGo" id="btnGo" ng-model="btnGo" ng-click="btnGoModal()">Proceed Search</button>
-                </td>
-            </tr>
-        </table>
+                    </tr>
+                    <tr>
+                        <td><br /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="button" style="float:right; width: 35%" class="btn btn-info" name="btnGo" id="btnGo" ng-model="btnGo" ng-click="btnGoClick()">Proceed</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="button" style="float:right;width: 35%" class="btn btn-warning" name="btnReset" id="btnReset" ng-model="btnReset" ng-click="btnResetClick()">Reset Form</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
-    @*<div class="error">
-            <table width="90%" border="1">
-                <tr>
-                    <th> LIST OF INCOMPLETE BATCH</th>
-                </tr>
-                <tr>
-                    <td>sample</td>
-                </tr>
-                <tr>
-                    <td>Total Count:</td>
-                </tr>
-            </table>
-        </div>*@
+    
+    <div class="sidebar-bottom" id="sidebar-bottom">
+        <br />
+        <div class="form-group" style="padding-bottom: 5%">
+            <div class="radio">
+                <label for="radios-1">
+                    <input type="radio" name="radios" id="radios-1" value="false" ng-click="radioExportAllClick()">
+                    Export All
+                </label>
+            </div>
+        </div>
+        <br />
+    </div>
 
     <div id="container">
         <div id="content">
-            <table class="table table-hover" border="0" style="border-width:thin; ">
+            <table id="tblSummary" name="tblSummary" ng-model="tblSummary" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
                 <thead id="tableHeader">
-                    <tr style="background-color:cornflowerblue; ">
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke" width="1%">#</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BATCH ID NO.</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">CHECK<br /> AMOUNT</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">CHECK<br /> NUMBER</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BRSTN</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">DRAWEE<br />BANK</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">ACCOUNT<br />NUMBER</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">IQA<br />STATUS</th>
+                    <tr>
+                        <td colspan="8">
+                            <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
+                        </td>
+                    </tr>
+                    <tr hidden>
+                        <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - PER BATCH </th>
+                        <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
+                    </tr>
+                    <tr>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID NO.</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> AMOUNT</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRSTN</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">DRAWEE<br />BANK</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT<br />NUMBER</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">IQA<br />STATUS</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr align="center" ng-repeat="x in summaryDetails" track by $index ng-click="rowSummaryClick(x)">
+                    <tr align="center" ng-repeat="x in batchDetails" track by $index ng-click="rowSummaryClick(x)">
                         <td align="left" width="1%">{{ $index +1 }}</td>
-                        <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
                         <td>{{ x.BATCH_ID }}</td>
-                        <td>{{ x.CAR_AMOUNT }}</td>
-                        <td>{{ x.SCAN_INSTRUMENT_NUMBER }}</td>
-                        <td>{{ x.BOFD_SORTCODE}}</td>
+                        <td>{{ x.CAR_AMOUNT| number:2 }}</td>
+                        <td>&nbsp; {{ x.SCAN_INSTRUMENT_NUMBER }}</td>
+                        <td>&nbsp; {{ x.BOFD_SORTCODE}}</td>
                         <td>{{ x.NAME  }}</td>
-                        <td>{{ x.SCAN_MICR_ACNO }}</td>
+                        <td>&nbsp; {{x.SCAN_MICR_ACNO}}</td>
                         <td>{{ x.IQA_FAILED_REASON }}</td>
                     </tr>
                 </tbody>
-                <tr>
-                    <td>
-                        <button type="button" style="background-color: indianred;float:right" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport">EXPORT</button>
-                    </td>
-                </tr>
+
+                <tfoot id="tableFooter" hidden>
+                    <tr>
+                        <td>TOTAL COUNT : </td>
+                        <td colspan="3">{{ batchDetails.length }}</td>
+                        <td>TOTAL AMOUNT : </td>
+                        <td colspan="3">{{ getTotal() |number:3 }}</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
+    <div id="loading">
+        <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />
+    </div>
+    <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+        <thead id="tableHeader">
+            <tr hidden>
+                <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - PER BATCH </th>
+                <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
+            </tr>
+            <tr>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID NO.</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> AMOUNT</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRSTN</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">DRAWEE<br />BANK</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT<br />NUMBER</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">IQA<br />STATUS</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr align="center" ng-repeat="x in tblSummaryHidden" track by $index ng-click="rowSummaryClick(x)">
+                <td align="left" width="1%">{{ $index +1 }}</td>
+                <td>{{ x.BATCH_ID }}</td>
+                <td>{{ x.CAR_AMOUNT| number:2 }}</td>
+                <td>&nbsp; {{ x.SCAN_INSTRUMENT_NUMBER }}</td>
+                <td>&nbsp; {{ x.BOFD_SORTCODE}}</td>
+                <td>{{ x.NAME  }}</td>
+                <td>&nbsp; {{x.SCAN_MICR_ACNO}}</td>
+                <td>{{ x.IQA_FAILED_REASON }}</td>
+            </tr>
+        </tbody>
+
+        <tfoot id="tableFooter">
+            <tr>
+                <td>TOTAL COUNT : </td>
+                <td colspan="3">{{ tblSummaryHiddenlength }}</td>
+                <td>TOTAL AMOUNT : </td>
+                <td colspan="3">{{ getTotal() |number:3 }}</td>
+            </tr>
+        </tfoot>
+    </table>
 </form>
-<script src="~/ScriptsNg/Controller/Loans/lateCheckSummary.js"></script>
+
+@*<script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.table2excel.min.js"></script>*@
+
+
+
