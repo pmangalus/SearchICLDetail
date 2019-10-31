@@ -33,12 +33,12 @@ namespace ICLSearchDetail.Web.api
         }
 
         //GetDetailsSummary
-        [Route("api/cics/getDetailsSummary/{idx}")]
+        [Route("api/cics/getDetailsSummary/{idx}/{fps}/{offSet}/{npLength}")]
         [HttpGet]
-        public IHttpActionResult GetDetailsSummary(String idx)
+        public IHttpActionResult GetDetailsSummary(String idx, String fps, String offSet, String npLength)
         {
             OutwardCheckService outCheck = new OutwardCheckService();
-            var result = outCheck.GetDetailsSummary(idx);
+            var result = outCheck.GetDetailsSummary(idx, fps, offSet, npLength);
             return Ok(result);
         }
     }

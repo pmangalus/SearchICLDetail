@@ -38,128 +38,149 @@
     
 </style>
 <h2>Index</h2>
-<form name="myFormDash" id="myFormDash" class="form" ng-controller="outwardCheckSummary" ng-app="indexApp">
-    <div class="header">
-        <h1>Outward Check Status Summary</h1>
-        <p><i>&nbsp; Displays the count, summary and details of outward checks with their status.</i></p>
-    </div>
-    <div id="sidebar">
-        <table>
+<div ng-app="testApp">
+    <form name="myFormDash" id="myFormDash" class="form" ng-controller="outwardCheckSummary" ng-app="indexApp">
+        <div class="header">
+            <h1>Outward Check Status Summary</h1>
+            <p><i>&nbsp; Displays the count, summary and details of outward checks with their status.</i></p>
+        </div>
+        <div id="sidebar">
+            <table>
                 <tr>
                     <td style="overflow: hidden; width: 280px; text-align: left; padding: 5px"><button id="" name="" class="btn btn-danger" ng-click="btnDateRefresh()" style="font-size:small; text-align:center; background-color:lawngreen; width:100%">UPDATED as of {{dateRefresh}}</button></td>
                 </tr>
-            <tr align="center" ng-repeat="x in display">
-                <td style="overflow: hidden; width: 280px; text-align: left; padding: 5px">
-                    <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" style="width:100%; background-color:cornflowerblue">{{ x.summary }}</button>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div id="container">
-        <div id="content" style="border:thin">
-            <table class="table table-hover" border="0" style="border-width:thin; ">
-                <thead id="tableHeader">
-                    <tr style="background-color:cornflowerblue; ">
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">#</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BUSINESS<br />DATE</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">AMOUNT</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">ACCOUNT</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />BRSTN</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">SERIAL<br />NUMBER</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BOFD_RT</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BRANCH<br />NAME</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">BOFD<br />ACC</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">ICL<br />FILENAME</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />TIME</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />BY</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">AMOUNT<br />KEYING<br />TIME</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke">ACCOUNT NO.<br />KEYING<br />TIME</th>
-
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr align="center" ng-repeat="x in summaryDetails" track by $index ng-click="rowSummaryClick(x)">
-                        <td align="left">{{ $index +1 }}</td>
-                        <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
-                        <td>{{ x.BUSINESS_DATE }}</td>
-                        <td>{{ x.AMOUNT }}</td>
-                        <td>{{ x.ACCOUNT }}</td>
-                        <td>{{ x.BRSTN }}</td>
-                        <td>{{ x.SERIAL_NUMBER }}</td>
-                        <td>{{ x.BOFD_RT }}</td>
-                        <td>{{ x.BRANCH_NAME }}</td>
-                        <td>{{ x.BOFD_ACC }}</td>
-                        <td>{{ x.ICL_FILENAME }}</td>
-                        <td>{{ x.SCANNED_TIME }}</td>
-                        <td>{{ x.SCANNED_BY }}</td>
-                        <td>{{ x.AMOUNT_KEYING_TIME }}</td>
-                        <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
-                    </tr>
-                </tbody>
+                <tr align="center" ng-repeat="x in display">
+                    <td style="overflow: hidden; width: 280px; text-align: left; padding: 5px">
+                        <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" style="width:100%; background-color:cornflowerblue">{{ x.summary }}</button>
+                    </td>
+                </tr>
             </table>
         </div>
-    </div>
-    @*<div style="background-color:whitesmoke">*@
-    <div class="modal alert-dismissable" id="bulkTableInfoModal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                DETAILS OUTWARD CHECK SUMMARY
-            </div>
-            <div class="container-fluid text-left" style="background-color:whitesmoke;font-size:smaller" name="div1">
-                <div class="cell" id="iavwai" name="iavwai" ng-disabled="true">
-                    <table border="0" ng-model="modalModel" id="modalTable" cellpadding="10" class="modalTr">
-                        <tr>
-                            <td>BUSINESS DATE: </td>
-                            <td><input type="text" name="busDate" id="busDate" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td>AMOUNT </td>
-                            <td><input type="text" name="amt" id="amt" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+
+        <div id="container">
+            <div id="content" style="border:thin">
+                <table class="table table-hover" border="0" style="border-width:thin; ">
+                    <thead id="tableHeader">
+                        <tr style="background-color:cornflowerblue; ">
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">#</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">BUSINESS<br />DATE</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">AMOUNT</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">ACCOUNT</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />BRSTN</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">SERIAL<br />NUMBER</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">BOFD_RT</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">BRANCH<br />NAME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">BOFD<br />ACC</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">ICL<br />FILENAME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />TIME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">SCANNED<br />BY</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">AMOUNT<br />KEYING<br />TIME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke">ACCOUNT NO.<br />KEYING<br />TIME</th>
+
                         </tr>
-                        <tr>    
-                            <td>ACCOUNT </td>
-                            <td><input type="text" name="account" id="account" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td>SCANNED BRSTN </td>
-                            <td><input type="text" name="scannedBrstn" id="scannedBrstn" class="form-control ng-pristine ng-valid ng-empty ng-touched" />  </td>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr align="center" ng-repeat="x in summaryDetails" track by $index ng-click="rowSummaryClick(x)">
+                            <td align="left">{{ $index +1 }}</td>
+                            <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
+                            <td>{{ x.BUSINESS_DATE }}</td>
+                            <td>{{ x.AMOUNT }}</td>
+                            <td>{{ x.ACCOUNT }}</td>
+                            <td>{{ x.BRSTN }}</td>
+                            <td>{{ x.SERIAL_NUMBER }}</td>
+                            <td>{{ x.BOFD_RT }}</td>
+                            <td>{{ x.BRANCH_NAME }}</td>
+                            <td>{{ x.BOFD_ACC }}</td>
+                            <td>{{ x.ICL_FILENAME }}</td>
+                            <td>{{ x.SCANNED_TIME }}</td>
+                            <td>{{ x.SCANNED_BY }}</td>
+                            <td>{{ x.AMOUNT_KEYING_TIME }}</td>
+                            <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
                         </tr>
-                        <tr>
-                            <td>SERIAL NUMBER </td>
-                            <td><input type="text" name="serialNumber" id="serialNumber" class="form-control ng-pristine ng-valid ng-empty ng-touched" />  </td>
-                            <td>BOFD_RT </td>
-                            <td><input type="text" name="bofd_rt" id="bofd_rt" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                        </tr>
-                        <tr>
-                            <td>BRANCH NAME </td>
-                            <td><input type="text" name="branchName" id="branchName" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td>BOFD_ACC </td>
-                            <td><input type="text" name="bofd_acc" id="bofd_acc" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                        </tr>
-                        <tr>
-                            <td>ICL FILENAME </td>
-                            <td><input type="text" name="iclFileName" id="iclFileName" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td>SCANNED TIME </td>
-                            <td><input type="text" name="scannedTime" id="scannedTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                        </tr>
-                        <tr>
-                            <td>SCANNED BY </td>
-                            <td><input type="text" name="scannedBy" id="scannedBy" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td>AMOUNT KEYING TIME </td>
-                            <td><input type="text" name="amtKeyingTime" id="amtKeyingTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                        </tr>
-                        <tr>
-                            <td>ACCOUNT NO KEYING_TIME </td>
-                            <td><input type="text" name="accountNoKeyingTime" id="accountNoKeyingTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
-                            <td></td>
-                            <td align="right">
-                                <button id="btnCloseModal" name="btnCloseModal" class="btn btn-danger" ng-click="btnCloseModal()">Close</button>
-                            </td>
-                        </tr>
-                    </table>
+                    </tbody>
+                </table>
+
+                <div ng-show="IsVisible">
+                    <button ng-disabled="currentPage == 0"
+                            ng-click="nextPage(-1)" ng-class="btn btn-info">
+                        <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
+                        <!-- nextPage() function create to display values-->
+                        Previous
+                    </button>
+
+                    Page {{currentPage+1}} of {{numberOfPages()}}
+
+                    <button ng-disabled="currentPage >= totalLength/pageSize - 1"
+                            ng-click="nextPage(1)" ng-class="btn btn-info">
+                        <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
+                        <!-- nextPage() function create to display values-->
+                        Next
+                    </button>
+
+
                 </div>
             </div>
-
         </div>
-    </div>
-    @*   </div>*@
-</form>
+        @*<div style="background-color:whitesmoke">*@
+        <div class="modal alert-dismissable" id="bulkTableInfoModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    DETAILS OUTWARD CHECK SUMMARY
+                </div>
+                <div class="container-fluid text-left" style="background-color:whitesmoke;font-size:smaller" name="div1">
+                    <div class="cell" id="iavwai" name="iavwai" ng-disabled="true">
+                        <table border="0" ng-model="modalModel" id="modalTable" cellpadding="10" class="modalTr">
+                            <tr>
+                                <td>BUSINESS DATE: </td>
+                                <td><input type="text" name="busDate" id="busDate" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td>AMOUNT </td>
+                                <td><input type="text" name="amt" id="amt" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                            </tr>
+                            <tr>
+                                <td>ACCOUNT </td>
+                                <td><input type="text" name="account" id="account" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td>SCANNED BRSTN </td>
+                                <td><input type="text" name="scannedBrstn" id="scannedBrstn" class="form-control ng-pristine ng-valid ng-empty ng-touched" />  </td>
+                            </tr>
+                            <tr>
+                                <td>SERIAL NUMBER </td>
+                                <td><input type="text" name="serialNumber" id="serialNumber" class="form-control ng-pristine ng-valid ng-empty ng-touched" />  </td>
+                                <td>BOFD_RT </td>
+                                <td><input type="text" name="bofd_rt" id="bofd_rt" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                            </tr>
+                            <tr>
+                                <td>BRANCH NAME </td>
+                                <td><input type="text" name="branchName" id="branchName" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td>BOFD_ACC </td>
+                                <td><input type="text" name="bofd_acc" id="bofd_acc" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                            </tr>
+                            <tr>
+                                <td>ICL FILENAME </td>
+                                <td><input type="text" name="iclFileName" id="iclFileName" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td>SCANNED TIME </td>
+                                <td><input type="text" name="scannedTime" id="scannedTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                            </tr>
+                            <tr>
+                                <td>SCANNED BY </td>
+                                <td><input type="text" name="scannedBy" id="scannedBy" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td>AMOUNT KEYING TIME </td>
+                                <td><input type="text" name="amtKeyingTime" id="amtKeyingTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                            </tr>
+                            <tr>
+                                <td>ACCOUNT NO KEYING_TIME </td>
+                                <td><input type="text" name="accountNoKeyingTime" id="accountNoKeyingTime" class="form-control ng-pristine ng-valid ng-empty ng-touched" /> </td>
+                                <td></td>
+                                <td align="right">
+                                    <button id="btnCloseModal" name="btnCloseModal" class="btn btn-danger" ng-click="btnCloseModal()">Close</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        @*   </div>*@
+    </form>
+</div>
 <script src="~/ScriptsNg/Controller/Reference/outwardCheckSummary.js"></script>
