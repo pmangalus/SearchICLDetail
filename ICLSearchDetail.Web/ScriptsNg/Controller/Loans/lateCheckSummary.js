@@ -1,366 +1,364 @@
-﻿app.controller('lateCheckSummary', ['$scope', '$timeout', function ($scope, $timeout) {
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Web;
+using ICLSearchDetail.Web.DBManager.Model;
+using ICLSearchDetail.Web.DBManager.Model.LoansModels;
+using Newtonsoft.Json;
 
-    console.log("#1 lateCheckSummary controller JS");
-    //var host = 'http://10.200.1.39:9862';
-    var host = 'http://localhost:53325';
+namespace ICLSearchDetail.Web.DBManager.Service.Loans {
+    public class LoansSearchService {
 
-    var that = this;
-    var radioSearchBatch = document.getElementById('radios-0');
-    var radioExport = document.getElementById('radios-1');
-    radioSearchBatch.focus = true;
-    $scope.btnExportDisabled = true;
-    // var jsonreply = JSON.parse(reply);
-    //$scope.batchDetails = jsonreply;
+        string createTimeSeconds1 = ConfigurationManager.AppSettings["createTimeSeconds1"];
+        string createTimeSeconds2 = ConfigurationManager.AppSettings["createTimeSeconds2"];
+        string createTimeSeconds3 = ConfigurationManager.AppSettings["createTimeSeconds3"];
+        string createTimeSeconds4 = ConfigurationManager.AppSettings["createTimeSeconds4"];
 
-    $('#loading').show();
-    
-    $.ajax({
-        type: 'GET',
-        url: host + "/api/loans/summaryLoan/",
-        success: function (blob) {
-            $('#loading').hide();
-            var listInconsistentCountArr = [];
-            
-            //console.log("Nim in ajax erroor ", blob);
-            var jsonParse = JSON.parse(blob);
-            //console.log("jsonParse", jsonParse);
-            if (jsonParse.length !== 0) {
-                //var jsonReply = JSON.parse(reply);
+        string BOFD_SORTCODE = ConfigurationManager.AppSettings["BOFD_SORTCODE"];
+        string BOFD_SORTCODE_2 = ConfigurationManager.AppSettings["BOFD_SORTCODE_2"];
 
-                for (var i = 0; i < jsonParse.length; i++) {
+        public string GetDates() {
+            var sqlString = "SELECT CONVERT(char(10),NEXT_LCY_DATE,126) as transaction_date, CONVERT(char(10), CUR_DATE, 126) as Create_time  from tbl_eod_bod_stat";
+            string curr_date = "";
 
-                    if (jsonParse[i].BATCH_ID.length == 10) {
-                        jsonParse[i].BATCH_ID = jsonParse[i].BATCH_ID.trim().padEnd(12, '-');
-                    } else {
-                        jsonParse[i].BATCH_ID = jsonParse[i].BATCH_ID.trim().padEnd(13, '-');
-                    }
+            ArrayList valuesList = new ArrayList();
 
-                    if (jsonParse[i].fldNotEqual == "1") {
-                        listInconsistentCountArr.push(jsonParse[i]);
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
+
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read()) {
+
+                        valuesList.Add(Convert.ToString(reader[0].ToString()));
+                        valuesList.Add(Convert.ToString(reader[1].ToString()));
+
+                        curr_date = valuesList.ToArray().GetValue(0).ToString() + '|' + valuesList.ToArray().GetValue(1).ToString();
+
                     }
                 }
-                $scope.listInconsistentCount = listInconsistentCountArr.sort(function (a, b) {
-                    return a - b
-                });
-                $scope.listBatch = jsonParse;
-                $scope.$apply();
-            } else {
-                document.getElementById('listBatch').value = "";
-                that.openDialog("No Batch Ids retrieved for today.");
-                var a = BootstrapDialog.show({
-                    message: "No Batch Ids retrieved for today.",
-                    buttons: [{
-                        label: 'Close',
-                        action: function (dialogItself) {
-                            dialogItself.close();
-                        }
-                    }]
-                });
+            } catch (Exception e) {
+                curr_date = "error occured";
+
             }
-        },
-        error: function (a, b, c) {
-            $('#loading').hide();
-            console.log("Nim in ajax erroor ", a);
+            return curr_date;
         }
 
-    });
+        public string getSummaryDetails(string neededDates, string batchIdNum) {
+
+            string[] arrDates;
+            arrDates = neededDates.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
 
 
-    $scope.btnGoClick = function () {
-        console.log('displaying batch details');
-        var result;
-        var that = this;
-        if (radioSearchBatch.checked && document.getElementById('listBatch').value != "") {
-            console.log('searching');
+            List < LoanDataModel > loanDataResult = new List < LoanDataModel > ();
 
-            result = document.getElementById('listBatch').value.split("-")[0];
-            var isCorrectValue = that.validateBatchID(document.getElementById('listBatch').value);
-            //result = "00226_442";
-            //result = "05837_28";
-            if (isCorrectValue) {
-                //document.getElementById('listBatch').value = "";
-                $('#loading').show();
-                $.ajax({
-                    type: 'GET',
-                    url: host + "/api/loans/summaryLoan/" + result,
-                    success: function (blob) {
+            string ret = "";
+            string sqlString = @ "SELECT
+            TOW.BATCH_ID AS 'BATCH ID NO.',
+                    TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                    TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
+                    TOW.BOFD_SORTCODE AS 'BRSTN',
+                    TBK.NAME AS 'DRAWEE BANK',
+                    TOW.SCAN_MICR_ACNO AS 'ACCOUNT NUMBER',
+                    TIQ.IQA_FAILED_REASON AS 'IQA STATUS'
+            FROM TBL_OUTWARD TOW INNER JOIN TBL_BANK TBK
+            ON TOW.SCAN_PAYEE_BANK_CITY_CODE = TBK.MICR_CITY_CODE AND
+            TOW.SCAN_PAYEE_BANK_CODE = TBK.MICR_CODE
+            INNER JOIN TBL_IQA_FAILED_REASON TIQ
+            ON TOW.IQA_FLAG = TIQ.IQA_ID
+            WHERE TOW.TRANSACTION_DATE = '" + txnDate +
+            "' AND TOW.CREATE_TIME > '" + createTime + " " + createTimeSeconds1 + "' " +
+                    " AND TOW.CREATE_TIME < '" + createTime + " " + createTimeSeconds2 + "' AND TOW.BATCH_ID = '" + batchIdNum + "'" +
+                    " AND TOW.BOFD_SORTCODE = '" + BOFD_SORTCODE + "' ORDER BY TOW.CREATE_TIME ASC";
 
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
 
-                        var jsonParse = JSON.parse(blob);
-                        console.log("jsonParse", jsonParse);
-                        if (jsonParse.length !== 0) {
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                            $scope.batchDetails = jsonParse;
+                    while (reader.Read()) {
+                        LoanDataModel loanDataResultList = new LoanDataModel();
+                        loanDataResultList.BATCH_ID = reader["BATCH ID NO."].ToString();
+                        loanDataResultList.CAR_AMOUNT = reader["CHECK AMOUNT"].ToString();
+                        loanDataResultList.SCAN_INSTRUMENT_NUMBER = reader["CHECK NUMBER"].ToString();
+                        loanDataResultList.BOFD_SORTCODE = reader["BRSTN"].ToString();
+                        loanDataResultList.NAME = reader["DRAWEE BANK"].ToString();
+                        loanDataResultList.SCAN_MICR_ACNO = reader["ACCOUNT NUMBER"].ToString();
+                        loanDataResultList.IQA_FAILED_REASON = reader["IQA STATUS"].ToString();
 
-                            document.getElementById("btnExport").disabled = false;
-                            document.getElementById("listBatch").disabled = false;
-                            $scope.$apply();
-
-                            console.log("$scope.batchDetails", $scope.batchDetails);
-
-                        } else {
-                            that.openDialog("Batch ID does not exist.");
-                        }
-                        $('#loading').hide();
-                    },
-                    error: function (a, b, c) {
-                        $('#loading').hide();
-                        console.log("Nim in ajax erroor ", a);
+                        loanDataResult.Add(loanDataResultList);
                     }
+                    ret = JsonConvert.SerializeObject(loanDataResult);
+                }
+            } catch (Exception e) {
 
-                });
-            } else {
-                that.openDialog("Batch ID does not exist.");
+                LoanDataModel loanDataResultList = new LoanDataModel();
+                loanDataResultList.ERROR_MSG = e.Message;
+                loanDataResult.Add(loanDataResultList);
+                ret = JsonConvert.SerializeObject(loanDataResult);
+                return ret;
             }
-        } else if (radioExport.checked) {
+            return ret;
 
-            //that.openDialog("Export All Function is under construction. Please wait. XD");
 
-            $('#loading').show();
-            $.ajax({
-                type: 'GET',
-                url: host + "/api/loans/summaryLoan/exportAll/",
-                success: function (blob) {
-                    $('#loading').hide();
-                    //var jsonParse = JSON.parse(blob);
-                    var jsonParse = blob;
-                    if (jsonParse.length !== 0) {
-
-                        $scope.tblSummaryHidden = jsonParse;
-                        $scope.$apply();
-                        $scope.fnExcelReport(true);
-
-                    } else {
-                        that.openDialog("Batch ID does not exist.");
-                    }
-
-                },
-                error: function (a, b, c) {
-                    $('#loading').hide();
-                    console.log("Nim in ajax erroor ", a);
-                }
-            });
         }
-        else if (!radioExport.checked && !radioSearchBatch.checked) {
-            console.log("inside list");
-            var e = document.getElementById("selectmultiple");
-            var selectedInconsistent = e.options[e.selectedIndex].value.split("-")[0];
 
-            $('#loading').show();
-            $.ajax({
-                type: 'GET',
-                url: host + "/api/loans/summaryLoan/" + selectedInconsistent,
-                success: function (blob) {
+        public string getSummaryDetails2(string neededDates) {
+
+                string[] arrDates;
+            arrDates = neededDates.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
 
 
-                    var jsonParse = JSON.parse(blob);
-                    console.log("jsonParse", jsonParse);
-                    if (jsonParse.length !== 0) {
+            List < LoanDataModel > loanDataResult = new List < LoanDataModel > ();
 
-                        $scope.batchDetails = jsonParse;
+            string ret = "";
+            string sqlString = @ "SELECT
+            TOW.BATCH_ID AS 'BATCH ID NO.',
+                    TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                    TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
+                    TOW.BOFD_SORTCODE AS 'BRSTN',
+                    TBK.NAME AS 'DRAWEE BANK',
+                    TOW.SCAN_MICR_ACNO AS 'ACCOUNT NUMBER',
+                    TIQ.IQA_FAILED_REASON AS 'IQA STATUS'
+            FROM TBL_OUTWARD TOW INNER JOIN TBL_BANK TBK
+            ON TOW.SCAN_PAYEE_BANK_CITY_CODE = TBK.MICR_CITY_CODE AND
+            TOW.SCAN_PAYEE_BANK_CODE = TBK.MICR_CODE
+            INNER JOIN TBL_IQA_FAILED_REASON TIQ
+            ON TOW.IQA_FLAG = TIQ.IQA_ID
+            WHERE TOW.TRANSACTION_DATE = '" + txnDate +
+            "' AND TOW.CREATE_TIME > '" + createTime + " " + createTimeSeconds1 + "' " +
+                    " AND TOW.CREATE_TIME < '" + createTime + " " + createTimeSeconds2 +
+                    "' AND TOW.BOFD_SORTCODE = '" + BOFD_SORTCODE + "' ORDER BY TOW.CREATE_TIME ASC";
 
-                        document.getElementById("btnExport").disabled = false;
-                        document.getElementById("listBatch").disabled = false;
-                        document.getElementById('listBatch').value = "";
-                        $scope.$apply();
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
 
-                        console.log("$scope.batchDetails", $scope.batchDetails);
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    } else {
-                        that.openDialog("Batch ID does not exist.");
-                    }
-                    $('#loading').hide();
-                },
-                error: function (a, b, c) {
-                    $('#loading').hide();
-                    console.log("Nim in ajax erroor ", a);
-                }
+                    while (reader.Read()) {
+                        LoanDataModel loanDataResultList = new LoanDataModel();
 
-            });
-        }
-        else {
-            that.openDialog("Batch ID does not exist.");
-        }
-    }, //end btnGoClick
-            $scope.listInconsistendDblClick = function (x) {
-                console.log(x);
-                var that = this;
-                $('#loading').show();
-                $.ajax({
-                    type: 'GET',
-                    url: host + "/api/loans/summaryLoan/" + x.BATCH_ID.split("-")[0],
-                    success: function (blob) {
-                        $('#loading').hide();
-                        document.getElementById("btnExport").disabled = false;
-                        var jsonParse = JSON.parse(blob);
-                        console.log("jsonParse", jsonParse);
-                        if (jsonParse.length !== 0) {
-                            $scope.batchDetails = jsonParse;
-                            $scope.$apply();
-                        }
-                    },
-                    error: function (a, b, c) {
-                        $('#loading').hide();
-                        console.log("Nim in ajax erroor ", a);
+                        loanDataResultList.CAR_AMOUNT = reader["CHECK AMOUNT"].ToString();
+                        loanDataResultList.SCAN_INSTRUMENT_NUMBER = reader["CHECK NUMBER"].ToString();
+                        loanDataResultList.BOFD_SORTCODE = reader["BRSTN"].ToString();
+                        loanDataResultList.NAME = reader["DRAWEE BANK"].ToString();
+                        loanDataResultList.SCAN_MICR_ACNO = reader["ACCOUNT NUMBER"].ToString();
+                        loanDataResultList.IQA_FAILED_REASON = reader["IQA STATUS"].ToString();
+
+                        loanDataResult.Add(loanDataResultList);
                     }
 
-                });
-            },
-            $scope.openDialog = function (message) {
-                var a = BootstrapDialog.show({
-                    message: message,
-                    buttons: [{
-                        label: 'Close',
-                        action: function (dialogItself) {
-                            dialogItself.close();
-                        }
-                    }]
-                });
-                return a;
-            },
-            $scope.fnExcelReport = function (exportAll) {
-                var fileNameAcc = "";
-                var that = this;
-                if (exportAll) {
-                    fileNameAcc = "Loans Late Check Scanned Report - Export All.xls";
-                    tab = document.getElementById('tblSummaryHidden'); // id of table
 
-                } else {
-                    fileNameAcc = "Loans Late Check Scanned Report - Batch ID.xls";
-                    tab = document.getElementById('tblSummary'); // id of table
+
+
+                    ret = JsonConvert.SerializeObject(loanDataResult);
                 }
-                var tab_text = "<table border='2px'><tr>";
-                var textRange;
-                var j = 0;
+            } catch (Exception e) {
 
-
-                for (j = 0; j < tab.rows.length; j++) {
-                    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
-                    //tab_text=tab_text+"</tr>";
-                }
-
-
-
-                tab_text = tab_text + "</table>";
-                tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
-                tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-                tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-
-
-
-                var ua = window.navigator.userAgent;
-                var msie = ua.indexOf("MSIE ");
-
-
-
-                if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
-                {
-                    txtArea1.document.open("txt/html", "replace");
-                    txtArea1.document.write(tab_text);
-                    txtArea1.document.close();
-                    txtArea1.focus();
-                    a = txtArea1.document.execCommand("SaveAs", true, "excel.xls");
-                } else {
-                    var blob = new Blob([tab_text], {
-                        type: 'application/vnd.ms-excel'
-                    });
-                    var downloadUrl = URL.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    a.href = downloadUrl;
-                    a.download = fileNameAcc;
-                    document.body.appendChild(a);
-                    a.click();
-                }
-
-                return (a);
-
-            },
-            $scope.getTotal = function () {
-                var total = 0;
-                if ($scope.batchDetails !== undefined) {
-                    for (var i = 0; i < $scope.batchDetails.length; i++) {
-                        var x = $scope.batchDetails[i];
-                        total = total + parseFloat(x.CAR_AMOUNT);
-                    }
-                    return total;
-                }
-                
-                if(radioExport.checked){
-                    console.log("extract all export");
-                    if ($scope.tblSummaryHidden != undefined) {
-                        $scope.tblSummaryHiddenlength = $scope.tblSummaryHidden.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                        for (var i = 0; i < $scope.tblSummaryHidden.length; i++) {
-                            var x = $scope.tblSummaryHidden[i];
-                            total = total + parseFloat(x.CAR_AMOUNT);
-                        }
-                    }
-                    return total;
-                }
-               
-            },
-            $scope.getDate = function () {
-                var today = new Date().toDateString();
-                return today;
-            },
-            $scope.listBatchFocus = function () {
-                document.getElementById('listBatch').value = "";
-                console.log("listBatchFocus");
-                radioSearchBatch.checked = true;                
-                //ola
-
-                radioExport.checked = false;
-                document.getElementById('listBatch').value = "";
-                document.getElementById("btnExport").disabled = true;
-                $scope.batchDetails = {};
-
-            },
-            $scope.validateBatchID = function (batchValue) {
-                var isValidBatch = false;
-                for (var i = 0; i < $scope.listBatch.length; i++) {
-                    if (document.getElementById('listBatch').value.split(" ")[0] == $scope.listBatch[i].BATCH_ID) {
-                        isValidBatch = true;
-                    }
-                }
-                return isValidBatch;
-            },
-            $scope.btnResetClick = function () {
-                var that = this;
-                location.reload();
-                radioSearchBatch.checked = true;
-                radioExport.checked = false;
-                document.getElementById('listBatch').value = "";
-                document.getElementById("btnExport").disabled = true;
-                $scope.batchDetails = {};
-            },
-            $scope.listInconsistentClick = function () {
-
-                document.getElementById("listBatch").disabled = false;
-                document.getElementById("btnExport").disabled = true;
-                document.getElementById('listBatch').value = "";
-                $scope.batchDetails = {};
-                radioSearchBatch.checked = false;
-                radioExport.checked = false;
-
-            },
-            $scope.radioExportAllClick = function () {
-                console.log("radioExportAllClick");
-                document.getElementById("btnExport").disabled = true;
-                document.getElementById('listBatch').value = "";
-
-                //$scope.batchDetails = {};
-
-
-            },
-            $scope.radioSearchBatchClick = function () {
-                document.getElementById("listBatch").disabled = false;
+                LoanDataModel loanDataResultList = new LoanDataModel();
+                loanDataResultList.ERROR_MSG = e.Message;
+                loanDataResult.Add(loanDataResultList);
+                ret = JsonConvert.SerializeObject(loanDataResult);
+                return ret;
             }
-            $("#listBatch").on('input', function () {
-                var val = this.value;
-                console.log("new edmfvsndjkvgn");
-                if ($('#resultBatch option').filter(function () {
-                    return this.value.toUpperCase() === val.toUpperCase();
-                }).length) {
-                    document.getElementById('listBatch').blur();
+            return ret;
+
+
+        }
+
+
+        public string getBatchIds(string neededDates2) {
+
+
+            string[] arrDates;
+            arrDates = neededDates2.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
+
+            List < LoanBatchIdModel > loanBatchIdDataResult = new List < LoanBatchIdModel > ();
+            List < LoanBatchIdModel > loanBatchIdCountDataResult = new List < LoanBatchIdModel > ();
+
+
+
+            string ret = "";
+
+            string sqlString = @ "SELECT BATCH_ID AS BATCH_ID, 
+            COUNT( * ) AS TOTAL_INSTRUMENT, '0'
+            as fldNotEqual
+            FROM TBL_OUTWARD
+            WHERE TRANSACTION_DATE = '" + txnDate + "'
+            AND CREATE_TIME > '" + createTime + " " + createTimeSeconds3 + "'
+            " +
+            "AND CREATE_TIME < '" + createTime + " " + createTimeSeconds4 + "' AND BOFD_SORTCODE = '" + BOFD_SORTCODE_2 + "' " +
+                    "GROUP BY BATCH_ID " +
+                    "INTERSECT " +
+                    "SELECT BATCH_ID, TOTAL_INSTRUMENT, '0' as fldNotEqual " +
+                    "FROM TBL_BATCH WHERE BATCH_ID IN (SELECT BATCH_ID AS BATCH_ID " +
+                    "FROM TBL_OUTWARD " +
+                    "WHERE TRANSACTION_DATE = '" + txnDate + "' AND CREATE_TIME > '" + createTime + " " + createTimeSeconds3 +
+                    "' AND CREATE_TIME < '" + createTime + " " + createTimeSeconds4 + "' AND BOFD_SORTCODE = '" + BOFD_SORTCODE_2 + "') " +
+                    "UNION " +
+                    "SELECT BATCH_ID AS BATCH_ID, " +
+                    "COUNT(*) AS TOTAL_INSTRUMENT, '1' as fldNotEqual " +
+                    "FROM TBL_OUTWARD " +
+                    "WHERE TRANSACTION_DATE ='" + txnDate + "' AND CREATE_TIME > '" + createTime + " " + createTimeSeconds3 +
+                    "' AND CREATE_TIME < '" + createTime + " " + createTimeSeconds4 + "' AND BOFD_SORTCODE = '" + BOFD_SORTCODE_2 + "' " +
+                    "GROUP BY BATCH_ID " +
+                    "EXCEPT " +
+                    "SELECT BATCH_ID, TOTAL_INSTRUMENT, '1' as fldNotEqual " +
+                    "FROM TBL_BATCH WHERE BATCH_ID IN (SELECT BATCH_ID AS BATCH_ID " +
+                    "FROM TBL_OUTWARD " +
+                    "WHERE TRANSACTION_DATE = '" + txnDate + "' AND CREATE_TIME > '" + createTime + " " + createTimeSeconds3 +
+                    "' AND CREATE_TIME < '" + createTime + " " + createTimeSeconds4 + "' AND BOFD_SORTCODE = '" + BOFD_SORTCODE_2 + "') order by fldNotEqual desc";
+
+
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
+
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read()) {
+                        LoanBatchIdModel loanBatchIdDataResultList = new LoanBatchIdModel();
+
+                        loanBatchIdDataResultList.BATCH_ID = reader["BATCH_ID"].ToString();
+                        loanBatchIdDataResultList.TOTAL_INSTRUMENT = reader["TOTAL_INSTRUMENT"].ToString();
+                        loanBatchIdDataResultList.fldNotEqual = reader["fldNotEqual"].ToString();
+
+                        loanBatchIdDataResult.Add(loanBatchIdDataResultList);
+
+                    }
+                    ret = summaryBatchIdAndCnts(loanBatchIdDataResult, neededDates2);
+
                 }
-            });
-}]);
+            } catch (Exception e) {
+                LoanBatchIdModel loanBatchIdDataResultList = new LoanBatchIdModel();
+                loanBatchIdDataResultList.ERROR_MSG = e.Message;
+                loanBatchIdDataResult.Add(loanBatchIdDataResultList);
+                ret = JsonConvert.SerializeObject(loanBatchIdDataResult);
+                return ret;
+            }
+            return ret;
+        }
+
+        public string summaryBatchIdAndCnts(List < LoanBatchIdModel > loanBatchIds, String neededDates2) {
+
+
+                List < LoanBatchIdModel > loanBatchIdCountDataResult = new List < LoanBatchIdModel > ();
+            string[] arrDates;
+            arrDates = neededDates2.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
+
+            string ret = "";
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+
+                    for (var i = 0; i < loanBatchIds.Count; i++) {
+                        string sqslGetBatchCount = @ "SELECT batch_id, 
+                        total_instrument
+                        FROM tbl_batch
+                        WHERE batch_id IN(SELECT batch_id AS BATCH_ID FROM TBL_BATCH WHERE BATCH_ID IN(SELECT BATCH_ID AS BATCH_ID " +
+                                        "FROM TBL_OUTWARD " +
+                                        "WHERE TRANSACTION_DATE = '" + txnDate + "' AND CREATE_TIME > '" + createTime + " " + createTimeSeconds3 +
+                                        "' AND CREATE_TIME < '" + createTime + " " + createTimeSeconds4 + "' AND BOFD_SORTCODE = '" + BOFD_SORTCODE_2 + "' AND batch_id  = '{batch_id}'))";
+
+
+                        sqslGetBatchCount = sqslGetBatchCount.Replace("{batch_id}", loanBatchIds[i].BATCH_ID); SqlCommand cmd = new SqlCommand(sqslGetBatchCount, connection); connection.Open(); SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read()) {
+
+                            loanBatchIds[i].batch_cnt = reader["total_instrument"].ToString();
+                            //loanBatchIdDataResultList.fldNotEqual = reader["fldNotEqual"].ToString();
+                        }
+                        connection.Close();
+                    }
+                }
+                ret = JsonConvert.SerializeObject(loanBatchIds);
+            } catch (Exception e) {
+                LoanBatchIdModel lexceptionLoanBatch = new LoanBatchIdModel();
+                lexceptionLoanBatch.ERROR_MSG = "Exception Occured. please try again.";
+                ret = JsonConvert.SerializeObject(lexceptionLoanBatch);
+            }
+            return ret;
+        }
+
+        public List < LoanDataModel > getAllSummaryForExportAll(string neededDates2) {
+            string[] arrDates;
+            arrDates = neededDates2.Split('|');
+
+            string txnDate = arrDates[0];
+            string createTime = arrDates[1];
+            List < LoanDataModel > loanDataResult = new List < LoanDataModel > ();
+
+            string ret = "";
+            string sqlString = @ "SELECT
+            TOW.BATCH_ID AS 'BATCH ID NO.',
+                    TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                    TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
+                    TOW.BOFD_SORTCODE AS 'BRSTN',
+                    TBK.NAME AS 'DRAWEE BANK',
+                    TOW.SCAN_MICR_ACNO AS 'ACCOUNT NUMBER',
+                    TIQ.IQA_FAILED_REASON AS 'IQA STATUS'
+            FROM TBL_OUTWARD TOW INNER JOIN TBL_BANK TBK
+            ON TOW.SCAN_PAYEE_BANK_CITY_CODE = TBK.MICR_CITY_CODE AND
+            TOW.SCAN_PAYEE_BANK_CODE = TBK.MICR_CODE
+            INNER JOIN TBL_IQA_FAILED_REASON TIQ
+            ON TOW.IQA_FLAG = TIQ.IQA_ID
+            WHERE TOW.TRANSACTION_DATE = '" + txnDate +
+            "' AND TOW.CREATE_TIME > '" + createTime + " " + createTimeSeconds1 + "' " +
+                    " AND TOW.CREATE_TIME < '" + createTime + " " + createTimeSeconds2 + "' " +
+                    " AND TOW.BOFD_SORTCODE = '" + BOFD_SORTCODE + "' ORDER BY TOW.CREATE_TIME ASC";
+
+            try {
+                using(var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString)) {
+                    SqlCommand cmd = new SqlCommand(sqlString, connection);
+
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read()) {
+                        LoanDataModel loanDataResultList = new LoanDataModel();
+                        loanDataResultList.BATCH_ID = reader["BATCH ID NO."].ToString();
+                        loanDataResultList.CAR_AMOUNT = reader["CHECK AMOUNT"].ToString();
+                        loanDataResultList.SCAN_INSTRUMENT_NUMBER = reader["CHECK NUMBER"].ToString();
+                        loanDataResultList.BOFD_SORTCODE = reader["BRSTN"].ToString();
+                        loanDataResultList.NAME = reader["DRAWEE BANK"].ToString();
+                        loanDataResultList.SCAN_MICR_ACNO = reader["ACCOUNT NUMBER"].ToString();
+                        loanDataResultList.IQA_FAILED_REASON = reader["IQA STATUS"].ToString();
+
+                        loanDataResult.Add(loanDataResultList);
+                    }
+                    //ret = JsonConvert.SerializeObject(loanDataResult);
+
+                }
+            } catch (Exception e) {
+
+                LoanDataModel loanDataResultList = new LoanDataModel();
+                loanDataResultList.ERROR_MSG = e.Message;
+                loanDataResult.Add(loanDataResultList);
+                ret = JsonConvert.SerializeObject(loanDataResult);
+                return loanDataResult;
+            }
+            return loanDataResult;
+        }
+        }
+    }
