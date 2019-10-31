@@ -113,7 +113,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
 
                 using (StreamReader file = new StreamReader(fileLoc))
                 {
-                    int counter = 0;
+                    //int counter = 0;
                     string ln;
                     while ((ln = file.ReadLine()) != null)
                     {
@@ -152,16 +152,27 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             return returnRetList;
         }
-        public String GetDetailsSummary(String idx)
+        public String GetDetailsSummary(String idx, String fps, String offSet, String npLength)
         {
             //throw new NotImplementedException();
             //http://localhost:53325/api/cics/getDetailsSummary/
+
+            var fpi = Int32.Parse(offSet);
+            var fpR = Int32.Parse(npLength);
+            var total = fpR - fpi;
+
+            if (fpR < fpi)
+            {
+                fps = total.ToString();
+                offSet = total.ToString();
+            }
+
             var fileLoc = ConfigurationManager.AppSettings["OutcheckDetailsLoc"];
             var curr_date = GetDateCurrentDate();
             var retSql = "";
             using (StreamReader file = new StreamReader(fileLoc))
             {
-                int counter = 0;
+                //int counter = 0;
                 string ln;
                 while (((ln = file.ReadLine()) != null) && !ln.Contains("--"))
                 {
@@ -176,6 +187,10 @@ namespace ICLSearchDetail.Web.DBManager.Service
             {
                 connection.Open();
                 var sqlString = retSql + " " + andClause;
+
+                sqlString = sqlString.Replace("{fps}", offSet)
+                                      .Replace("{ffr}", fps);
+
                 SqlCommand cmd = new SqlCommand(sqlString, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -205,7 +220,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
 
         public string getConditionalStatement(int idx)
         {
-            var sqlWhere = "";
+            //var sqlWhere = "";
             var fileLoc = ConfigurationManager.AppSettings["OutcheckDetailsLoc"];
             List<string> where = new List<string>();
             using (StreamReader file = new StreamReader(fileLoc))

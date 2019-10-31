@@ -1,8 +1,19 @@
-﻿app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $timeout) {
+﻿(function () {
+    var app = angular.module('testApp', []);
+
+app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $timeout) {
 
     console.log("#1 outwardCheckSummary controller JS");
-    var host = 'http://10.200.1.39:9861';
-    //var host = 'http://localhost:53325';
+    //var host = 'http://10.200.1.39:9861';
+    var host = 'http://localhost:53325';
+
+    var iLength = 0;
+    var tempIdx = 0;
+
+    $scope.IsVisible = false;
+    $scope.currentPage = 0;
+    $scope.pageSize = 0;
+    
 
     var apiUrl = host + '/api/cics/outwardChechStatusSummary/';
     var that = this;
@@ -27,19 +38,75 @@
         }
 
     });
+    $scope.nextPage = function (x) {
+        $scope.currentPage = $scope.currentPage + x;
+        $scope.totalLength = iLength;
+        //$scope.getCustomerData($scope.pageSize * $scope.currentPage);
+        var offSet = $scope.pageSize * $scope.currentPage;
+        var npLength = $scope.totalLength //- offSet;
+        console.log("nextPage");
 
-    $scope.btnViewSummaryClick = function (x) {
-        console.log("btnViewSummaryClick");
-        console.log(x);
         var that = this;
         //api/cics/getDetailsSummary/
         $.ajax({
             type: 'GET',
-            url: host + "/api/cics/getDetailsSummary/"+x.idx,
+            //url: host + "/api/cics/getDetailsSummary/"+x.idx,
+            url: host + "/api/cics/getDetailsSummary/" + tempIdx + "/" + $scope.pageSize + "/" + offSet + "/" + npLength,
             success: function (blob) {
                 var jsonParse = JSON.parse(blob);
                 if (jsonParse.length !== 0) {
                     $scope.summaryDetails = jsonParse;
+
+                    console.log($scope.summaryDetails);
+                    $scope.IsVisible = true;
+                    $scope.numberOfPages = () => {
+                        return Math.ceil(
+                            $scope.totalLength / $scope.pageSize
+                        );
+                    }
+                }
+                else {
+                    // that.openDialog("No result Found. Please try again.");
+                    that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
+                    $scope.summaryDetails = {};
+                }
+                $scope.$apply();
+            },
+            error: function (a, b, c) {
+                console.log("Nim in ajax erroor ", a);
+            }
+
+        });
+
+    };
+
+    $scope.btnViewSummaryClick = function (x) {
+        console.log("btnViewSummaryClick");
+        console.log(x);
+       
+        $scope.currentPage = 0;
+        $scope.pageSize = 50;
+        $scope.totalLength = (x.summary).split("-")[0];
+        iLength = $scope.totalLength;
+        tempIdx = x.idx;
+
+        var that = this;
+        //api/cics/getDetailsSummary/
+        $.ajax({
+            type: 'GET',
+            //url: host + "/api/cics/getDetailsSummary/"+x.idx,
+            url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
+            success: function (blob) {
+                var jsonParse = JSON.parse(blob);
+                if (jsonParse.length !== 0) {
+                    $scope.summaryDetails = jsonParse;
+
+                    $scope.IsVisible = true;
+                    $scope.numberOfPages = () => {
+                        return Math.ceil(
+                            $scope.totalLength / $scope.pageSize
+                        );
+                    }
                 }
                 else {
                     // that.openDialog("No result Found. Please try again.");
@@ -88,4 +155,6 @@
     $scope.btnCloseModal = function () {
         $('#bulkTableInfoModal').modal('hide');
     }
-}]);
+    }]);
+
+})();
