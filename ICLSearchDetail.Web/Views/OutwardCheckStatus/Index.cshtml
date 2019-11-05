@@ -57,7 +57,7 @@
             </table>
         </div>
 
-        <div id="container">
+        <div id="container" ng-show="IsVisible">
             <div id="content" style="border:thin">
                 <table class="table table-hover" border="0" style="border-width:thin; ">
                     <thead id="tableHeader">
@@ -79,7 +79,7 @@
 
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
+                    <tbody id="tableBody" >
                         <tr align="center" ng-repeat="x in summaryDetails" track by $index ng-click="rowSummaryClick(x)">
                             <td align="left">{{ $index +1 }}</td>
                             <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
