@@ -73,7 +73,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             string ret = "";
             string sqlString = @"SELECT
                                 TOW.BATCH_ID AS 'BATCH ID NO.',
-                                 CASE WHEN TOW.CAR_AMOUNT IS NULL THEN '0' ELSE TOW.CAR_AMOUNT END AS 'CHECK AMOUNT',
+                                CASE WHEN TOW.CAR_AMOUNT IS NULL THEN '0' ELSE TOW.CAR_AMOUNT END AS 'CHECK AMOUNT',
                                 TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
                                 TOW.BOFD_SORTCODE AS 'BRSTN',
                                 TBK.NAME AS 'DRAWEE BANK',
