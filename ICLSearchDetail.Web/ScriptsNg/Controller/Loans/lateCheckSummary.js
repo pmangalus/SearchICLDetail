@@ -1,16 +1,17 @@
 ﻿app.controller('lateCheckSummary', ['$scope', '$timeout', function ($scope, $timeout) {
 
     console.log("#1 lateCheckSummary controller JS");
-    //var host = 'http://10.200.1.39:9862';
-    var host = 'http://localhost:53325';
+    var host = 'http://10.200.1.39:9862';
+    //var host = 'http://localhost:53325';
 
     var that = this;
+
     var radioSearchBatch = document.getElementById('radios-0');
     var radioExport = document.getElementById('radios-1');
+
     radioSearchBatch.focus = true;
     $scope.btnExportDisabled = true;
-    // var jsonreply = JSON.parse(reply);
-    //$scope.batchDetails = jsonreply;
+    $scope.isVisible = false;			//added 11/5/2019 for bug#7416
 
     $('#loading').show();
 
@@ -24,7 +25,7 @@
             //console.log("Nim in ajax erroor ", blob);
             var jsonParse = JSON.parse(blob);
             //console.log("jsonParse", jsonParse);
-            if (jsonParse.length !== 0) {
+            if (jsonParse.length !== 0 && jsonParse[0].ERROR_MSG == null) {
                 //var jsonReply = JSON.parse(reply);
 
                 for (var i = 0; i < jsonParse.length; i++) {
@@ -39,14 +40,15 @@
                         listInconsistentCountArr.push(jsonParse[i]);
                     }
                 }
-                $scope.listInconsistentCount = listInconsistentCountArr.sort(function (a, b) {
-                    return a - b
-                });
+                $scope.listInconsistentCount = listInconsistentCountArr;
+                //$scope.listInconsistentCount = listInconsistentCountArr.sort(function (a, b) {
+                //    return a - b
+                //});
                 $scope.listBatch = jsonParse;
                 $scope.$apply();
             } else {
                 document.getElementById('listBatch').value = "";
-                that.openDialog("No Batch Ids retrieved for today.");
+                //that.openDialog("No Batch Ids retrieved for today.");
                 var a = BootstrapDialog.show({
                     message: "No Batch Ids retrieved for today.",
                     buttons: [{
@@ -67,6 +69,7 @@
 
 
     $scope.btnGoClick = function () {
+        $scope.isVisible = true;			//added 11/5/2019 for bug#7416
         console.log('displaying batch details');
         var result;
         var that = this;
@@ -322,6 +325,7 @@
                 return isValidBatch;
             },
             $scope.btnResetClick = function () {
+                $scope.isVisible = false;			//added 11/5/2019 for bug#7416
                 var that = this;
                 location.reload();
                 radioSearchBatch.checked = true;
