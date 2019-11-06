@@ -173,7 +173,7 @@
                                     <tr>
                                         <td>
                                             <select id="selectmultiple" name="selectmultiple" class="form-control" multiple="multiple" style="width:100%">
-                                                <option ng-repeat="x in listInconsistentCount" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                                                <option ng-repeat="x in listInconsistentCount | orderBy:'-TOTAL_INSTRUMENT'" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -181,7 +181,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr
                         <td>
                             <br />
                         </td>
