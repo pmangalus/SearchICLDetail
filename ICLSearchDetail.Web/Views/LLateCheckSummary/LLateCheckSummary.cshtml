@@ -6,7 +6,7 @@
 <style type='text/css'>
     #container {
         /*width: 100%;
-            float: right;*/
+        float: right;*/
         /*margin-right: -390px;*/
     }
 
@@ -137,9 +137,7 @@
     <br />
     <div class="header">
         <h1>Loans - Late Check Inquiry Summary</h1>
-        <p>
-            <i>&nbsp; Displays the summary and details of Late Checks for the day.</i>
-        </p>
+        <p><i>&nbsp; Displays the summary and details of Late Checks for the day.</i></p>
     </div>
     <div class="sidebar" id="sidebar" style="border:thin;">
         <div class="">
@@ -151,7 +149,8 @@
                     <tr>
                         <td>
                             <label for="radios-0">
-                                <input type="radio" name="radios" id="radios-0" value="true" checked="checked" ng-click="radioSearchBatchClick()">Search Per Batch
+                                <input type="radio" name="radios" id="radios-0" value="true" checked="checked" ng-click="radioSearchBatchClick()">
+                                Search Per Batch
                             </label>
                         </td>
                         <td>
@@ -179,12 +178,12 @@
                                     </tr>
                                 </table>
                             </div>
+
                         </td>
+
                     </tr>
                     <tr>
-                        <td>
-                            <br />
-                        </td>
+                        <td><br /></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -192,7 +191,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>&nbsp;</td>
+                        <td>
+                            &nbsp;
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -203,56 +204,42 @@
             </div>
         </div>
     </div>
+
     <div class="sidebar-bottom" id="sidebar-bottom">
         <br />
         <div class="form-group" style="padding-bottom: 5%">
             <div class="radio">
                 <label for="radios-1">
-                    <input type="radio" name="radios" id="radios-1" value="false" ng-click="radioExportAllClick()">Export All
+                    <input type="radio" name="radios" id="radios-1" value="false" ng-click="radioExportAllClick()">
+                    Export All
                 </label>
             </div>
         </div>
         <br />
     </div>
+
     <div id="container">
-        <div id="content">
+        <div id="content" ng-show="isVisible">
             <table id="tblSummary" name="tblSummary" ng-model="tblSummary" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
                 <thead id="tableHeader">
                     <tr>
                         <td colspan="8">
-                            <p>
-                                <button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button>
-                            </p>
+                            <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
                         </td>
                     </tr>
                     <tr hidden>
-                        <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;">LOANS LATE CHECK REPORT - PER BATCH</th>
-                        <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}}</th>
+                        <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - PER BATCH </th>
+                        <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
                     </tr>
                     <tr>
                         <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
                         <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID NO.</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                            CHECK
-                            <br />AMOUNT
-                        </th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                            CHECK
-                            <br />NUMBER
-                        </th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> AMOUNT</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
                         <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRSTN</th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                            DRAWEE
-                            <br />BANK
-                        </th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                            ACCOUNT
-                            <br />NUMBER
-                        </th>
-                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                            IQA
-                            <br />STATUS
-                        </th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">DRAWEE<br />BANK</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT<br />NUMBER</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">IQA<br />STATUS</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -262,16 +249,17 @@
                         <td>{{ x.CAR_AMOUNT| number:2 }}</td>
                         <td>&nbsp; {{ x.SCAN_INSTRUMENT_NUMBER }}</td>
                         <td>&nbsp; {{ x.BOFD_SORTCODE}}</td>
-                        <td>{{ x.NAME }}</td>
+                        <td>{{ x.NAME  }}</td>
                         <td>&nbsp; {{x.SCAN_MICR_ACNO}}</td>
                         <td>{{ x.IQA_FAILED_REASON }}</td>
                     </tr>
                 </tbody>
+
                 <tfoot id="tableFooter" hidden>
                     <tr>
-                        <td>TOTAL COUNT :</td>
+                        <td>TOTAL COUNT : </td>
                         <td colspan="3">{{ batchDetails.length }}</td>
-                        <td>TOTAL AMOUNT :</td>
+                        <td>TOTAL AMOUNT : </td>
                         <td colspan="3">{{ getTotal() |number:3 }}</td>
                     </tr>
                 </tfoot>
@@ -284,33 +272,18 @@
     <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
         <thead id="tableHeader">
             <tr hidden>
-                <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;">LOANS LATE CHECK REPORT - PER BATCH</th>
-                <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}}</th>
+                <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - SUMMARY </th>
+                <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
             </tr>
             <tr>
                 <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
                 <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID NO.</th>
-                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                    CHECK
-                    <br />AMOUNT
-                </th>
-                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                    CHECK
-                    <br />NUMBER
-                </th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> AMOUNT</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
                 <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRSTN</th>
-                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                    DRAWEE
-                    <br />BANK
-                </th>
-                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                    ACCOUNT
-                    <br />NUMBER
-                </th>
-                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">
-                    IQA
-                    <br />STATUS
-                </th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">DRAWEE<br />BANK</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT<br />NUMBER</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">IQA<br />STATUS</th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -320,20 +293,26 @@
                 <td>{{ x.CAR_AMOUNT| number:2 }}</td>
                 <td>&nbsp; {{ x.SCAN_INSTRUMENT_NUMBER }}</td>
                 <td>&nbsp; {{ x.BOFD_SORTCODE}}</td>
-                <td>{{ x.NAME }}</td>
+                <td>{{ x.NAME  }}</td>
                 <td>&nbsp; {{x.SCAN_MICR_ACNO}}</td>
                 <td>{{ x.IQA_FAILED_REASON }}</td>
             </tr>
         </tbody>
+
         <tfoot id="tableFooter">
             <tr>
-                <td>TOTAL COUNT :</td>
+                <td>TOTAL COUNT : </td>
                 <td colspan="3">{{ tblSummaryHiddenlength }}</td>
-                <td>TOTAL AMOUNT :</td>
+                <td>TOTAL AMOUNT : </td>
                 <td colspan="3">{{ getTotal() |number:3 }}</td>
             </tr>
         </tfoot>
     </table>
-</form>@*
-    <script src="~/Scripts/jquery.min.js"></script>
+</form>
+
+@*<script src="~/Scripts/jquery.min.js"></script>
     <script src="~/Scripts/jquery.table2excel.min.js"></script>*@
+
+
+
+
