@@ -57,7 +57,7 @@
             </table>
         </div>
 
-        <div id="container">
+        <div id="container" ng-show="IsVisible">
             <div id="content" style="border:thin">
                 <table class="table table-hover" border="0" style="border-width:thin; ">
                     <thead id="tableHeader">
@@ -102,7 +102,7 @@
 
                 <div ng-show="IsVisible">
                     <button ng-disabled="currentPage == 0"
-                            ng-click="nextPage(-1)" ng-class="btn btn-info">
+                            ng-click="nextPage(-1)" >
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Previous
@@ -111,7 +111,7 @@
                     Page {{currentPage+1}} of {{numberOfPages()}}
 
                     <button ng-disabled="currentPage >= totalLength/pageSize - 1"
-                            ng-click="nextPage(1)" ng-class="btn btn-info">
+                            ng-click="nextPage(1)" >
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Next
