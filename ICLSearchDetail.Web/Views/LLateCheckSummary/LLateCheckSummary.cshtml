@@ -172,7 +172,7 @@
                                     <tr>
                                         <td>
                                             <select id="selectmultiple" name="selectmultiple" class="form-control" multiple="multiple" style="width:100%">
-                                                <option ng-repeat="x in listInconsistentCount" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                                                <option ng-repeat="x in listInconsistentCount | orderBy: '-TOTAL_INSTRUMENT'" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -220,13 +220,14 @@
 
     <div id="container">
         <div id="content" ng-show="isVisible">
+            <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
             <table id="tblSummary" name="tblSummary" ng-model="tblSummary" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
                 <thead id="tableHeader">
-                    <tr>
-                        <td colspan="8">
-                            <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
-                        </td>
-                    </tr>
+                    @*<tr>
+                    <td colspan="8">
+                        <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
+                    </td>
+                </tr>*@
                     <tr hidden>
                         <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - PER BATCH </th>
                         <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
@@ -304,7 +305,7 @@
                 <td>TOTAL COUNT : </td>
                 <td colspan="3">{{ tblSummaryHiddenlength }}</td>
                 <td>TOTAL AMOUNT : </td>
-                <td colspan="3">{{ getTotal() |number:3 }}</td>
+                <td colspan="3">{{ getTotal() }}</td>
             </tr>
         </tfoot>
     </table>
