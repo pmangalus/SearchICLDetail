@@ -52,7 +52,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             }
             catch (Exception e)
             {
-                curr_date = "error occured";
+                curr_date = "error occured" + e.ToString();
 
             }
             return curr_date;
@@ -328,7 +328,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             catch (Exception e)
             {
                 LoanBatchIdModel lexceptionLoanBatch = new LoanBatchIdModel();
-                lexceptionLoanBatch.ERROR_MSG = "Exception Occured. please try again.";
+                lexceptionLoanBatch.ERROR_MSG = "Exception Occured. please try again." + e.ToString();
                 ret = JsonConvert.SerializeObject(lexceptionLoanBatch);
             }
             return ret;

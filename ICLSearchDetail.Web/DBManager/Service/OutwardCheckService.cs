@@ -96,7 +96,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             catch (Exception e)
             {
-                curr_date = "error occured";
+                curr_date = "error occured" + e.ToString();
             }
             return curr_date;
         }
