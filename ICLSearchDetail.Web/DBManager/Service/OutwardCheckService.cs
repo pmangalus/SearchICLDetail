@@ -3,10 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace ICLSearchDetail.Web.DBManager.Service
 {
@@ -244,8 +243,52 @@ namespace ICLSearchDetail.Web.DBManager.Service
 
         public String ExportToExcel(String idx)
         {
-            var retSql = "SUCCESS";
 
+            var fileLoc = ConfigurationManager.AppSettings["OutcheckDetailsLoc"];
+            var curr_date = GetDateCurrentDate();
+            var retSql = "";
+            using (StreamReader file = new StreamReader(fileLoc))
+            {
+                //int counter = 0;
+                string ln;
+                while (((ln = file.ReadLine()) != null) && !ln.Contains("--"))
+                {
+                    retSql += ln;
+                }
+                file.Close();
+            }
+            retSql = retSql.Replace("{date}", curr_date);
+            var andClause = getConditionalStatement(Int32.Parse(idx));
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString))
+            {
+                connection.Open();
+                var sqlString = retSql + " " + andClause;
+                SqlCommand cmd = new SqlCommand(sqlString, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    OCSumDetailsModel ocCSumDetailsModel = new OCSumDetailsModel();
+                    ocCSumDetailsModel.INSTRUMENT_ID = reader["INSTRUMENT_ID"].ToString();
+                    ocCSumDetailsModel.BUSINESS_DATE = DateTime.Parse(reader["BUSINESS_DATE"].ToString()).ToShortDateString();
+                    ocCSumDetailsModel.AMOUNT = reader["AMOUNT"].ToString();
+                    ocCSumDetailsModel.ACCOUNT = reader["ACCOUNT"].ToString();
+                    ocCSumDetailsModel.BRSTN = reader["BRSTN"].ToString();
+                    ocCSumDetailsModel.SERIAL_NUMBER = reader["SERIAL_NUMBER"].ToString();
+                    ocCSumDetailsModel.BOFD_RT = reader["BOFD_RT"].ToString();
+                    ocCSumDetailsModel.BRANCH_NAME = reader["BRANCH_NAME"].ToString();
+                    ocCSumDetailsModel.BOFD_ACC = reader["BOFD_ACC"].ToString();
+                    ocCSumDetailsModel.ICL_FILENAME = reader["ICL_FILENAME"].ToString();
+                    ocCSumDetailsModel.SCANNED_TIME = reader["SCANNED_TIME"].ToString();
+                    ocCSumDetailsModel.SCANNED_BY = reader["SCANNED_BY"].ToString();
+                    ocCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT_KEYING_TIME"].ToString();
+                    ocCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT_NO_KEYING_TIME"].ToString();
+                    oCSumDetailsModelList.Add(ocCSumDetailsModel);
+
+                }
+                retSql = JsonConvert.SerializeObject(oCSumDetailsModelList);
+            }
+      
             return retSql;
         }
     }

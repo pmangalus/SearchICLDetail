@@ -51,5 +51,18 @@ namespace ICLSearchDetail.Web.api
             return Ok(result);
         }
 
+
+        //Loan Export
+        [Route("api/cics/getDetailsSummary/{idx}")]
+        [HttpGet]
+        public IHttpActionResult LoanExportSummary(String idx)
+        {
+            var result = "";
+                OutwardCheckService outCheck = new OutwardCheckService();
+                result = outCheck.ExportToExcel(idx);
+
+            return Ok(result);
+        }
+
     }
 }

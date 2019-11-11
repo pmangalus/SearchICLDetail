@@ -102,7 +102,7 @@
 
                 <div ng-show="IsVisible">
                     <button ng-disabled="currentPage == 0"
-                            ng-click="nextPage(-1)" >
+                            ng-click="nextPage(-1)">
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Previous
@@ -111,7 +111,7 @@
                     Page {{currentPage+1}} of {{numberOfPages()}}
 
                     <button ng-disabled="currentPage >= totalLength/pageSize - 1"
-                            ng-click="nextPage(1)" >
+                            ng-click="nextPage(1)">
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Next
@@ -181,6 +181,56 @@
             </div>
         </div>
         @*   </div>*@
+
+        <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+            <thead id="tableHeader">
+                <tr style="background-color:cornflowerblue; ">
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">#</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BUSINESS<br />DATE</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />BRSTN</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SERIAL<br />NUMBER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BOFD_RT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRANCH<br />NAME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BOFD<br />ACC</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ICL<br />FILENAME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />BY</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT<br />KEYING<br />TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NO.<br />KEYING<br />TIME</th>
+
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: '-BUSINESS_DATE'">
+                    <td align="left">{{ $index +1 }}</td>
+                    <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
+                    <td>{{ x.BUSINESS_DATE }}</td>
+                    <td>{{ x.AMOUNT }}</td>
+                    <td>{{ x.ACCOUNT }}</td>
+                    <td>{{ x.BRSTN }}</td>
+                    <td>{{ x.SERIAL_NUMBER }}</td>
+                    <td>{{ x.BOFD_RT }}</td>
+                    <td>{{ x.BRANCH_NAME }}</td>
+                    <td>{{ x.BOFD_ACC }}</td>
+                    <td>{{ x.ICL_FILENAME }}</td>
+                    <td>{{ x.SCANNED_TIME }}</td>
+                    <td>{{ x.SCANNED_BY }}</td>
+                    <td>{{ x.AMOUNT_KEYING_TIME }}</td>
+                    <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                </tr>
+            </tbody>
+
+            @*<tfoot id="tableFooter">
+                <tr>
+                    <td>TOTAL COUNT : </td>
+                    <td colspan="3">{{ tblSummaryHiddenlength }}</td>
+                    <td>TOTAL AMOUNT : </td>
+                    <td colspan="3">{{ getTotal() }}</td>
+                </tr>
+            </tfoot>*@
+        </table>
     </form>
 </div>
 <script src="~/ScriptsNg/Controller/Reference/outwardCheckSummary.js"></script>
