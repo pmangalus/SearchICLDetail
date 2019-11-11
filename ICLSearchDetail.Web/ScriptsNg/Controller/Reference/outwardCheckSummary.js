@@ -92,17 +92,15 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
 
         var that = this;
         //api/cics/getDetailsSummary/
-
+        if (tempIdx === 6) {
+            console.log("Test");
+        }
        $.ajax({
                 type: 'GET',
                 //url: host + "/api/cics/getDetailsSummary/"+x.idx,
                 url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
            success: function (blob) {
-
-               if (blob === "SUCCESS") {
-                   that.openDialog("Done extract! ... ");
-               }
-               else {
+              
                    var jsonParse = JSON.parse(blob);
                    if (jsonParse.length !== 0) {
                        $scope.summaryDetails = jsonParse;
@@ -119,8 +117,6 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
                        that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
                        $scope.summaryDetails = {};
                    }
-                   
-               }
                $scope.$apply();
                     
                 },
@@ -129,7 +125,7 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
                 }
 
             });
-        }
+        
      
     },
     $scope.openDialog = function (message) {
