@@ -88,38 +88,47 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
         $scope.pageSize = 50;
         $scope.totalLength = (x.summary).split("-")[0];
         iLength = $scope.totalLength;
-        tempIdx = x.idx;
+        tempIdx = x.idx; // idx = 6 for loans
 
         var that = this;
         //api/cics/getDetailsSummary/
-        $.ajax({
-            type: 'GET',
-            //url: host + "/api/cics/getDetailsSummary/"+x.idx,
-            url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
-            success: function (blob) {
-                var jsonParse = JSON.parse(blob);
-                if (jsonParse.length !== 0) {
-                    $scope.summaryDetails = jsonParse;
+       $.ajax({
+                type: 'GET',
+                //url: host + "/api/cics/getDetailsSummary/"+x.idx,
+                url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
+           success: function (blob) {
 
-                    $scope.IsVisible = true;
-                    $scope.numberOfPages = () => {
-                        return Math.ceil(
-                            $scope.totalLength / $scope.pageSize
-                        );
-                    }
-                }
-                else {
-                    // that.openDialog("No result Found. Please try again.");
-                    that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
-                    $scope.summaryDetails = {};
-                }
-                $scope.$apply();
-            },
-            error: function (a, b, c) {
-                console.log("Nim in ajax erroor ", a);
-            }
+               if (blob !== "SUCCESS") {
+                   var jsonParse = JSON.parse(blob);
+                   if (jsonParse.length !== 0) {
+                       $scope.summaryDetails = jsonParse;
 
-        });
+                       $scope.IsVisible = true;
+                       $scope.numberOfPages = () => {
+                           return Math.ceil(
+                               $scope.totalLength / $scope.pageSize
+                           );
+                       }
+                   }
+                   else {
+                       // that.openDialog("No result Found. Please try again.");
+                       that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
+                       $scope.summaryDetails = {};
+                   }
+               } else {
+                   console.log("Try");
+               }
+                  
+               $scope.$apply();
+                    
+                },
+                error: function (a, b, c) {
+                    console.log("Nim in ajax erroor ", a);
+                }
+
+            });
+        
+     
     },
     $scope.openDialog = function (message) {
         var  a = BootstrapDialog.show({

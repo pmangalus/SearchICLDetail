@@ -96,7 +96,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             catch (Exception e)
             {
-                curr_date = "error occured";
+                curr_date = "error occured" + e.ToString();
             }
             return curr_date;
         }
@@ -217,7 +217,6 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             return retSql;
         }
-
         public string getConditionalStatement(int idx)
         {
             //var sqlWhere = "";
@@ -236,6 +235,18 @@ namespace ICLSearchDetail.Web.DBManager.Service
                 
             }
             return where[idx];
+        }
+
+        /* Sprint 4: 11/11/2019 
+         * Author: JCPB
+         * Export To Excel Direct Button
+         */
+
+        public String ExportToExcel(String idx)
+        {
+            var retSql = "SUCCESS";
+
+            return retSql;
         }
     }
 }

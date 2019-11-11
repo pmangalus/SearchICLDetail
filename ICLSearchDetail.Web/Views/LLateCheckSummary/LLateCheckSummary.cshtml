@@ -156,7 +156,7 @@
                         <td>
                             <input list="resultBatch" name="listBatch" id="listBatch" class="form-control" ng-focus="listBatchFocus()" style="width:100%" placeholder="Select Batch ID here">
                             <datalist id="resultBatch" name="resultBatch" onselect="listBatchClick()">
-                                <option ng-repeat="x in listBatch" placeholder="choose batch here..">{{x.BATCH_ID}} cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                                <option ng-repeat="x in listBatch | orderBy: '-BATCH_ID'" placeholder="choose batch here..">{{x.BATCH_ID}} cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
                             </datalist>
                         </td>
                     </tr>
@@ -172,7 +172,7 @@
                                     <tr>
                                         <td>
                                             <select id="selectmultiple" name="selectmultiple" class="form-control" multiple="multiple" style="width:100%">
-                                                <option ng-repeat="x in listInconsistentCount | orderBy: '-TOTAL_INSTRUMENT'" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
+                                                <option ng-repeat="x in listInconsistentCount | orderBy: '-BATCH_ID'" ng-dblclick="listInconsistendDblClick(x)" ng-click="listInconsistentClick()">{{x.BATCH_ID}}cnt: {{x.TOTAL_INSTRUMENT}}/{{x.batch_cnt}}</option>
                                             </select>
                                         </td>
                                     </tr>
