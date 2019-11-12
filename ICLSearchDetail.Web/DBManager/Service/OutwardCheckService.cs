@@ -13,6 +13,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
     {
         List<OutwardCheckSummaryModel> retList = new List<OutwardCheckSummaryModel>();
         List<OCSumDetailsModel> oCSumDetailsModelList = new List<OCSumDetailsModel>();
+        List<LNSumDetailsModel> lNSumDetailsModelList = new List<LNSumDetailsModel>();
         /*public String GetOutwardCheckSummaryBackUp(String fileLoc)
         {
             var ret = "";
@@ -99,8 +100,6 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             return curr_date;
         }
-
-
         public String GetOutwardCheckSummary(String fileLoc)
         {
 
@@ -244,7 +243,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
         public String ExportToExcel(String idx)
         {
 
-            var fileLoc = ConfigurationManager.AppSettings["OutcheckDetailsLoc"];
+            var fileLoc = ConfigurationManager.AppSettings["LoanTransmitLoc"];
             var curr_date = GetDateCurrentDate();
             var retSql = "";
             using (StreamReader file = new StreamReader(fileLoc))
@@ -258,35 +257,34 @@ namespace ICLSearchDetail.Web.DBManager.Service
                 file.Close();
             }
             retSql = retSql.Replace("{date}", curr_date);
-            var andClause = getConditionalStatement(Int32.Parse(idx));
+            //var andClause = getConditionalStatement(Int32.Parse(idx));
 
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString))
             {
                 connection.Open();
-                var sqlString = retSql + " " + andClause;
+                var sqlString = retSql;
                 SqlCommand cmd = new SqlCommand(sqlString, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    OCSumDetailsModel ocCSumDetailsModel = new OCSumDetailsModel();
-                    ocCSumDetailsModel.INSTRUMENT_ID = reader["INSTRUMENT_ID"].ToString();
-                    ocCSumDetailsModel.BUSINESS_DATE = DateTime.Parse(reader["BUSINESS_DATE"].ToString()).ToShortDateString();
-                    ocCSumDetailsModel.AMOUNT = reader["AMOUNT"].ToString();
-                    ocCSumDetailsModel.ACCOUNT = reader["ACCOUNT"].ToString();
-                    ocCSumDetailsModel.BRSTN = reader["BRSTN"].ToString();
-                    ocCSumDetailsModel.SERIAL_NUMBER = reader["SERIAL_NUMBER"].ToString();
-                    ocCSumDetailsModel.BOFD_RT = reader["BOFD_RT"].ToString();
-                    ocCSumDetailsModel.BRANCH_NAME = reader["BRANCH_NAME"].ToString();
-                    ocCSumDetailsModel.BOFD_ACC = reader["BOFD_ACC"].ToString();
-                    ocCSumDetailsModel.ICL_FILENAME = reader["ICL_FILENAME"].ToString();
-                    ocCSumDetailsModel.SCANNED_TIME = reader["SCANNED_TIME"].ToString();
-                    ocCSumDetailsModel.SCANNED_BY = reader["SCANNED_BY"].ToString();
-                    ocCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT_KEYING_TIME"].ToString();
-                    ocCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT_NO_KEYING_TIME"].ToString();
-                    oCSumDetailsModelList.Add(ocCSumDetailsModel);
+                    LNSumDetailsModel lnCSumDetailsModel = new LNSumDetailsModel();
+                    lnCSumDetailsModel.BATCH_ID = reader["BATCH ID NO."].ToString();
+                    lnCSumDetailsModel.BUSINESS_DATE = DateTime.Parse(reader["BUSINESS DATE"].ToString()).ToShortDateString();
+                    lnCSumDetailsModel.CHECK_NUMBER = reader["CHECK NUMBER"].ToString();
+                    lnCSumDetailsModel.AMOUNT = reader["AMOUNT"].ToString();
+                    lnCSumDetailsModel.SCAN_ACCOUNT = reader["SCAN ACCOUNT NO."].ToString();
+                    lnCSumDetailsModel.SCAN_BRSTN = reader["SCAN BRSTN"].ToString();
+
+                    //lnCSumDetailsModel.SCANNED_TIME = reader["SCANNED_TIME"].ToString();
+                    lnCSumDetailsModel.SCANNED_BY = reader["SCAN BY"].ToString();
+                    //lnCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT_KEYING_TIME"].ToString();
+                    lnCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    lnCSumDetailsModel.ACCOUNT_NO_KEYING_USR = reader["ACCOUNT NO. KEYING USER"].ToString();
+                    lnCSumDetailsModel.BRANCH_NAME = reader["BRANCH_NAME"].ToString();
+                    lNSumDetailsModelList.Add(lnCSumDetailsModel);
 
                 }
-                retSql = JsonConvert.SerializeObject(oCSumDetailsModelList);
+                retSql = JsonConvert.SerializeObject(lNSumDetailsModelList);
             }
       
             return retSql;

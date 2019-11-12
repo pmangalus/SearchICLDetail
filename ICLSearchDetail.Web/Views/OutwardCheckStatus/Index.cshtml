@@ -185,51 +185,44 @@
         <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
             <thead id="tableHeader">
                 <tr style="background-color:cornflowerblue; ">
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">#</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BUSINESS<br />DATE</th>
+                    @*<th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">#</th>*@
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BUSINESS DATE</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK NUMBER</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />BRSTN</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SERIAL<br />NUMBER</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BOFD_RT</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRANCH<br />NAME</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BOFD<br />ACC</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ICL<br />FILENAME</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />TIME</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED<br />BY</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT<br />KEYING<br />TIME</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NO.<br />KEYING<br />TIME</th>
-
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED ACCOUNT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BRSTN</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BY</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRANCH NAME</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: '-BUSINESS_DATE'">
-                    <td align="left">{{ $index +1 }}</td>
-                    <td align="left" hidden>ID{{ x.INSTRUMENT_ID }}</td>
+                <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: 'BATCH_ID'">
+                    @*<td align="left">{{ $index +1 }}</td>
+        <td align="left">ID{{ x.INSTRUMENT_ID }}</td>*@
                     <td>{{ x.BUSINESS_DATE }}</td>
-                    <td>{{ x.AMOUNT }}</td>
-                    <td>{{ x.ACCOUNT }}</td>
-                    <td>{{ x.BRSTN }}</td>
-                    <td>{{ x.SERIAL_NUMBER }}</td>
-                    <td>{{ x.BOFD_RT }}</td>
-                    <td>{{ x.BRANCH_NAME }}</td>
-                    <td>{{ x.BOFD_ACC }}</td>
-                    <td>{{ x.ICL_FILENAME }}</td>
-                    <td>{{ x.SCANNED_TIME }}</td>
+                    <td>{{ x.BATCH_ID }}</td>
+                    <td>&nbsp;{{ x.CHECK_NUMBER }}</td>
+                    <td>{{ x.AMOUNT | number:2}}</td>
+                    <td>&nbsp; {{ x.SCAN_ACCOUNT }}</td>
+                    <td>&nbsp; {{ x.SCAN_BRSTN }}</td>
                     <td>{{ x.SCANNED_BY }}</td>
-                    <td>{{ x.AMOUNT_KEYING_TIME }}</td>
                     <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                    <td>{{ x.ACCOUNT_NO_KEYING_USR }}</td>
+                    <td>{{ x.BRANCH_NAME }}</td>
                 </tr>
             </tbody>
 
-            @*<tfoot id="tableFooter">
+            <tfoot id="tableFooter">
                 <tr>
                     <td>TOTAL COUNT : </td>
-                    <td colspan="3">{{ tblSummaryHiddenlength }}</td>
+                    <td colspan="3">{{ loansummaryDetails.length }}</td>
                     <td>TOTAL AMOUNT : </td>
-                    <td colspan="3">{{ getTotal() }}</td>
+                    <td colspan="3">{{ getTotal() | number:2 }}</td>
                 </tr>
-            </tfoot>*@
+            </tfoot>
         </table>
     </form>
 </div>
