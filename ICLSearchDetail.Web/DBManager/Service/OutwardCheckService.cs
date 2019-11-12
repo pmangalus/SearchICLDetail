@@ -3,10 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace ICLSearchDetail.Web.DBManager.Service
 {
@@ -14,6 +13,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
     {
         List<OutwardCheckSummaryModel> retList = new List<OutwardCheckSummaryModel>();
         List<OCSumDetailsModel> oCSumDetailsModelList = new List<OCSumDetailsModel>();
+        List<LNSumDetailsModel> lNSumDetailsModelList = new List<LNSumDetailsModel>();
         /*public String GetOutwardCheckSummaryBackUp(String fileLoc)
         {
             var ret = "";
@@ -100,8 +100,6 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             return curr_date;
         }
-
-
         public String GetOutwardCheckSummary(String fileLoc)
         {
 
@@ -244,8 +242,51 @@ namespace ICLSearchDetail.Web.DBManager.Service
 
         public String ExportToExcel(String idx)
         {
-            var retSql = "SUCCESS";
 
+            var fileLoc = ConfigurationManager.AppSettings["LoanTransmitLoc"];
+            var curr_date = GetDateCurrentDate();
+            var retSql = "";
+            using (StreamReader file = new StreamReader(fileLoc))
+            {
+                //int counter = 0;
+                string ln;
+                while (((ln = file.ReadLine()) != null) && !ln.Contains("--"))
+                {
+                    retSql += ln;
+                }
+                file.Close();
+            }
+            retSql = retSql.Replace("{date}", curr_date);
+            //var andClause = getConditionalStatement(Int32.Parse(idx));
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString))
+            {
+                connection.Open();
+                var sqlString = retSql;
+                SqlCommand cmd = new SqlCommand(sqlString, connection);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    LNSumDetailsModel lnCSumDetailsModel = new LNSumDetailsModel();
+                    lnCSumDetailsModel.BATCH_ID = reader["BATCH ID NO."].ToString();
+                    lnCSumDetailsModel.BUSINESS_DATE = DateTime.Parse(reader["BUSINESS DATE"].ToString()).ToShortDateString();
+                    lnCSumDetailsModel.CHECK_NUMBER = reader["CHECK NUMBER"].ToString();
+                    lnCSumDetailsModel.AMOUNT = reader["AMOUNT"].ToString();
+                    lnCSumDetailsModel.SCAN_ACCOUNT = reader["SCAN ACCOUNT NO."].ToString();
+                    lnCSumDetailsModel.SCAN_BRSTN = reader["SCAN BRSTN"].ToString();
+
+                    //lnCSumDetailsModel.SCANNED_TIME = reader["SCANNED_TIME"].ToString();
+                    lnCSumDetailsModel.SCANNED_BY = reader["SCAN BY"].ToString();
+                    //lnCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT_KEYING_TIME"].ToString();
+                    lnCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    lnCSumDetailsModel.ACCOUNT_NO_KEYING_USR = reader["ACCOUNT NO. KEYING USER"].ToString();
+                    lnCSumDetailsModel.BRANCH_NAME = reader["BRANCH_NAME"].ToString();
+                    lNSumDetailsModelList.Add(lnCSumDetailsModel);
+
+                }
+                retSql = JsonConvert.SerializeObject(lNSumDetailsModelList);
+            }
+      
             return retSql;
         }
     }

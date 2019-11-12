@@ -79,7 +79,17 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
         });
 
     };
+    $scope.getTotal = function () {
+        var total = 0;
+        for (var i = 0; i < $scope.loansummaryDetails.length; i++) {
+            var x = $scope.loansummaryDetails[i];
+            // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+            total = total + parseFloat(x.AMOUNT);
+            //console.log("total: " + total);
+        }
+        return total;
 
+    };
     $scope.btnViewSummaryClick = function (x) {
         console.log("btnViewSummaryClick");
         console.log(x);
@@ -90,43 +100,136 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
         iLength = $scope.totalLength;
         tempIdx = x.idx; // idx = 6 for loans
 
-        var that = this;
+       
         //api/cics/getDetailsSummary/
-       $.ajax({
+        if (tempIdx === 6) {
+            console.log("Try");
+            var that = this;
+            $.ajax({
                 type: 'GET',
                 //url: host + "/api/cics/getDetailsSummary/"+x.idx,
-                url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
-           success: function (blob) {
+                url: host + "/api/cics/getDetailsSummary/" + x.idx,
+                success: function (blob) {
 
-               if (blob !== "SUCCESS") {
-                   var jsonParse = JSON.parse(blob);
-                   if (jsonParse.length !== 0) {
-                       $scope.summaryDetails = jsonParse;
 
-                       $scope.IsVisible = true;
-                       $scope.numberOfPages = () => {
-                           return Math.ceil(
-                               $scope.totalLength / $scope.pageSize
-                           );
-                       }
-                   }
-                   else {
-                       // that.openDialog("No result Found. Please try again.");
-                       that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
-                       $scope.summaryDetails = {};
-                   }
-               } else {
-                   console.log("Try");
-               }
+                    var jsonParse = JSON.parse(blob);
+                    if (jsonParse.length !== 0) {
+                        $scope.loansummaryDetails = jsonParse;
+                        $scope.$apply();
+
+
+                        var fileNameAcc = "";
+
+                        fileNameAcc = "Loans Outward Transmitted Report - Export All.xls";
+                        tab = document.getElementById('tblSummaryHidden'); // id of table
+
+
+                        var tab_text = "<table border='2px'><tr>";
+                        var textRange;
+                        var j = 0;
+
+
+                        for (j = 0; j < tab.rows.length; j++) {
+                            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                            //tab_text=tab_text+"</tr>";
+                        }
+
+
+
+                        tab_text = tab_text + "</table>";
+                        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
+                        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+                        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+
+
+                        var ua = window.navigator.userAgent;
+                        var msie = ua.indexOf("MSIE ");
+
+
+
+                        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
+                        {
+                            txtArea1.document.open("txt/html", "replace");
+                            txtArea1.document.write(tab_text);
+                            txtArea1.document.close();
+                            txtArea1.focus();
+                            a = txtArea1.document.execCommand("SaveAs", true, "excel.xls");
+                        } else {
+                            var blob = new Blob([tab_text], {
+                                type: 'application/vnd.ms-excel'
+                            });
+                            var downloadUrl = URL.createObjectURL(blob);
+                            var a = document.createElement("a");
+                            a.href = downloadUrl;
+                            a.download = fileNameAcc;
+                            document.body.appendChild(a);
+                            a.click();
+                        }
+                        that.openDialog("Done Extract");
+                        return (a);
+
+                        
+
+                        //$scope.IsVisible = true;
+                        //$scope.numberOfPages = () => {
+                        //    return Math.ceil(
+                        //        $scope.totalLength / $scope.pageSize
+                        //    );
+                        //}
+
+                    }
+                    else {
+                        // that.openDialog("No result Found. Please try again.");
+                        that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
+                        $scope.loansummaryDetails = {};
+                    }
                   
-               $scope.$apply();
-                    
+
+
+
                 },
                 error: function (a, b, c) {
                     console.log("Nim in ajax erroor ", a);
                 }
 
             });
+
+        } else {
+            var that = this;
+            $.ajax({
+                type: 'GET',
+                //url: host + "/api/cics/getDetailsSummary/"+x.idx,
+                url: host + "/api/cics/getDetailsSummary/" + x.idx + "/" + $scope.pageSize + "/" + $scope.currentPage + "/" + $scope.totalLength,
+                success: function (blob) {
+
+
+                    var jsonParse = JSON.parse(blob);
+                    if (jsonParse.length !== 0) {
+                        $scope.summaryDetails = jsonParse;
+
+                        $scope.IsVisible = true;
+                        $scope.numberOfPages = () => {
+                            return Math.ceil(
+                                $scope.totalLength / $scope.pageSize
+                            );
+                        }
+                    }
+                    else {
+                        // that.openDialog("No result Found. Please try again.");
+                        that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
+                        $scope.summaryDetails = {};
+                    }
+                    $scope.$apply();
+
+                },
+                error: function (a, b, c) {
+                    console.log("Nim in ajax erroor ", a);
+                }
+
+            });
+        }
+
         
      
     },

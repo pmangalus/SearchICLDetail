@@ -102,7 +102,7 @@
 
                 <div ng-show="IsVisible">
                     <button ng-disabled="currentPage == 0"
-                            ng-click="nextPage(-1)" >
+                            ng-click="nextPage(-1)">
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Previous
@@ -111,7 +111,7 @@
                     Page {{currentPage+1}} of {{numberOfPages()}}
 
                     <button ng-disabled="currentPage >= totalLength/pageSize - 1"
-                            ng-click="nextPage(1)" >
+                            ng-click="nextPage(1)">
                         <!-- ng-click="nextPage()" |  ng-click="currentPage=currentPage+1">  -->
                         <!-- nextPage() function create to display values-->
                         Next
@@ -181,6 +181,49 @@
             </div>
         </div>
         @*   </div>*@
+
+        <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+            <thead id="tableHeader">
+                <tr style="background-color:cornflowerblue; ">
+                    @*<th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">#</th>*@
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BUSINESS DATE</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK NUMBER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED ACCOUNT</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BRSTN</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BY</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRANCH NAME</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: 'BATCH_ID'">
+                    @*<td align="left">{{ $index +1 }}</td>
+        <td align="left">ID{{ x.INSTRUMENT_ID }}</td>*@
+                    <td>{{ x.BUSINESS_DATE }}</td>
+                    <td>{{ x.BATCH_ID }}</td>
+                    <td>&nbsp;{{ x.CHECK_NUMBER }}</td>
+                    <td>{{ x.AMOUNT | number:2}}</td>
+                    <td>&nbsp; {{ x.SCAN_ACCOUNT }}</td>
+                    <td>&nbsp; {{ x.SCAN_BRSTN }}</td>
+                    <td>{{ x.SCANNED_BY }}</td>
+                    <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                    <td>{{ x.ACCOUNT_NO_KEYING_USR }}</td>
+                    <td>{{ x.BRANCH_NAME }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot id="tableFooter">
+                <tr>
+                    <td>TOTAL COUNT : </td>
+                    <td colspan="3">{{ loansummaryDetails.length }}</td>
+                    <td>TOTAL AMOUNT : </td>
+                    <td colspan="3">{{ getTotal() | number:2 }}</td>
+                </tr>
+            </tfoot>
+        </table>
     </form>
 </div>
 <script src="~/ScriptsNg/Controller/Reference/outwardCheckSummary.js"></script>

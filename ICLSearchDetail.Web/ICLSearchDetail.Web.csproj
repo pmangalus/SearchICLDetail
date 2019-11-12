@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\DbScript\loanTransmittedReport.txt" />
     <Content Include="bin\DbScript\outcheckDetails.txt" />
     <Content Include="bin\DbScript\outwardCheckSummary.txt" />
     <Content Include="bin\ICLSearchDetail.Web.dll" />
