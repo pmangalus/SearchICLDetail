@@ -33,13 +33,36 @@ namespace ICLSearchDetail.Web.api
         }
 
         //GetDetailsSummary
-        [Route("api/cics/getDetailsSummary/{idx}")]
+        [Route("api/cics/getDetailsSummary/{idx}/{fps}/{offSet}/{npLength}")]
         [HttpGet]
-        public IHttpActionResult GetDetailsSummary(String idx)
+        public IHttpActionResult GetDetailsSummary(String idx, String fps, String offSet, String npLength)
         {
-            OutwardCheckService outCheck = new OutwardCheckService();
-            var result = outCheck.GetDetailsSummary(idx);
+            var result = "";
+            if (idx.Equals("6")) // 11/11/2019 sprint 4 export to excel
+            {
+                OutwardCheckService outCheck = new OutwardCheckService();
+                 result = outCheck.ExportToExcel(idx);
+            } else
+            {
+                OutwardCheckService outCheck = new OutwardCheckService();
+                result = outCheck.GetDetailsSummary(idx, fps, offSet, npLength);
+            }
+            
             return Ok(result);
         }
+
+
+        //Loan Export
+        [Route("api/cics/getDetailsSummary/{idx}")]
+        [HttpGet]
+        public IHttpActionResult LoanExportSummary(String idx)
+        {
+            var result = "";
+                OutwardCheckService outCheck = new OutwardCheckService();
+                result = outCheck.ExportToExcel(idx);
+
+            return Ok(result);
+        }
+
     }
 }

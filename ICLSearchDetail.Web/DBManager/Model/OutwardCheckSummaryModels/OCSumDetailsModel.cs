@@ -23,4 +23,22 @@ namespace ICLSearchDetail.Web.DBManager.Model
         public string ACCOUNT_NO_KEYING_TIME { get; set; }
         
     }
+
+    public class LNSumDetailsModel
+    {
+        public string BATCH_ID { get; set; }
+        public string BUSINESS_DATE { get; set; }
+        public string CHECK_NUMBER { get; set; }
+        public string AMOUNT { get; set; }
+        public string SCAN_ACCOUNT { get; set; }
+        public string SCAN_BRSTN { get; set; }
+        //public string SCANNED_TIME { get; set; }
+        public string SCANNED_BY { get; set; }
+        //public string AMOUNT_KEYING_TIME { get; set; }
+        public string AMOUNT_KEYING_USR { get; set; }
+        public string ACCOUNT_NO_KEYING_TIME { get; set; }
+        public string ACCOUNT_NO_KEYING_USR { get; set; }
+        public string BRANCH_NAME { get; set; }
+
+    }
 }

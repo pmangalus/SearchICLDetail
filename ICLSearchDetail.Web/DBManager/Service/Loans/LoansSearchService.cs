@@ -52,7 +52,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             }
             catch (Exception e)
             {
-                curr_date = "error occured";
+                curr_date = "error occured" + e.ToString();
 
             }
             return curr_date;
@@ -73,7 +73,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             string ret = "";
             string sqlString = @"SELECT
                                 TOW.BATCH_ID AS 'BATCH ID NO.',
-                                TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                                CASE WHEN TOW.CAR_AMOUNT IS NULL THEN '0' ELSE TOW.CAR_AMOUNT END AS 'CHECK AMOUNT',
                                 TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
                                 TOW.BOFD_SORTCODE AS 'BRSTN',
                                 TBK.NAME AS 'DRAWEE BANK',
@@ -328,7 +328,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             catch (Exception e)
             {
                 LoanBatchIdModel lexceptionLoanBatch = new LoanBatchIdModel();
-                lexceptionLoanBatch.ERROR_MSG = "Exception Occured. please try again.";
+                lexceptionLoanBatch.ERROR_MSG = "Exception Occured. please try again." + e.ToString();
                 ret = JsonConvert.SerializeObject(lexceptionLoanBatch);
             }
             return ret;
@@ -346,7 +346,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.Loans
             string ret = "";
             string sqlString = @"SELECT
                                 TOW.BATCH_ID AS 'BATCH ID NO.',
-                                TOW.CAR_AMOUNT AS 'CHECK AMOUNT',
+                                CASE WHEN TOW.CAR_AMOUNT IS NULL THEN '0' ELSE TOW.CAR_AMOUNT END AS 'CHECK AMOUNT',
                                 TOW.SCAN_INSTRUMENT_NUMBER AS 'CHECK NUMBER',
                                 TOW.BOFD_SORTCODE AS 'BRSTN',
                                 TBK.NAME AS 'DRAWEE BANK',
