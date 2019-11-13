@@ -57,7 +57,5 @@ namespace ICLSearchDetail.Web.Controllers.api.Loans
             return Ok(loansService.getAllSummaryForExportAll(returnDates));
         }
 
-
-
     }
 }

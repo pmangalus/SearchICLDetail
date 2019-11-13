@@ -1,0 +1,309 @@
+﻿@{ ViewBag.Title = "SearchEngineIWOW"; }
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/jquery.table2excel.min.js"></script>
+<script src="~/Scripts/FileSaver.js"></script>
+<script src="~/ScriptsNg/Controller/SearchIWOWDetails/searchIWOWDetails.js"></script>
+
+<style type='text/css'>
+    #container {
+        /*width: 100%;
+        float: right;*/
+        /*margin-right: -390px;*/
+    }
+
+    #content {
+        padding-left: 2%;
+        height: 500px;
+        width: 70%;
+        overflow-x: hidden;
+    }
+
+    #sidebar {
+        width: 30%;
+        float: left;
+        height: 100%;
+    }
+
+    #sidebar-bottom {
+        width: 30%;
+        bottom: 0;
+        position: absolute;
+        padding-bottom: 9%;
+    }
+
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: block;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+    }
+
+    .modalTr td,
+    tr {
+        padding: 4px
+    }
+
+    .table-hover td {
+        font-size: small;
+    }
+
+    .table-hover th {
+        border: 1px thin;
+        border-radius: 5px;
+        border-spacing: 0;
+    }
+
+    .table tbody tr:hover td,
+    .table tbody tr:hover th {
+        background-color: lightgreen;
+    }
+
+    .radio label,
+    .radio1 label {
+        font-size: 14px;
+        margin: 10px
+    }
+
+    radio1 {
+        font-size: 14px;
+        margin: 10px;
+    }
+
+    .error {
+        position: relative;
+        height: 250px;
+        padding-top: 30px;
+        margin-left: 10px
+    }
+
+    .options {
+        position: fixed;
+        height: 250px;
+        width: 100%;
+    }
+
+    .radio {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: relative;
+        background-color: burlywood;
+        min-width: 220px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+
+    .dropdown-content {
+        display: block;
+    }
+
+    .testingCSS {
+        font-size: smaller;
+        text-align: center;
+        color: whitesmoke;
+    }
+
+    .less {
+        border-radius: 15px;
+        background-color: red;
+    }
+
+    .equal {
+        border-radius: 15px;
+        background-color: blue;
+    }
+
+    input::-webkit-calendar-picker-indicator {
+        opacity: 100;
+    }
+
+    input-date {
+        font-size: 14px;
+        margin: 10px;
+    }
+
+    input {
+    }
+</style>
+<form name="yourId" id="yourId" class="form" ng-controller="searchEngineIWOW" ng-app="indexApp" autocomplete="off">
+    <!--     <div class="header">
+       </div>-->
+    <br />
+    <br />
+    <br />
+    <div class="header">
+        <h1>SEARCH ENGINE - IW and OW Details</h1>
+    </div>
+
+    <div class="sidebar" id="sidebar" style="border:thin;">
+
+        <br />
+
+        <div class="">
+
+            <div class="radio">
+                <b>By User or Verification Time</b>
+
+                <table style="width:100%" border="0">
+                    <tr>
+                        <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td col>
+                            <label for="radios-0">
+                                <input type="radio" name="radios" id="radios-0" value="true" ng-click="radioSearchBatchClick()">
+                                User Id
+                            </label>
+                        </td>
+                        <td>
+                            <input list="listUserId" name="listUserId" id="listUserId" class="form-control" ng-focus="listBatchFocus()" style="width:100%" placeholder="[A-Z, 0-9]">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="input-date" id="optDate">
+                                Date
+                                <input id="input-date" type="date" value="2014-10-31">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                Verification Time
+                                <input id="input-time" type="time" value="00:00:01">
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-bottom" id="sidebar-bottom">
+        <div class="radio1">
+            <b>By Check Number</b>
+
+            <table style="width:100%" border="0">
+                <tr>
+                    <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="radios-0">
+                            <input type="radio" name="radios" id="radios-1" value="true" ng-click="radioSearchBatchClick()">
+                            Check Number
+                        </label>
+                    </td>
+                    <td>
+                        <input list="resultBatch" name="listCheckNumber" id="listCheckNumber" class="form-control" ng-focus="listBatchFocus()" style="width:100%" placeholder="[0-9]">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="input-date" id="optDate">
+                            User ID
+                        </label>
+                    </td>
+                    <td>
+                        <input list="resultBatch" name="listUserId" id="listUserId" class="form-control" ng-focus="listUserIdFocus()" style="width:100%" placeholder="[A-Z, 0-9]">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>
+                            Date
+                            <input id="input-date" type="date" value="2014-10-31">
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" style="float:right; width: 30%" class="btn btn-info" name="btnSearch" id="btnSearch" ng-model="btnSearch" ng-click="btnSearchClick()">Search</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" style="float:right; width: 30%" class="btn btn-info" name="btnReset" id="btnReset" ng-model="btnReset" ng-click="btnResetClick()">Reset</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="container">
+        <div id="content" ng-show="isVisible">
+            <table id="tblSummary" name="tblSummary" ng-model="tblSummary" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
+                <thead id="tableHeader">
+                    @*<tr>
+                            <td colspan="8">
+                                <p><button type="button" style="background-color: indianred; float:right; width:20%" class="btn btn-info" name="btnExport" id="btnExport" ng-model="btnExport" ng-click="fnExcelReport()" disabled>EXPORT</button></p>
+                            </td>
+                        </tr>*@
+                    @*<tr hidden>
+                            <th colspan="7" style="color:whitesmoke;background-color:cornflowerblue;"> LOANS LATE CHECK REPORT - PER BATCH </th>
+                            <th style="color:whitesmoke;background-color:cornflowerblue;">{{getDate()}} </th>
+                        </tr>*@
+                    <tr>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">TRANSACTION DATE </th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT WISE USER</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFICATION TIME</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER ID</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER NAME</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRSTN</th>
+                        <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRANCH NAME</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClick(x)">
+                        <td align="left" width="1%">{{ $index +1 }}</td>
+                        <td>{{ x.TRANSACTION_DATE }}</td>
+                        <td>{{ x.INSTRUMENT_NUMBER  }}</td>
+                        <td> {{ x.ZP_AMOUNT  }}</td>
+                        <td> {{ x.ZP_AMT_CREATOR }}</td>
+                        <td>{{ x.SVSFV_TIME}}</td>
+                        <td> {{x.SVS_FIRST }}</td>
+                        <td>{{ x.FNAME  }}</td>
+                        <td>{{ x.CHECK_BRSTN}}</td>
+                        <td>{{ x.BRANCH_NAME}}</td>
+                    </tr>
+                </tbody>
+
+                @*<tfoot id="tableFooter" hidden>
+                        <tr>
+                            <td>TOTAL COUNT : </td>
+                            <td colspan="3">{{ batchDetails.length }}</td>
+                            <td>TOTAL AMOUNT : </td>
+                            <td colspan="3">{{ getTotal() |number:3 }}</td>
+                        </tr>
+                    </tfoot>*@
+            </table>
+        </div>
+    </div>
+</form>

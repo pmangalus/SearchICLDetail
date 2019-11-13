@@ -160,14 +160,17 @@
     <Compile Include="Controllers\ICLSearchController.cs" />
     <Compile Include="Controllers\Loans\LLateCheckSummaryController.cs" />
     <Compile Include="Controllers\OutwardCheckStatusController.cs" />
+    <Compile Include="Controllers\SearchEngineIWOW\SearchEngineIWOWController.cs" />
     <Compile Include="DBManager\Model\ICLModels\ICLDataModel.cs" />
     <Compile Include="DBManager\Model\LoansModels\LoanBatchIdModel.cs" />
     <Compile Include="DBManager\Model\LoansModels\LoanDataModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumDetailsModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumModel.cs" />
+    <Compile Include="DBManager\Model\SearchEngineModel\IWOWModel.cs" />
     <Compile Include="DBManager\Service\ICLSearchService.cs" />
     <Compile Include="DBManager\Service\Loans\LoansSearchService.cs" />
     <Compile Include="DBManager\Service\OutwardCheckService.cs" />
+    <Compile Include="DBManager\Service\SearchEngineIWOWService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -284,6 +287,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="ScriptsNg\Controller\Loans\lateCheckSummary.js" />
     <Content Include="ScriptsNg\Controller\Reference\outwardCheckSummary.js" />
+    <Content Include="ScriptsNg\Controller\SearchIWOWDetails\searchIWOWDetails.js" />
     <Content Include="ScriptsNg\Module\indexApp.js" />
     <Content Include="ScriptsNg\Controller\Reference\iclViewSearchCtrl.js" />
     <Content Include="Scripts\angular-animate.js" />
@@ -1238,6 +1242,7 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-2.5.0.js" />
     <Content Include="Views\OutwardCheckStatus\backup.html" />
+    <Content Include="Views\SearchEngineIWOW\SearchEngineIWOW.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
