@@ -14,6 +14,7 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
     $scope.currentPage = 0;
     $scope.pageSize = 0;
     
+    $scope.colors = ['cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'coral'];
 
     var apiUrl = host + '/api/cics/outwardChechStatusSummary/';
     var that = this;
@@ -27,6 +28,8 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
             if (jsonParse.length !== 0) {
                 $scope.display = jsonParse;
                 $scope.dateRefresh = new Date().toLocaleString();
+
+                
             }
             else {
                 that.openDialog("Kindly refresh the page, possible records was already \nprocessed for the next status");
@@ -81,12 +84,16 @@ app.controller('outwardCheckSummary', ['$scope', '$timeout', function ($scope, $
     };
     $scope.getTotal = function () {
         var total = 0;
-        for (var i = 0; i < $scope.loansummaryDetails.length; i++) {
-            var x = $scope.loansummaryDetails[i];
-            // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
-            total = total + parseFloat(x.AMOUNT);
-            //console.log("total: " + total);
+
+        if ($scope.loansummaryDetails !== undefined) {
+            for (var i = 0; i < $scope.loansummaryDetails.length; i++) {
+                var x = $scope.loansummaryDetails[i];
+                // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+                total = total + parseFloat(x.AMOUNT);
+                //console.log("total: " + total);
+            }
         }
+        
         return total;
 
     };

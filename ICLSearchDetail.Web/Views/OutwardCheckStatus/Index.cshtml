@@ -35,6 +35,10 @@
         background-color: lawngreen;
     }
 
+    .activeButton {
+        background-color : orange;
+     }
+
     
 </style>
 <h2>Index</h2>
@@ -51,7 +55,7 @@
                 </tr>
                 <tr align="center" ng-repeat="x in display">
                     <td style="overflow: hidden; width: 280px; text-align: left; padding: 5px">
-                        <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" style="width:100%; background-color:cornflowerblue">{{ x.summary }}</button>
+                        <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" ng-style="{'background-color': colors[$index]}" style="width:100%;" >{{ x.summary }}</button>
                     </td>
                 </tr>
             </table>
@@ -186,15 +190,23 @@
             <thead id="tableHeader">
                 <tr style="background-color:cornflowerblue; ">
                     @*<th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">#</th>*@
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">MODULE</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BUSINESS DATE</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BATCH ID</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK NUMBER</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED ACCOUNT</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BRSTN</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCANNED BY</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING TIME</th>
-                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NUMBER KEYING USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCAN ACCOUNT NO.</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCAN BRSTN</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCAN BY</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SCAN TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT KEYING/PDC PROCESSING USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT KEYING/PDC PROCESSING TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NO. KEYING USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">ACCOUNT NO. KEYING TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">PDC VERIFICATION USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">PDC VERIFICATION TIME</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">PDC ALLOW/HOLD USER</th>
+                    <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">PDC ALLOW/HOLD TIME</th>
                     <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">BRANCH NAME</th>
                 </tr>
             </thead>
@@ -202,6 +214,7 @@
                 <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: 'BATCH_ID'">
                     @*<td align="left">{{ $index +1 }}</td>
         <td align="left">ID{{ x.INSTRUMENT_ID }}</td>*@
+                    <td>{{ x.MODULE }}</td>
                     <td>{{ x.BUSINESS_DATE }}</td>
                     <td>{{ x.BATCH_ID }}</td>
                     <td>&nbsp;{{ x.CHECK_NUMBER }}</td>
@@ -209,8 +222,15 @@
                     <td>&nbsp; {{ x.SCAN_ACCOUNT }}</td>
                     <td>&nbsp; {{ x.SCAN_BRSTN }}</td>
                     <td>{{ x.SCANNED_BY }}</td>
-                    <td>{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                    <td>&nbsp;{{ x.SCANNED_TIME }}</td>
+                    <td>{{ x.AMOUNT_KEYING_USR }}</td>
+                    <td>&nbsp;{{ x.AMOUNT_KEYING_TIME }}</td>
                     <td>{{ x.ACCOUNT_NO_KEYING_USR }}</td>
+                    <td>&nbsp;{{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                    <td>{{ x.PDC_VERIFICATION_USER }}</td>
+                    <td>&nbsp;{{ x.PDC_VERIFICATION_TIME }}</td>
+                    <td>{{ x.PDC_ALLOW_HOLD_USER }}</td>
+                    <td>&nbsp;{{ x.PDC_ALLOW_HOLD_TIME }}</td>
                     <td>{{ x.BRANCH_NAME }}</td>
                 </tr>
             </tbody>
