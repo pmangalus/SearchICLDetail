@@ -98,9 +98,9 @@ namespace ICLSearchDetail.Web.DBManager.Service
             catch (Exception e)
             {
 
-                IWOWModel iwowResultList = new IWOWModel();
-                iwowResultList.ERROR_MSG = e.Message;
-                searchResult.Add(iwowResultList);
+                //IWOWModel iwowResultList = new IWOWModel();
+                //iwowResultList.ERROR_MSG = e.Message;
+                //searchResult.Add(iwowResultList);
                 ret = JsonConvert.SerializeObject(searchResult);
                 return ret;
             }

@@ -290,7 +290,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="ScriptsNg\Controller\Loans\lateCheckSummary.js" />
     <Content Include="ScriptsNg\Controller\Reference\outwardCheckSummary.js" />
-    <Content Include="ScriptsNg\Controller\Reference\searchEngineIWOW.js" />
+    <Content Include="ScriptsNg\Controller\IWOW\searchEngineIWOW.js" />
     <Content Include="ScriptsNg\Module\indexApp.js" />
     <Content Include="ScriptsNg\Controller\Reference\iclViewSearchCtrl.js" />
     <Content Include="Scripts\angular-animate.js" />

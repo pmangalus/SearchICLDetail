@@ -6,7 +6,7 @@ using System.Web;
 namespace ICLSearchDetail.Web.DBManager.Model.SearchEngineModels
 {
     public class IWOWModel
-    {
+    { 
         public string TRANSACTION_DATE { get; set; }
         public string INSTRUMENT_NUMBER { get; set; }
         public string ZP_AMOUNT { get; set; }

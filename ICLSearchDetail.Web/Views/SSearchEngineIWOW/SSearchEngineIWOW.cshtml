@@ -1,6 +1,6 @@
 ﻿@{ ViewBag.Title = "Search Inward/Outward Check Details"; }
 
-<script src="~/ScriptsNg/Controller/Reference/searchEngineIWOW.js"></script>
+<script src="~/ScriptsNg/Controller/IWOW/searchEngineIWOW.js"></script>
 
 <style type='text/css'>
     #container {
@@ -158,32 +158,37 @@
             <div class="radio">
 
                 <fieldset>
-                    <legend><b>By User or Verification Time</b></legend>
+                    <legend><b>By User and Verification Date(time)</b></legend>
                     <table style="width:100%" border="0">
                         @*<tr>
                                 <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
                             </tr>*@
                         <tr>
-                            <td col>
-                                <label for="radios-0">
-                                    <input type="radio" name="radioUserID" id="radioSearchUserID" value="true" ng-model="radioUserID" ng-click="radioSearchBatchClick()">
-                                    User Id
+                            <td col title="mandatory field">
+                                <label for="radioSearchUserID">
+                                    <input type="radio" name="radioUserID" id="radioSearchUserID" ng-model="radioUserID" ng-click="radioSearchBatchClick()" checked="isChecked">
+                                    User ID<span style="font-size:15px;color:red"><sup>*</sup></span>
                                 </label>
 
                             </td>
                             <td>
                                 <input type="text" name="txtUserId" id="txtUserId" ng-disabled="radioDisabled2" class="form-control" style="width:100%;align-self:auto" placeholder="Enter User ID" ng-focus="searchByFocus(1)" />
-                                <span style="font-size:9px"> Accepts Characters [A-Z] [0-9]</span>
+                                <span style="font-size:9px"><span style="font-size:9px;color:red">*REQUIRED </span> accepts alphanumeric char(s) only</span>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td title="mandatory field">
                                 <label for="input-date" id="optDate">
-                                    Date
+                                    Verification Date<span style="font-size:15px;color:red"><sup>*</sup></span>
 
                                 </label>
                             </td>
-                            <td><input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" ng-focus="searchByFocus(1)" /></td>
+                            <td>
+                                <input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" ng-focus="searchByFocus(1)" max="9999-12-31" />
+
+                                <span style="font-size:9px;color:red"> *REQUIRED </span>
+                            </td>
+
                         </tr>
                         <tr>
                             <td>
@@ -212,16 +217,17 @@
                             <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
                         </tr>*@
                     <tr>
-                        <td>
-                            <label for="radios-1">
+                        <td title="mandatory field">
+                            <label for="radioSearchCheckNo">
                                 <input type="radio" name="radioCheckNo" id="radioSearchCheckNo" value="true" ng-model="radioCheckNo" ng-click="radioSearchBatchClick1()">
-                                Check Number
+                                Check Number<span style="font-size:15px;color:red"><sup>*</sup></span>
                             </label>
 
                         </td>
                         <td>
-                            <input type="number" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1" class="form-control" style="width:100%" placeholder="Enter Check Number" max="10" ng-focus="searchByFocus(2)" />
-                            <span style="font-size:9px"> Accepts Numbers [0-9]</span>
+                            <!--<input type="number" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1"  class="form-control" style="width:100%" placeholder="Enter Check Number" max="10" ng-focus= "searchByFocus(2)"/> -->
+                            <input type="text" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1" class="form-control" style="width:100%" placeholder="Enter Check Number" maxlength="10" />
+                            <span style="font-size:9px"> <span style="font-size:9px;color:red">*REQUIRED </span> accepts numeric char(s) only</span>
                         </td>
                     </tr>
                     <tr>
@@ -232,7 +238,7 @@
                         </td>
                         <td>
                             <input type="text" name="textUserCheck" ng-disabled="radioDisabled1" id="textUserCheck" class="form-control" style="width:100%" placeholder="Enter User ID" ng-focus="searchByFocus(2)">
-                            <span style="font-size:9px"> Accepts Characters [A-Z] [0-9]</span>
+                            <span style="font-size:9px"> accepts alphanumeric char(s) only</span>
                         </td>
                     </tr>
                     <tr>
@@ -243,7 +249,7 @@
                             </label>
                         </td>
                         <td>
-                            <input id="input-date1" type="date" ng-disabled="radioDisabled1" class="form-control" ng-focus="searchByFocus(2)" />
+                            <input id="input-date1" type="date" ng-disabled="radioDisabled1" class="form-control" ng-focus="searchByFocus(2)" max="9999-12-31" />
                         </td>
 
                     </tr>
@@ -255,7 +261,7 @@
                     <tr>
 
                         <td colspan="2">
-                            <button type="button" style="float:right; width: 30%" class="btn btn-info" name="btnSearch" id="btnSearch" ng-model="btnSearch" ng-disabled="!radioUserID && !radioCheckNo" ng-click="btnSearchClick()">Search</button>
+                            <button type="button" style="float:right; width: 30%" class="btn btn-info" name="btnSearch" id="btnSearch" ng-model="btnSearch" ng-click="btnSearchClick()">Search</button>
                         </td>
                     </tr>
                     <tr>
@@ -293,11 +299,11 @@
                 <tbody id="tableBody">
                     <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClick(x)">
                         <td align="left" width="1%">{{ $index +1 }}</td>
-                        <td>{{ x.TRANSACTION_DATE }}</td>
-                        <td>{{ x.INSTRUMENT_NUMBER  }}</td>
+                        <td>&nbsp;{{ x.TRANSACTION_DATE }}</td>
+                        <td> &nbsp;{{ x.INSTRUMENT_NUMBER  }}</td>
                         <td> {{ x.ZP_AMOUNT  }}</td>
                         <td> {{ x.ZP_AMT_CREATOR }}</td>
-                        <td>{{ x.SVSFV_TIME}}</td>
+                        <td>&nbsp; {{ x.SVSFV_TIME}}</td>
                         <td> {{x.SVS_FIRST }}</td>
                         <td>{{ x.FNAME  }}</td>
                         <td>{{ x.CHECK_BRSTN}}</td>
@@ -327,11 +333,11 @@
         <tbody id="tableBody">
             <tr align="center" ng-repeat="x in IWOWDetailsEx" track by $index ng-click="rowSummaryClick(x)">
                 <td align="left" width="1%">{{ $index +1 }}</td>
-                <td>{{ x.TRANSACTION_DATE }}</td>
-                <td>{{ x.INSTRUMENT_NUMBER  }}</td>
-                <td> {{ x.ZP_AMOUNT  }}</td>
+                <td> &nbsp; {{ x.TRANSACTION_DATE }}</td>
+                <td>&nbsp; {{ x.INSTRUMENT_NUMBER  }}</td>
+                <td> {{ x.ZP_AMOUNT | number:2 }}</td>
                 <td> {{ x.ZP_AMT_CREATOR }}</td>
-                <td>{{ x.SVSFV_TIME}}</td>
+                <td>&nbsp; {{ x.SVSFV_TIME}}</td>
                 <td> {{x.SVS_FIRST }}</td>
                 <td>{{ x.FNAME  }}</td>
                 <td>{{ x.CHECK_BRSTN}}</td>

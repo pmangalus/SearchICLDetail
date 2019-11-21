@@ -11,7 +11,7 @@ namespace ICLSearchDetail.Web.Controllers
         // GET: SSearchEngineIWOW
         public ActionResult SSearchEngineIWOW()
         {
-            return View();
+            return View(); 
         }
     }
 }

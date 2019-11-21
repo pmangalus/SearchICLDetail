@@ -10,7 +10,7 @@ namespace ICLSearchDetail.Web.Controllers
     public class SearchEngineIWOWController : ApiController
     {
         [System.Web.Http.Route("api/searchEngine/searchIWOW/userID/{userIDDate}")]
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpGet] 
         public IHttpActionResult GetUserIDDateDetails(String userIDDate)
         {
 
