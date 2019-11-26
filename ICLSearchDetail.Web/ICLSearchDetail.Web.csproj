@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\api\ILO\SearchEngineILOController.cs" />
     <Compile Include="Controllers\api\IWOW\SearchEngineIWOWController.cs" />
     <Compile Include="Controllers\api\Loans\LoansSummaryController.cs" />
     <Compile Include="Controllers\api\SearchIclController.cs" />
@@ -163,12 +164,14 @@
     <Compile Include="Controllers\OutwardCheckStatusController.cs" />
     <Compile Include="Controllers\SSearchEngineIWOWController.cs" />
     <Compile Include="DBManager\Model\ICLModels\ICLDataModel.cs" />
+    <Compile Include="DBManager\Model\ILOModel\ILOModel.cs" />
     <Compile Include="DBManager\Model\IWOWModel\IWOWModel.cs" />
     <Compile Include="DBManager\Model\LoansModels\LoanBatchIdModel.cs" />
     <Compile Include="DBManager\Model\LoansModels\LoanDataModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumDetailsModel.cs" />
     <Compile Include="DBManager\Model\OutwardCheckSummaryModels\OCSumModel.cs" />
     <Compile Include="DBManager\Service\ICLSearchService.cs" />
+    <Compile Include="DBManager\Service\ILO\SearchEngineILOService.cs" />
     <Compile Include="DBManager\Service\IWOW\SearchEngineIWOWService.cs" />
     <Compile Include="DBManager\Service\Loans\LoansSearchService.cs" />
     <Compile Include="DBManager\Service\OutwardCheckService.cs" />
@@ -179,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\DbScript\ILO.txt" />
     <Content Include="bin\DbScript\IWOW.txt" />
     <Content Include="bin\DbScript\loanTransmittedReport.txt" />
     <Content Include="bin\DbScript\outcheckDetails.txt" />

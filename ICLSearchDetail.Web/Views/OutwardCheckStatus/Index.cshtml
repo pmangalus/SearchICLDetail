@@ -1,6 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "Outward Check Status ";
+                /**/
+
+                ViewBag.Title = "Outward Check Status ";
 }
 <style>
     #container {
@@ -22,9 +24,11 @@
     .modalTr td, tr {
         padding: 4px
     }
+
     .table-hover td {
         font-size: small;
     }
+
     .table-hover th {
         border: 1px thin;
         border-radius: 5px;
@@ -35,11 +39,18 @@
         background-color: lawngreen;
     }
 
-    .activeButton {
-        background-color : orange;
-     }
-
-    
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: block;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+    }
 </style>
 <h2>Index</h2>
 <div ng-app="testApp">
@@ -55,7 +66,7 @@
                 </tr>
                 <tr align="center" ng-repeat="x in display">
                     <td style="overflow: hidden; width: 280px; text-align: left; padding: 5px">
-                        <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" ng-style="{'background-color': colors[$index]}" style="width:100%;" >{{ x.summary }}</button>
+                        <button id="" name="" class="btn btn-info" ng-click="btnViewSummaryClick(x)" ng-style="{'background-color': colors[$index]}" style="width:100%;">{{ x.summary }}</button>
                     </td>
                 </tr>
             </table>
@@ -186,6 +197,9 @@
         </div>
         @*   </div>*@
 
+        <div id="loading">
+            <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />
+        </div>
         <table id="tblSummaryHidden" name="tblSummaryHidden" ng-model="tblSummaryHidden" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
             <thead id="tableHeader">
                 <tr style="background-color:cornflowerblue; ">
@@ -213,7 +227,7 @@
             <tbody id="tableBody">
                 <tr align="center" ng-repeat="x in loansummaryDetails | orderBy: 'BATCH_ID'">
                     @*<td align="left">{{ $index +1 }}</td>
-        <td align="left">ID{{ x.INSTRUMENT_ID }}</td>*@
+                        <td align="left">ID{{ x.INSTRUMENT_ID }}</td>*@
                     <td>{{ x.MODULE }}</td>
                     <td>{{ x.BUSINESS_DATE }}</td>
                     <td>{{ x.BATCH_ID }}</td>
