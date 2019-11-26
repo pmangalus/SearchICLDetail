@@ -12,7 +12,7 @@
     $scope.radioDisabled2 = false;
     $scope.radioDisabled1 = true;
     $scope.isChecked = true;
-
+    $('#loading').hide();
     const timeField = document.getElementById('input-time');
     console.log("time:" + timeField.checkValidity());
 
@@ -35,33 +35,37 @@
     console.log("batchIDOut:" + batchIDOut.checkValidity());
 
         $scope.openPage = function (pageName, elmnt, color) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablink");
-        tablinks2 = document.getElementsByClassName("tablink2");
+			var i, tabcontent, tablinks;
+			$scope.radioDisabled1 = true;
+			$scope.radioDisabled2 = false;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablink");
+			tablinks2 = document.getElementsByClassName("tablink2");
 
-            console.log(pageName);
-            if (pageName === "Inward") {
-                $scope.isRequired = false;
-            } else {
-                $scope.isRequired = true;
-            }
-            $scope.radioDisabled2 = false;
-            $scope.radioDisabled1 = true;
-        for (i = 0; i < tablinks2.length; i++) {
-            tablinks2[i].style.backgroundColor = "";
-        }
+				console.log(pageName);
+				if (pageName === "Inward") {
+					$scope.isRequired = false;
+					document.getElementById('radioSearchUserID').checked = true;
+					document.getElementById('radioSearchCheckNo').checked = false;
+				} else {
+					document.getElementById('radioSearchBRSTNOutward').checked = true;
+					document.getElementById('radioSearchBatchOutward').checked = false;
+					$scope.isRequired = true;
+				}
+			for (i = 0; i < tablinks2.length; i++) {
+				tablinks2[i].style.backgroundColor = "";
+			}
 
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
-        }
-            document.getElementById(pageName).style.display = "block";
-             
-        //elmnt.style.backgroundColor = color;
-        document.getElementById(elmnt).style.backgroundColor = color;
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].style.backgroundColor = "";
+			}
+				document.getElementById(pageName).style.display = "block";
+				 
+			//elmnt.style.backgroundColor = color;
+			document.getElementById(elmnt).style.backgroundColor = color;
 
     },
 
@@ -274,6 +278,7 @@
                     console.log(param);
 
                     if (isCheckNumber) {
+                        $('#loading').show();
                         $.ajax({
                             type: 'GET',
                             url: host + "/api/searchEngine/searchILO/brstn/" + param,
@@ -288,16 +293,18 @@
                                     //document.getElementById("btnSearch").disabled = false;
                                     //document.getElementById("btnReset").disabled = false;
                                     $scope.$apply();
-
-                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBRSTN.xls");
-
+                                    var fDate = dateFieldOut.value.replace(/-/gi, "");
+                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBRSTN (" + brstnOut.value + "_" + fDate+").xls");
+                                    $('#loading').hide();
                                 }
                                 else {
                                     $scope.isVisible = false;
+                                    $('#loading').hide();
                                     that.openDialog("No records found!");
                                 }
                             },
                             error: function (a, b, c) {
+                                $('#loading').hide();
                                 //$('#loading').hide();
                                 //console.log("Nim in ajax erroor ", a);
                             }
@@ -340,6 +347,7 @@
                     console.log(param);
 
                     if (isCheckNumber) {
+                        $('#loading').show();
                         $.ajax({
                             type: 'GET',
                             url: host + "/api/searchEngine/searchILO/batchID/" + param,
@@ -354,17 +362,19 @@
                                     //document.getElementById("btnSearch").disabled = false;
                                     //document.getElementById("btnReset").disabled = false;
                                     $scope.$apply();
-
-                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBatchID.xls");
-
+                                    var fDate = dateFieldOut2.value.replace(/-/gi, "");
+                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBatchID (" + batchIDOut.value + "_" + fDate +").xls");
+                                    $('#loading').hide();
                                 }
                                 else {
                                     $scope.isVisible = false;
+                                    $('#loading').hide();
                                     that.openDialog("No records found!");
                                 }
                             },
                             error: function (a, b, c) {
                                 //$('#loading').hide();
+                                $('#loading').hide();
                                 //console.log("Nim in ajax erroor ", a);
                             }
                         });
@@ -428,7 +438,21 @@
                 return (a);
 
             },
+        $scope.getTotal = function () {
+                var total = 0;
 
+            if ($scope.IWOWDetailsOutward !== undefined) {
+                for (var i = 0; i < $scope.IWOWDetailsOutward.length; i++) {
+                    var x = $scope.IWOWDetailsOutward[i];
+                        // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+                        total = total + parseFloat(x.AMOUNT);
+                        //console.log("total: " + total);
+                    }
+                }
+
+                return total;
+
+            };
         $scope.openDialog = function (message) {
             var a = BootstrapDialog.show({
                 message: message,

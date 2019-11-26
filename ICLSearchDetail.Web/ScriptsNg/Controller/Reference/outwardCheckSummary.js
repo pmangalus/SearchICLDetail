@@ -92,12 +92,16 @@
         };
         $scope.getTotal = function () {
             var total = 0;
-            for (var i = 0; i < $scope.loansummaryDetails.length; i++) {
-                var x = $scope.loansummaryDetails[i];
-                // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
-                total = total + parseFloat(x.AMOUNT);
-                //console.log("total: " + total);
+
+            if ($scope.loansummaryDetails !== undefined) {
+                for (var i = 0; i < $scope.loansummaryDetails.length; i++) {
+                    var x = $scope.loansummaryDetails[i];
+                    // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+                    total = total + parseFloat(x.AMOUNT);
+                    //console.log("total: " + total);
+                }
             }
+          
             return total;
 
         };

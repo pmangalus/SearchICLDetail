@@ -425,9 +425,9 @@
 
                                 </td>
                                 <td>
-                                    <input type="text"  ng-disabled="radioDisabled2"  title="accepts alphanumeric char(s) only" name="txtBRSTNOutwardR1" id="txtBRSTNOutwardR1" class="form-control" style="width:100%;float:right;color: black;background-color:powderblue" ng-focus="searchByFocusOut(1)" placeholder="Enter BRSTN" ng-required="isRequired"/>
+                                    <input type="text" ng-disabled="radioDisabled2" title="accepts alphanumeric char(s) only" name="txtBRSTNOutwardR1" id="txtBRSTNOutwardR1" class="form-control" style="width:100%;float:right;color: black;background-color:powderblue" ng-focus="searchByFocusOut(1)" placeholder="Enter BRSTN" ng-required="isRequired" />
                                 </td>
-                                
+
 
                             </tr>
                             <tr>
@@ -435,7 +435,7 @@
                                     Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
                                 </td>
                                 <td>
-                                    <input id="input-dateOutwardR1" ng-disabled="radioDisabled2"  name="input-dateOutwardR1" type="date" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(1)" max="9999-12-31" ng-required="isRequired" />
+                                    <input id="input-dateOutwardR1" ng-disabled="radioDisabled2" name="input-dateOutwardR1" type="date" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(1)" max="9999-12-31" ng-required="isRequired" />
                                 </td>
                             </tr>
                             <tr>
@@ -444,7 +444,7 @@
 
                                 </td>
                                 <td>
-                                    <input type="text"  ng-disabled="radioDisabled2"  title="accepts alphanumeric char(s) only" name="txtCheckNoOutwardR1" id="txtCheckNoOutwardR1" class="form-control" style="width:100%;float:right;color: black;" placeholder="Enter Check Number" ng-focus="searchByFocusOut(1)" maxlength="10" />
+                                    <input type="text" ng-disabled="radioDisabled2" title="accepts alphanumeric char(s) only" name="txtCheckNoOutwardR1" id="txtCheckNoOutwardR1" class="form-control" style="width:100%;float:right;color: black;" placeholder="Enter Check Number" ng-focus="searchByFocusOut(1)" maxlength="10" />
                                 </td>
                             </tr>
                             <tr>
@@ -479,7 +479,7 @@
 
                             </td>
                             <td>
-                                <input type="text" ng-disabled="radioDisabled1" title="accepts alphanumeric char(s) only" name="txtBatchIDOutwardR2" id="txtBatchIDOutwardR2" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(2)" placeholder="Enter Batch ID" ng-required="isRequired"/>
+                                <input type="text" ng-disabled="radioDisabled1" title="accepts alphanumeric char(s) only" name="txtBatchIDOutwardR2" id="txtBatchIDOutwardR2" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(2)" placeholder="Enter Batch ID" ng-required="isRequired" />
                             </td>
                         </tr>
                         <tr>
@@ -490,7 +490,7 @@
                                 <input id="input-dateOutwardR2" ng-disabled="radioDisabled1" name="input-dateOutwardR2" type="date" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(2)" max="9999-12-31" ng-required="isRequired" />
                             </td>
 
-                            
+
                         </tr>
                         <tr>
                             <td col title="mandatory field" width="100%">
@@ -558,7 +558,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr align="center" ng-repeat="x in IWOWDetailsOutward" track by $index>
+                        <tr align="center" ng-repeat="x in IWOWDetailsOutward | orderBy: 'SCANNED_TIME'" track by $index>
                             <td align="left" width="1%">{{ $index +1 }}</td>
                             <td>&nbsp; {{ x.BUSINESS_DATE }}</td>
                             <td>{{ x.MODULE }}</td>
@@ -581,9 +581,21 @@
                             <td>{{ x.BRANCH_NAME}}</td>
                         </tr>
                     </tbody>
+                    <tfoot id="tableFooter">
+                        <tr>
+                            <td>TOTAL COUNT : </td>
+                            <td colspan="3">{{ IWOWDetailsOutward.length }}</td>
+                            <td>TOTAL AMOUNT : </td>
+                            <td colspan="3">{{ getTotal() | number:2 }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div> @*end div content container*@
+    </div>
+
+    <div id="loading">
+        <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />
     </div>
 
     <table id="tblIWOWDetailsEx" name="tblIWOWDetailsEx" ng-model="tblIWOWDetailsEx" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
@@ -618,6 +630,7 @@
                 <td>{{ x.BRANCH_NAME}}</td>
             </tr>
         </tbody>
+
     </table>
 
 </form>
