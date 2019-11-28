@@ -34,38 +34,38 @@
     const batchIDOut = document.getElementById('txtBatchIDOutwardR2');
     console.log("batchIDOut:" + batchIDOut.checkValidity());
 
-        $scope.openPage = function (pageName, elmnt, color) {
-			var i, tabcontent, tablinks;
-			$scope.radioDisabled1 = true;
-			$scope.radioDisabled2 = false;
-			tabcontent = document.getElementsByClassName("tabcontent");
-			for (i = 0; i < tabcontent.length; i++) {
-				tabcontent[i].style.display = "none";
-			}
-			tablinks = document.getElementsByClassName("tablink");
-			tablinks2 = document.getElementsByClassName("tablink2");
+    $scope.openPage = function (pageName, elmnt, color) {
+        var i, tabcontent, tablinks;
+        $scope.radioDisabled1 = true;
+        $scope.radioDisabled2 = false;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        tablinks2 = document.getElementsByClassName("tablink2");
 
-				console.log(pageName);
-				if (pageName === "Inward") {
-					$scope.isRequired = false;
-					document.getElementById('radioSearchUserID').checked = true;
-					document.getElementById('radioSearchCheckNo').checked = false;
-				} else {
-					document.getElementById('radioSearchBRSTNOutward').checked = true;
-					document.getElementById('radioSearchBatchOutward').checked = false;
-					$scope.isRequired = true;
-				}
-			for (i = 0; i < tablinks2.length; i++) {
-				tablinks2[i].style.backgroundColor = "";
-			}
+        console.log(pageName);
+        if (pageName === "Inward") {
+            $scope.isRequired = false;
+            document.getElementById('radioSearchUserID').checked = true;
+            document.getElementById('radioSearchCheckNo').checked = false;
+        } else {
+            document.getElementById('radioSearchBRSTNOutward').checked = true;
+            document.getElementById('radioSearchBatchOutward').checked = false;
+            $scope.isRequired = true;
+        }
+        for (i = 0; i < tablinks2.length; i++) {
+            tablinks2[i].style.backgroundColor = "";
+        }
 
-			for (i = 0; i < tablinks.length; i++) {
-				tablinks[i].style.backgroundColor = "";
-			}
-				document.getElementById(pageName).style.display = "block";
-				 
-			//elmnt.style.backgroundColor = color;
-			document.getElementById(elmnt).style.backgroundColor = color;
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+        document.getElementById(pageName).style.display = "block";
+
+        //elmnt.style.backgroundColor = color;
+        document.getElementById(elmnt).style.backgroundColor = color;
 
     },
 
@@ -128,7 +128,7 @@
 
                                         $scope.IWOWDetailsEx = jsonParse;
                                         $scope.$apply();
-                                        that.extractExcel("tblIWOWDetailsEx", "Inward Check Details - Export All.xls");                                        
+                                        that.extractExcel("tblIWOWDetailsEx", "Inward Check Details - Export All.xls");
 
                                     } else {
                                         $scope.isVisible = true;
@@ -238,9 +238,9 @@
 
         },
         $scope.btnSearchOutwardClick = function () {
-                console.log("SearchOutwardClick");
-                console.log("batchIDOut:" + batchIDOut.checkValidity());
-                var that = this;
+            console.log("SearchOutwardClick");
+            console.log("batchIDOut:" + batchIDOut.checkValidity());
+            var that = this;
             $scope.tblIWOWDetailsOuward = [];
             var radioSearchBRSTNOutward = document.getElementById('radioSearchBRSTNOutward');
             var radioSearchBatchOutward = document.getElementById('radioSearchBatchOutward');
@@ -249,7 +249,7 @@
 
                 if (!brstnOut.checkValidity()) {
 
-                    that.openDialog("Please enter a valid Batch ID.");
+                    that.openDialog("Please enter a valid BRSTN.");
 
                 } else if (!dateFieldOut.checkValidity()) {
                     that.openDialog("Please enter a valid date(mm/dd/yyyy)");
@@ -294,7 +294,7 @@
                                     //document.getElementById("btnReset").disabled = false;
                                     $scope.$apply();
                                     var fDate = dateFieldOut.value.replace(/-/gi, "");
-                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBRSTN (" + brstnOut.value + "_" + fDate+").xls");
+                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBRSTN (" + brstnOut.value + "_" + fDate + ").xls");
                                     $('#loading').hide();
                                 }
                                 else {
@@ -363,7 +363,7 @@
                                     //document.getElementById("btnReset").disabled = false;
                                     $scope.$apply();
                                     var fDate = dateFieldOut2.value.replace(/-/gi, "");
-                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBatchID (" + batchIDOut.value + "_" + fDate +").xls");
+                                    that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBatchID (" + batchIDOut.value + "_" + fDate + ").xls");
                                     $('#loading').hide();
                                 }
                                 else {
@@ -386,85 +386,85 @@
             }
 
 
-            },
+        },
 
 
         $scope.extractExcel = function (tableName, fileName) {
 
-                var fileNameAcc = "";
-                var that = this;
-                fileNameAcc = fileName //"Inward Check Details - Export All.xls";
-                tab = document.getElementById(tableName); // id of table
+            var fileNameAcc = "";
+            var that = this;
+            fileNameAcc = fileName //"Inward Check Details - Export All.xls";
+            tab = document.getElementById(tableName); // id of table
 
 
-                var tab_text = "<table border='2px'><tr>";
-                var textRange;
-                var j = 0;
+            var tab_text = "<table border='2px'><tr>";
+            var textRange;
+            var j = 0;
 
 
-                for (j = 0; j < tab.rows.length; j++) {
-                    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
-                    //tab_text=tab_text+"</tr>";
-                }
+            for (j = 0; j < tab.rows.length; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                //tab_text=tab_text+"</tr>";
+            }
 
-                tab_text = tab_text + "</table>";
-                tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
-                tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-                tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
-                var ua = window.navigator.userAgent;
-                var msie = ua.indexOf("MSIE ");
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
 
-                if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
-                {
-                    txtArea1.document.open("txt/html", "replace");
-                    txtArea1.document.write(tab_text);
-                    txtArea1.document.close();
-                    txtArea1.focus();
-                    a = txtArea1.document.execCommand("SaveAs", true, "excel.xls");
-                } else {
-                    var blob = new Blob([tab_text], {
-                        type: 'application/vnd.ms-excel'
-                    });
-                    var downloadUrl = URL.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    a.href = downloadUrl;
-                    a.download = fileNameAcc;
-                    document.body.appendChild(a);
-                    a.click();
-                }
-                that.openDialog("Done Extract");
-                //console.log("$scope.IWOWDetailsEx", $scope.IWOWDetailsEx);
-                return (a);
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
+            {
+                txtArea1.document.open("txt/html", "replace");
+                txtArea1.document.write(tab_text);
+                txtArea1.document.close();
+                txtArea1.focus();
+                a = txtArea1.document.execCommand("SaveAs", true, "excel.xls");
+            } else {
+                var blob = new Blob([tab_text], {
+                    type: 'application/vnd.ms-excel'
+                });
+                var downloadUrl = URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = fileNameAcc;
+                document.body.appendChild(a);
+                a.click();
+            }
+            that.openDialog("Done Extract");
+            //console.log("$scope.IWOWDetailsEx", $scope.IWOWDetailsEx);
+            return (a);
 
-            },
+        },
         $scope.getTotal = function () {
-                var total = 0;
+            var total = 0;
 
             if ($scope.IWOWDetailsOutward !== undefined) {
                 for (var i = 0; i < $scope.IWOWDetailsOutward.length; i++) {
                     var x = $scope.IWOWDetailsOutward[i];
-                        // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
-                        total = total + parseFloat(x.AMOUNT);
-                        //console.log("total: " + total);
-                    }
+                    // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+                    total = total + parseFloat(x.AMOUNT);
+                    //console.log("total: " + total);
                 }
+            }
 
-                return total;
+            return total;
 
-            };
-        $scope.openDialog = function (message) {
-            var a = BootstrapDialog.show({
-                message: message,
-                buttons: [{
-                    label: 'Close',
-                    action: function (dialogItself) {
-                        dialogItself.close();
-                    }
-                }]
-            });
-            return a;
-        },
+        };
+    $scope.openDialog = function (message) {
+        var a = BootstrapDialog.show({
+            message: message,
+            buttons: [{
+                label: 'Close',
+                action: function (dialogItself) {
+                    dialogItself.close();
+                }
+            }]
+        });
+        return a;
+    },
 
         /*Inward*/
         $scope.radioSearchBatchClick = function () {
@@ -491,20 +491,20 @@
 
         }
 
-        /*Outward*/
-        $scope.radioSearchBRSTNOutwardClick = function () {
-            //console.logs("batchClick1");
-            $scope.radioDisabled1 = true;
-            $scope.radioDisabled2 = false;
-            $scope.isVisible = false;
-            $scope.IWOWDetailsOutward = [];
-            document.getElementById('radioSearchBatchOutward').checked = false;
-            document.getElementById('txtBatchIDOutwardR2').value = "";
-            document.getElementById('txtCheckNoOutwardR2').value = "";
-            document.getElementById('input-dateOutwardR2').value = "";
-        },
+    /*Outward*/
+    $scope.radioSearchBRSTNOutwardClick = function () {
+        //console.logs("batchClick1");
+        $scope.radioDisabled1 = true;
+        $scope.radioDisabled2 = false;
+        $scope.isVisible = false;
+        $scope.IWOWDetailsOutward = [];
+        document.getElementById('radioSearchBatchOutward').checked = false;
+        document.getElementById('txtBatchIDOutwardR2').value = "";
+        document.getElementById('txtCheckNoOutwardR2').value = "";
+        document.getElementById('input-dateOutwardR2').value = "";
+    },
         $scope.radioSearchBatchOutwardClick = function () {
-                //console.logs("batchClick1");
+            //console.logs("batchClick1");
             $scope.radioDisabled1 = false;
             $scope.radioDisabled2 = true;
             $scope.isVisible = false;
@@ -513,7 +513,7 @@
             document.getElementById('txtBRSTNOutwardR1').value = "";
             document.getElementById('txtCheckNoOutwardR1').value = "";
             document.getElementById('input-dateOutwardR1').value = "";
-        },        
+        },
 
         $scope.btnResetClick = function () {
             location.reload();
@@ -532,8 +532,8 @@
             $scope.radioDisabled2 = false;
             $scope.radioDisabled1 = true;
 
-        //$scope.isChecked = true;
-        //document.getElementById("btnSearch").disabled = true;
+            //$scope.isChecked = true;
+            //document.getElementById("btnSearch").disabled = true;
         },
         $scope.btnResetOutwardClick = function () {
             $scope.isVisible = false;
@@ -552,7 +552,7 @@
 
             //$scope.isChecked = true;
             //document.getElementById("btnSearch").disabled = true;
-            },
+        },
 
         $scope.searchByFocus = function (isBy) {
             //console.log(isBy);
@@ -562,7 +562,7 @@
                 document.getElementById('radioSearchCheckNo').checked = false;
                 $scope.radioDisabled1 = true;
                 $scope.radioDisabled2 = false;
-               
+
 
             } else {
                 document.getElementById('radioSearchUserID').checked = false;
@@ -575,9 +575,9 @@
 
             document.getElementById("btnSearch").disabled = false;
         }
-        $scope.searchByFocusOut = function (isBy) {
+    $scope.searchByFocusOut = function (isBy) {
 
-            $scope.isRequired = true;
+        $scope.isRequired = true;
         //console.log(isBy);
 
         if (isBy == "1") {
