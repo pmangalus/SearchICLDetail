@@ -268,6 +268,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
                 while (reader.Read())
                 {
                     LNSumDetailsModel lnCSumDetailsModel = new LNSumDetailsModel();
+                    lnCSumDetailsModel.MODULE = reader["MODULE"].ToString();
                     lnCSumDetailsModel.BATCH_ID = reader["BATCH ID NO."].ToString();
                     lnCSumDetailsModel.BUSINESS_DATE = DateTime.Parse(reader["BUSINESS DATE"].ToString()).ToShortDateString();
                     lnCSumDetailsModel.CHECK_NUMBER = reader["CHECK NUMBER"].ToString();
@@ -275,11 +276,63 @@ namespace ICLSearchDetail.Web.DBManager.Service
                     lnCSumDetailsModel.SCAN_ACCOUNT = reader["SCAN ACCOUNT NO."].ToString();
                     lnCSumDetailsModel.SCAN_BRSTN = reader["SCAN BRSTN"].ToString();
 
-                    //lnCSumDetailsModel.SCANNED_TIME = reader["SCANNED_TIME"].ToString();
+                    if (reader["SCAN TIME"].ToString().Equals(""))
+                    {
+                        lnCSumDetailsModel.SCANNED_TIME = reader["SCAN TIME"].ToString();
+                    }
+                    else
+                    {
+                        lnCSumDetailsModel.SCANNED_TIME = DateTime.Parse(reader["SCAN TIME"].ToString()).ToString(); //reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    }
+                    
+
                     lnCSumDetailsModel.SCANNED_BY = reader["SCAN BY"].ToString();
-                    //lnCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT_KEYING_TIME"].ToString();
-                    lnCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT NO. KEYING TIME"].ToString();
+
+
+                    if (reader["AMOUNT KEYING/PDC PROCESSING TIME"].ToString().Equals(""))
+                    {
+                        lnCSumDetailsModel.AMOUNT_KEYING_TIME = reader["AMOUNT KEYING/PDC PROCESSING TIME"].ToString();
+                    }
+                    else
+                    {
+                        lnCSumDetailsModel.AMOUNT_KEYING_TIME = DateTime.Parse(reader["AMOUNT KEYING/PDC PROCESSING TIME"].ToString()).ToString(); //reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    }
+
+                    lnCSumDetailsModel.AMOUNT_KEYING_USR = reader["AMOUNT KEYING/PDC PROCESSING USER"].ToString();
+
+                    if(reader["ACCOUNT NO. KEYING TIME"].ToString().Equals(""))
+                    {
+                        lnCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    } else
+                    {
+                        lnCSumDetailsModel.ACCOUNT_NO_KEYING_TIME = DateTime.Parse(reader["ACCOUNT NO. KEYING TIME"].ToString()).ToString(); //reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    }
+                    
+
+
                     lnCSumDetailsModel.ACCOUNT_NO_KEYING_USR = reader["ACCOUNT NO. KEYING USER"].ToString();
+                    lnCSumDetailsModel.PDC_VERIFICATION_USER = reader["PDC VERIFICATION USER"].ToString();
+
+                    if (reader["PDC VERIFICATION TIME"].ToString().Equals(""))
+                    {
+                        lnCSumDetailsModel.PDC_VERIFICATION_TIME = reader["PDC VERIFICATION TIME"].ToString();
+                    }
+                    else
+                    {
+                        lnCSumDetailsModel.PDC_VERIFICATION_TIME = DateTime.Parse(reader["PDC VERIFICATION TIME"].ToString()).ToString(); //reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    }
+                    
+                    lnCSumDetailsModel.PDC_ALLOW_HOLD_USER = reader["PDC ALLOW/HOLD USER"].ToString();
+
+                    if (reader["PDC ALLOW/HOLD TIME"].ToString().Equals(""))
+                    {
+                        lnCSumDetailsModel.PDC_ALLOW_HOLD_TIME = reader["PDC ALLOW/HOLD TIME"].ToString();
+                    }
+                    else
+                    {
+                        lnCSumDetailsModel.PDC_ALLOW_HOLD_TIME = DateTime.Parse(reader["PDC ALLOW/HOLD TIME"].ToString()).ToString(); //reader["ACCOUNT NO. KEYING TIME"].ToString();
+                    }
+                    
                     lnCSumDetailsModel.BRANCH_NAME = reader["BRANCH_NAME"].ToString();
                     lNSumDetailsModelList.Add(lnCSumDetailsModel);
 
