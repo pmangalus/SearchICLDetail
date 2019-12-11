@@ -41,6 +41,7 @@
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
+            tabcontent[i].focus = "false";
         }
         tablinks = document.getElementsByClassName("tablink");
         tablinks2 = document.getElementsByClassName("tablink2");

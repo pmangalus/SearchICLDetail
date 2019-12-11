@@ -297,6 +297,7 @@
     <Content Include="ScriptsNg\Controller\IWOW\searchEngineIWOW.js" />
     <Content Include="ScriptsNg\Module\indexApp.js" />
     <Content Include="ScriptsNg\Controller\Reference\iclViewSearchCtrl.js" />
+    <Content Include="ScriptsNg\styles.css" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
