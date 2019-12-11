@@ -24,6 +24,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.ILO
             var fileLoc = ConfigurationManager.AppSettings["ILOLoc"];
 
             var retSql = "";
+            var sqlQuery = "";
             using (StreamReader file = new StreamReader(fileLoc))
             {
                 //int counter = 0;
@@ -36,7 +37,19 @@ namespace ICLSearchDetail.Web.DBManager.Service.ILO
             }
 
             string ret = "";
-            var sqlQuery = retSql + " WHERE TOW.TRANSACTION_DATE = '" + varDate + "' AND TOW.BOFD_SORTCODE = '" + varBrstn + "'";
+
+            if(varDate.Contains("to"))
+            {
+                String [] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
+
+                sqlQuery = retSql + " WHERE (TOW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TOW.TRANSACTION_DATE < '" + dateRange[1].TrimStart() + "') AND TOW.BOFD_SORTCODE = '" + varBrstn + "'";
+
+
+            } else
+            {
+                sqlQuery = retSql + " WHERE TOW.TRANSACTION_DATE = '" + varDate + "' AND TOW.BOFD_SORTCODE = '" + varBrstn + "'";
+            }
+            
           
             if (!varCheckNumber.Equals(""))
             {
@@ -105,6 +118,7 @@ namespace ICLSearchDetail.Web.DBManager.Service.ILO
             var fileLoc = ConfigurationManager.AppSettings["ILOLoc"];
 
             var retSql = "";
+            var sqlQuery = "";
             using (StreamReader file = new StreamReader(fileLoc))
             {
                 //int counter = 0;
@@ -117,7 +131,18 @@ namespace ICLSearchDetail.Web.DBManager.Service.ILO
             }
 
             string ret = "";
-            var sqlQuery = retSql + " WHERE TOW.TRANSACTION_DATE = '" + varDate + "' AND TOW.BATCH_ID = '" + varBatchID + "'";
+
+            if(varDate.Contains("to"))
+            {
+                String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
+
+                sqlQuery = retSql + " WHERE (TOW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TOW.TRANSACTION_DATE < '" + dateRange[1].TrimStart() + "') AND TOW.BATCH_ID = '" + varBatchID + "'";
+
+            } else
+            {
+                sqlQuery = retSql + " WHERE TOW.TRANSACTION_DATE = '" + varDate + "' AND TOW.BATCH_ID = '" + varBatchID + "'";
+            }
+            
 
             if (!varCheckNumber.Equals(""))
             {
