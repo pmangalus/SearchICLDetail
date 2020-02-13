@@ -34,5 +34,18 @@ namespace ICLSearchDetail.Web.Controllers.api.ILO
             return Ok(returnCheckDetails);
         }
 
+
+        [System.Web.Http.Route("api/searchEngine/searchILO/iclFile/{iclFile}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetByICLFileName(String iclFile)
+        {
+
+            SearchEngineILOService searchEngineService = new SearchEngineILOService();
+
+            string returnCheckDetails = searchEngineService.getICLFileName(iclFile);
+
+            return Ok(returnCheckDetails);
+        }
+
     }
 }

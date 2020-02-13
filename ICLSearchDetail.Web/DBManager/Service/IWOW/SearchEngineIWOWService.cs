@@ -187,17 +187,18 @@ namespace ICLSearchDetail.Web.DBManager.Service
                         {
                             String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
 
-                            sqlQuery = retSql + " WHERE (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE < '" + dateRange[1].TrimStart() + "')";
+                            sqlQuery += " AND (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE <= '" + dateRange[1].TrimStart() + "')";
 
 
                         }
                         else
                         {
-                            sqlQuery = retSql + " WHERE TIW.TRANSACTION_DATE = '" + varDate + "'";
+                            sqlQuery += " AND TIW.TRANSACTION_DATE = '" + varDate + "'";
                         }
 
                         //sqlQuery = sqlQuery + " AND TIW.TRANSACTION_DATE = '" + varDate + "'";
-                    }else if(paramDetails[2] != "")
+                    }
+                    else if(paramDetails[2] != "")
                     {
                         varUserID = paramDetails[2];
                         sqlQuery = sqlQuery + " AND TIW.SVS_FIRST = '" + varUserID + "'";
@@ -276,7 +277,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
             {
                 String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
 
-                sqlQuery = retSql + " WHERE (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE < '" + dateRange[1].TrimStart() + "') AND TIW.PAYEE_ACNO = '" + varAcctNo + "'";
+                sqlQuery = retSql + " WHERE (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE <= '" + dateRange[1].TrimStart() + "') AND TIW.PAYEE_ACNO = '" + varAcctNo + "'";
 
 
             }
@@ -288,7 +289,7 @@ namespace ICLSearchDetail.Web.DBManager.Service
             //sqlQuery =   retSql + " WHERE TIW.INSTRUMENT_NUMBER = '" + varCheckNo + "'";
 
 
-            if (paramDetails.Length > 1 && paramDetails[2] != null)
+            if (paramDetails[2] != "")
             {
                 varCheckNo = paramDetails[2].PadLeft(10, '0');
 
