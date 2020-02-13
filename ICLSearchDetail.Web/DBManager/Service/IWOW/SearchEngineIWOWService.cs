@@ -160,15 +160,45 @@ namespace ICLSearchDetail.Web.DBManager.Service
                 {
                     varDate = paramDetails[1];
                     varUserID = paramDetails[2];
-                    sqlQuery = sqlQuery + " AND TIW.TRANSACTION_DATE = '" + varDate + "' AND TIW.SVS_FIRST = '" + varUserID + "'";
+
+
+                    if (varDate.Contains("to"))
+                    {
+                        String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
+
+                        sqlQuery = retSql + " WHERE (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE < '" + dateRange[1].TrimStart() + "') AND TIW.SVS_FIRST = '" + varUserID + "'";
+
+
+                    }
+                    else
+                    {
+                        sqlQuery = retSql + " WHERE TIW.TRANSACTION_DATE = '" + varDate + "' AND TIW.SVS_FIRST  = '" + varUserID + "'";
+                    }
+
+                    //sqlQuery = sqlQuery + " AND TIW.TRANSACTION_DATE = '" + varDate + "' AND TIW.SVS_FIRST = '" + varUserID + "'";
                 }
                 else
                 {
                     if(paramDetails[1] != "")
                     {
                         varDate = paramDetails[1];
-                        sqlQuery = sqlQuery + " AND TIW.TRANSACTION_DATE = '" + varDate + "'";
-                    }else if(paramDetails[2] != "")
+
+                        if (varDate.Contains("to"))
+                        {
+                            String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
+
+                            sqlQuery += " AND (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE <= '" + dateRange[1].TrimStart() + "')";
+
+
+                        }
+                        else
+                        {
+                            sqlQuery += " AND TIW.TRANSACTION_DATE = '" + varDate + "'";
+                        }
+
+                        //sqlQuery = sqlQuery + " AND TIW.TRANSACTION_DATE = '" + varDate + "'";
+                    }
+                    else if(paramDetails[2] != "")
                     {
                         varUserID = paramDetails[2];
                         sqlQuery = sqlQuery + " AND TIW.SVS_FIRST = '" + varUserID + "'";
@@ -208,13 +238,104 @@ namespace ICLSearchDetail.Web.DBManager.Service
             }
             catch (Exception e)
             {
-                IWOWModel iwowResultList = new IWOWModel();
-                iwowResultList.ERROR_MSG = e.Message;
-                searchResult.Add(iwowResultList);
+                //IWOWModel iwowResultList = new IWOWModel();
+                //iwowResultList.ERROR_MSG = e.Message;
+                //searchResult.Add(iwowResultList);
                 ret = JsonConvert.SerializeObject(searchResult);
                 return ret;
             }
             return ret;
         }
+
+        public string getByAcctNo(string acctNoDate)
+        {
+            string[] paramDetails;
+            paramDetails = acctNoDate.Split('|');
+            //string varCheckNo = paramDetails[0].PadLeft(10, '0');
+            string varAcctNo = paramDetails[0];
+            string varDate = paramDetails[1];
+            
+            string varCheckNo = "";
+            var fileLoc = ConfigurationManager.AppSettings["IWOWLoc"];
+
+            var retSql = "";
+            using (StreamReader file = new StreamReader(fileLoc))
+            {
+                //int counter = 0;
+                string ln;
+                while (((ln = file.ReadLine()) != null) && !ln.Contains("--"))
+                {
+                    retSql += ln;
+                }
+                file.Close();
+            }
+
+            string ret = "";
+            var sqlQuery = "";
+
+            if (varDate.Contains("to"))
+            {
+                String[] dateRange = varDate.Split(new[] { "to" }, StringSplitOptions.None);
+
+                sqlQuery = retSql + " WHERE (TIW.TRANSACTION_DATE >= '" + dateRange[0].TrimEnd() + "' and TIW.TRANSACTION_DATE <= '" + dateRange[1].TrimStart() + "') AND TIW.PAYEE_ACNO = '" + varAcctNo + "'";
+
+
+            }
+            else
+            {
+                sqlQuery = retSql + " WHERE TIW.TRANSACTION_DATE = '" + varDate + "' AND TIW.PAYEE_ACNO  = '" + varAcctNo + "'";
+            }
+
+            //sqlQuery =   retSql + " WHERE TIW.INSTRUMENT_NUMBER = '" + varCheckNo + "'";
+
+
+            if (paramDetails[2] != "")
+            {
+                varCheckNo = paramDetails[2].PadLeft(10, '0');
+
+                sqlQuery += " AND TIW.INSTRUMENT_NUMBER = '" + varCheckNo + "'";
+            }
+
+
+            sqlQuery = sqlQuery + " ORDER BY TIW.SVSFV_TIME ASC";
+            List<IWOWModel> searchResult = new List<IWOWModel>();
+            try
+            {
+                using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["EXPRESS_SBC_CONN"].ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(sqlQuery, connection);
+
+                    connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        IWOWModel iwowResultList = new IWOWModel();
+                        iwowResultList.CHECK_BRSTN = reader["CHECK BRSTN"].ToString();
+                        iwowResultList.TRANSACTION_DATE = reader["TRANSACTION DATE"].ToString();
+                        iwowResultList.INSTRUMENT_NUMBER = reader["CHECK NO."].ToString();
+                        iwowResultList.ZP_AMOUNT = reader["AMOUNT"].ToString();
+                        iwowResultList.ZP_AMT_CREATOR = reader["AMOUNT WISE USER"].ToString();
+                        iwowResultList.SVSFV_TIME = reader["SVS VERIFICATION TIME"].ToString();
+                        iwowResultList.SVS_FIRST = reader["SVS VERIFY BY USER ID"].ToString();
+                        iwowResultList.FNAME = reader["SVS VERIFY BY USER NAME"].ToString();
+                        iwowResultList.BRANCH_NAME = reader["CHECK BRANCH NAME"].ToString();
+
+                        searchResult.Add(iwowResultList);
+                    }
+                    ret = JsonConvert.SerializeObject(searchResult);
+                }
+            }
+            catch (Exception e)
+            {
+                //IWOWModel iwowResultList = new IWOWModel();
+                //iwowResultList.ERROR_MSG = e.Message;
+                //searchResult.Add(iwowResultList);
+                ret = JsonConvert.SerializeObject(searchResult);
+                return ret;
+            }
+            return ret;
+        }
+
     }
 }

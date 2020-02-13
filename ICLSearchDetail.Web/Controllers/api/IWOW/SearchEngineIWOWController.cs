@@ -32,5 +32,17 @@ namespace ICLSearchDetail.Web.Controllers
 
             return Ok(returnCheckDetails);
         }
+
+        [System.Web.Http.Route("api/searchEngine/searchIWOW/scanAcctNo/{scanAcctNo}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetByAcctNo(String scanAcctNo)
+        {
+
+            SearchEngineIWOWService searchEngineService = new SearchEngineIWOWService();
+
+            string returnCheckDetails = searchEngineService.getByAcctNo(scanAcctNo);
+
+            return Ok(returnCheckDetails);
+        }
     }
 }
