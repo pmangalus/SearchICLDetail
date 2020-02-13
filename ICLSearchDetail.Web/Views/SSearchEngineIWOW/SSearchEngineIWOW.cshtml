@@ -17,8 +17,8 @@
             <h1>SEARCH ENGINE - IW and OW Details</h1>
             <p><i>Search engine that will display inward and outward details corresponds to user search criteria.</i></p>
         </div>
-        <button type="button" class="tablink active" ng-focus="myFunction()" ng-click="openPage('Inward', 'btnInward', '#800000')" id="btnInward" style="">Inward</button>
-        <button type="button" class="tablink2" ng-focus="myFunction()" ng-click="openPage('Outward', 'btnOutward', '#800000')" id="btnOutward" style="">Outward</button>
+        <button type="button" class="tablink active" ng-focus="myFunction()" ng-click="openPage('Inward', 'btnInward', '#4169e1')" id="btnInward" style="">Inward</button>
+        <button type="button" class="tablink2" ng-focus="myFunction()" ng-click="openPage('Outward', 'btnOutward', '#4169e1')" id="btnOutward" style="">Outward</button>
         <br /><br />
 
         @*inward tab*@
@@ -163,7 +163,7 @@
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClick(x)">
+                            <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClickInwardScanAccountNumber(x)">
                                 <td align="left" width="1%">{{ $index +1 }}</td>
                                 <td>{{ x.TRANSACTION_DATE }}</td>
                                 <td>{{ x.INSTRUMENT_NUMBER }}</td>
@@ -290,16 +290,7 @@
                             </tr>
 
 
-                            <tr>
-                                <td colspan="2">
-                                    <button type="button" style="width:50%;float:right" class="btn btn-success" name="btnSearchOutward" id="btnSearchOutward" ng-model="btnSearchOutward" ng-click="btnSearchOutwardClick()">Search</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <button type="button" style="width:50%; float:right" class="btn btn-danger" name="btnResetOutward" id="btnResetOutward" ng-model="btnResetOutward" ng-click="btnResetOutwardClick()">Reset</button>
-                                </td>
-                            </tr>
+
 
                         </table>
                     </fieldset>
@@ -307,6 +298,71 @@
                 </div>
 
                 <br />
+
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchIclFileNameOutward">
+                                <input type="radio" name="radioSearchIclFileNameOutward" value="true" id="radioSearchIclFileNameOutward" ng-model="radioSearchIclFileNameOutward" ng-click="radioSearchIclFileNameOutwardClick()" />
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>Search by ICL File Name/s:</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table style="width:100%" border="0" class="modalTr">
+
+                            <tr>
+                                <td title="mandatory field">
+                                    Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input id="input-dateOutwardR4" ng-disabled="radioDisabled4" placeholder="mm-dd-yyyy" name="input-dateOutwardR4" type="text" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;"*@ max="9999-12-31" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR4')" ng-focus="mymodalshow('input-dateOutwardR4')" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td col title="mandatory field" style="padding-right:10px" colspan="2">
+                                    ICL File Name/s: <span style="font-size:18px;color:red"><sup>*</sup></span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100%" colspan="2">
+                                    <textarea ng-model="myTextarea" class="form-control" background-color:powderblue" ng-disabled="radioDisabled3" title="Accepts 1 or more ICL File Name/s separated with comma (,). Press [enter] to add." name="txtICLFnameOutwardR3" id="txtICLFnameOutwardR3" style="border-left-width:2px; background-color:powderblue; resize: none; height: 50px;max-height: 50px;  overflow-y: auto" ng-focus="searchByFocusOut(3)" placeholder="Enter ICL Filename/s" ng-required="isRequired"></textarea>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <table style="width:100%" border="0" class="modalTr">
+                            <tr>
+                                <td>
+                                    <select name="itemListIclFileName" id="itemListIclFileName" size={{itemListIclFileNameSize}} class="form-control" style=" height: 100px;max-height: 100px;  overflow-y: no-display">
+                                        <option ng-repeat="x in itemListIclFileNameX" ng-dblclick="itemListIclFileNameXDblClick(x)"> {{x.iclFilename}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table style="width:100%" border="0" class="modalTr">
+                            <tr>
+                                <td>
+                                    <br />
+                                    <button type="button" style="width:50%;float:right" class="btn btn-success" name="btnSearchOutward" id="btnSearchOutward" ng-model="btnSearchOutward" ng-click="btnSearchOutwardClick()">Search</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" style="width:50%; float:right" class="btn btn-danger" name="btnResetOutward" id="btnResetOutward" ng-model="btnResetOutward" ng-click="btnResetOutwardClick()">Reset</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </div>
             </div>
             <div id="sidebarMid"></div>
             <div id="container">
@@ -374,6 +430,59 @@
                 </div>
             </div> @*end div content container*@
         </div>
+<<<<<<< Updated upstream
+=======
+        <!-- Modal content -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" @*style="background-color:maroon"*@>
+                        <button type="button" id="close" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Please select date/dates below:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="radioModalExactDate">
+                                        <input type="radio" name="radioModalDate" id="radioModalExactDate" ng-model="radioModalExactDate" ng-click="radioModalExactDateClick()"> Exact Date:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input id="modal-date-exact" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px" max="9999-12-31" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="radioModalDateRange" style="margin-top:10px">
+                                        <input type="radio" name="radioModalDate" id="radioModalDateRange" ng-model="radioModalDateRange" ng-click="radioModalDateRangeClick()"> Date Range:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input id="modal-date-from" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px;margin-top:10px" max="9999-12-31" />
+                                </td>
+                                <td style="padding-left:35px">
+                                    <p style="margin-top:20px"><b>To:</b></p>
+                                </td>
+                                <td>
+                                    <input id="modal-date-to" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px;margin-top:10px" max="9999-12-31" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <span style="color:red;float:left;" ng-show="isErrorVisible">Start Date is greater than the End Date.</span>
+                        <span style="color:red;float:left;" ng-show="isErrorVisible1">Start/End Date is empty.</span>
+                        <button type="button" class="btn btn-success" ng-click="btnModalClick()">Okay</button>
+                        @*<button type="button" class="btn btn-default" data-dismiss="modal">Close </button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+>>>>>>> Stashed changes
 
         <div id="loading">
             <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />
