@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "BypassBatchAccountKeying";
+}
+
+<script src="~/ScriptsNg/Controller/Bypass/byPassController.js"></script>
+
+<head>
+    <link rel="stylesheet" href="~/ScriptsNg/styles.css" type="text/css">
+</head>
+
+<body>
+    <form name="yourId" id="yourId" class="form" ng-controller="byPassController" ng-app="indexApp" autocomplete="off">
+
+        <!--     <div class="header">
+        </div>-->
+        <br />
+        <br />
+        <br />
+
+        <div class="header">
+            <h1>Bypass - Batch Account No. Keying</h1>
+            <p><i>Manual override if there are any beyond 4:30PM checks that needs/wants to override status flag.</i></p><br />
+
+        </div>
+        <br />
+
+        <div class="sidebar" id="sidebar" style="border:thin;background-color: white">
+            <p><a ng-click="anchorClick()" style="font-size:larger;">Updated as of {{currDate}} <br />CLICK TO REFRESH.</a></p>
+            <button type="button" class="btn btn-danger" ng-click="btnUpdateClick()" id="btnUpdate" name="btnUpdate" title="Will Only enable at 4:30PM"> {{count}} record/s. <br /> Perform Manual Update?</button>
+        </div>
+        <div id="sidebarMid" style="border-color: white"></div>
+
+    </form>
+</body>

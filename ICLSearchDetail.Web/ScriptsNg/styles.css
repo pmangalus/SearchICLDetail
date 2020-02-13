@@ -24,7 +24,7 @@
 
 
 h1 {
-    color: #800000;
+    color: #e15194;
 }
 
 
@@ -33,12 +33,12 @@ h1 {
     overflow-x: auto;
     background-color: ghostwhite;
     border-radius: 10px;
-    height: 550px;
+    height: 900px;
 }
 
 #sidebar {
     width: 330px;
-    height: 550px;
+    height: 900px;
     float: left;
     background-color: ghostwhite;
     padding: 2%;
@@ -48,7 +48,7 @@ h1 {
     width: 10px;
     float: left;
     border: solid;
-    border-color: #800000;
+    border-color: #4169e1;
 }
 
 
@@ -88,13 +88,13 @@ tr {
     font-size: inherit;
     text-align: center;
     color: white;
-    background-color: #7E0000;
+    background-color: #4169e1;
     vertical-align:central;
 }
 
 .table tbody tr:hover td,
 .table tbody tr:hover th {
-    background-color: #E6AB59;
+    background-color: #92e250;
 }
 
 .radio label,
@@ -190,7 +190,7 @@ html {
 }
 
 .tablink {
-    background-color: burlywood;
+    background-color: #92e250;
     color: white;
     float: left;
     border: none;
@@ -210,7 +210,7 @@ html {
 }
 
 .tablink2 {
-    background-color: burlywood;
+    background-color: #92e250;
     color: white;
     float: left;
     border: none;
@@ -247,7 +247,7 @@ html {
 }
 
 #Inward, #Outward {
-    background-color: #800000;
+    background-color: #4169e1;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -279,6 +279,14 @@ html {
     display: inline-block;
 }
 
+.modal-header {
+    color: white;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-topright: 10px;
+}
+.modal-content {
+    border-radius: 10px;
+}
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;

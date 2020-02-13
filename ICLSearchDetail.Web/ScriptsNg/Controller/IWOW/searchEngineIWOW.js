@@ -2,7 +2,11 @@
 
     console.log("#1 searchEngineIWOW controller JS");
     //var host = 'http://localhost:53325';
+<<<<<<< Updated upstream
     var host = 'http://10.200.1.39:9864';
+=======
+    var host = 'http://10.200.1.39:9866';
+>>>>>>> Stashed changes
 
     //var radioSearchUserID = document.getElementById('radios-0');
     //var radioSearchCheckNo = document.getElementById('radios-1');
@@ -12,6 +16,13 @@
     $scope.radioDisabled2 = false;
     $scope.radioDisabled1 = true;
     $scope.isChecked = true;
+<<<<<<< Updated upstream
+=======
+
+
+    var iclFileNames = [];
+    document.getElementById("modal-date-exact").disabled = true;
+>>>>>>> Stashed changes
     $('#loading').hide();
     const timeField = document.getElementById('input-time');
     console.log("time:" + timeField.checkValidity());
@@ -30,6 +41,9 @@
 
     const dateFieldOut2 = document.getElementById('input-dateOutwardR2');
     console.log("dateFieldOut:" + dateFieldOut.checkValidity());
+
+
+    const dateOutwardR4 = document.getElementById('input-dateOutwardR4');
 
     const batchIDOut = document.getElementById('txtBatchIDOutwardR2');
     console.log("batchIDOut:" + batchIDOut.checkValidity());
@@ -63,6 +77,12 @@
             document.getElementById('radioSearchBatchOutward').checked = false;
             $scope.isRequired = true;
             $scope.isRequired2 = false;
+
+            document.getElementById('txtICLFnameOutwardR3').value = "";
+            document.getElementById('radioSearchIclFileNameOutward').checked = false;
+            $scope.itemListIclFileNameX = [];
+            iclFileNames = [];
+            dateOutwardR4.disabled = true;
         }
         for (i = 0; i < tablinks2.length; i++) {
             tablinks2[i].style.backgroundColor = "";
@@ -78,6 +98,7 @@
         this.btnResetClick();
     },
 
+<<<<<<< Updated upstream
     $scope.btnSearchClick = function () {
 
         console.log(timeField.checkValidity());
@@ -89,6 +110,27 @@
 
         var radioSearchUserID = document.getElementById('radioSearchUserID');
         var radioSearchCheckNo = document.getElementById('radioSearchCheckNo');
+=======
+            $scope.btnSearchClick = function () {
+
+                console.log(timeField.checkValidity());
+                console.log("date:" + dateField.checkValidity());
+
+                var letterNumber = /^[0-9a-zA-Z]+$/;
+                var regTime = /((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/;
+                var NumberS = /^[0-9]+$/;
+                console.log('Start search by User ID');
+
+                var radioSearchUserID = document.getElementById('radioSearchUserID');
+                var radioSearchCheckNo = document.getElementById('radioSearchCheckNo');
+                var radioSearchScanAccountNo = document.getElementById('radioSearchScanAccountNo');
+                var scanDateRange = document.getElementById('input-date2');
+                var userID;
+                var date;
+                var time;
+                var param;
+                var that = this;
+>>>>>>> Stashed changes
 
         var userID;
         var date;
@@ -96,6 +138,7 @@
         var param;
         var that = this;
 
+<<<<<<< Updated upstream
 
         if (radioSearchUserID.checked && document.getElementById('txtUserId').value !== "" && document.getElementById('input-date').value !== "") {
 
@@ -188,14 +231,238 @@
 
             } else if (!dateField1.checkValidity()) {
                 that.openDialog("Please enter a valid date (mm/dd/yyyy).");
+=======
+                if (radioSearchUserID.checked && document.getElementById('txtUserId').value !== "" && document.getElementById('input-date').value !== "") {
+
+                    $scope.IWOWDetails = [];
+                    userID = document.getElementById('txtUserId').value;
+                    date = document.getElementById('input-date').value;
+                    console.log(document.getElementById('input-time').msGetInputContext);
+                    if (document.getElementById('input-time').value !== "") {
+
+                        time = document.getElementById('input-time').value;
+
+                        time = time.replace(":", "|");
+                    }
+
+                    console.log('User Id :', userID);
+                    console.log('Input Date: ', date);
+                    console.log('Input Time: ', time);
+
+                    param = userID + "|" + date + "|" + time;
+
+                    if ((userID.match(letterNumber))) {
+
+                        if (!timeField.checkValidity()) {
+
+                            that.openDialog("Please enter a valid time (HH:MM PM/AM).");
+
+                        } else {
+                            $('#loading').show();
+                            $.ajax({
+
+                                type: 'GET',
+                                url: host + "/api/searchEngine/searchIWOW/userID/" + param,
+                                success: function (blob) {
+                                    $('#loading').hide();
+                                    var jsonParse = JSON.parse(blob);
+                                    console.log("jsonParse", jsonParse);
+                                    if (jsonParse.length !== 0) {
+                                        if (time === undefined) {
+
+                                            $scope.IWOWDetailsEx = jsonParse;
+                                            $scope.$apply();
+                                            that.extractExcel("tblIWOWDetailsEx", "Inward User Details - Export All.xls");
+                                        } else {
+                                            $scope.isVisible = true;
+                                            $scope.IWOWDetails = jsonParse;
+                                            console.log("$scope.IWOWDetails", $scope.IWOWDetails);
+                                        }
+                                    } else {
+                                        that.openDialog("No records found! Kindly verify the User ID and/or Verification Date(time) entered.");
+                                    }
+                                    $scope.$apply();
+                                },
+                                error: function (a, b, c) {
+                                    console.log("Nim in ajax erroor ", a);
+                                    $('#loading').hide();
+                                }
+
+                            });
+
+                        }
+                    } else {
+                        that.openDialog("Special Characters in User ID Field is not Allowed! ");
+                    }
+
+                } else if (!txtUserId.checkValidity()) {
+                    that.openDialog("Please enter a User ID.");
+                } else if (!dateField.checkValidity()) {
+                    that.openDialog("Please enter a valid date (mm/dd/yyyy).");
+                } else if (!radioSearchCheckNo.checked && radioSearchUserID.checked) {
+                    that.openDialog("Please enter User ID/ Verification Date.");
+                } else if (radioSearchCheckNo.checked && document.getElementById('txtCheckNumber').value !== "") {
+
+                    var chkNumber = document.getElementById('txtCheckNumber').value;
+                    var checkDateRange = document.getElementById('input-date1');
+                    var userId = "";
+                    var date = "";
+                    $scope.IWOWDetails = [];
+                    var letterNumber = /^[0-9a-zA-Z]+$/;
+                    var NumberS = /^[0-9]+$/;
+
+                    if (!(chkNumber.match(NumberS))) {
+
+                        that.openDialog("Please enter a valid number on Check Number Field.");
+
+                    } else if (!dateField1.checkValidity()) {
+                        that.openDialog("Please enter a valid date (mm/dd/yyyy).");
+
+                    } else {
+
+                        if (document.getElementById('input-date1').value !== "") {
+                            date = document.getElementById('input-date1').value;
+
+                        }
+
+                        if (document.getElementById('textUserCheck').value !== "") {
+                            userId = document.getElementById('textUserCheck').value;
+
+                        }
+
+                        chkNumber = chkNumber + '|' + date + '|' + userId;
+
+                        if (userId !== "" && !(userId.match(letterNumber))) {
+
+                            that.openDialog("Special Characters in User ID Field is not Allowed!");
+                        } else {
+                            $('#loading').show();
+                            console.log("pasok" + chkNumber);
+                            $.ajax({
+                                type: 'GET',
+                                url: host + "/api/searchEngine/searchIWOW/checkNo/" + chkNumber,
+                                success: function (blob) {
+                                    $('#loading').hide();
+                                    var jsonParseC = JSON.parse(blob);
+                                    //console.log("jsonParse", jsonParse);
+                                    if (jsonParseC.length !== 0) {
+                                        $scope.isVisible = true;
+                                        $scope.$apply();
+
+
+                                        if (checkDateRange.value.indexOf("to") != -1) {
+                                            $scope.isVisible = false;
+                                            $scope.tblIWOWDetailsDownload = jsonParseC;
+                                            $scope.$apply();
+                                            that.extractExcel("tblIWOWDetailsDownload", "Inward Check Details - Export All.xls");
+
+
+                                        } else {
+                                            //display only if not range;
+                                            $scope.IWOWDetails = jsonParseC;
+                                        }
+                                        $scope.$apply();
+
+                                    } else {
+                                        $scope.isVisible = false;
+                                        that.openDialog("No records found! Kindly check the Check Number entered.");
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    $('#loading').hide();
+                                    //console.log("Nim in ajax erroor ", a);
+                                }
+                            });
+                        }
+                    }
+
+
+
+                    //$scope.isVisible = true;
+                } else if (radioSearchCheckNo.checked && !radioSearchUserID.checked) {
+                    that.openDialog("Please enter the check number.");
+                } else if (radioSearchScanAccountNo.checked && document.getElementById('txtScanAcctNumber').value !== "" && document.getElementById('input-date2').value !== "") {
+
+                    var scanNumber;
+                    var chkNumber;
+                    var scanDate = document.getElementById('input-date2');
+                    var scanParam;
+
+                    $scope.IWOWDetails = [];
+
+                    scanNumber = document.getElementById('txtScanAcctNumber').value.trim();
+                    chkNumber = document.getElementById('txtCheckNumber1').value.trim();
+                    //scanDate = document.getElementById('input-date2').value;
+
+                    console.log("Start search by Scan Account Number");
+
+                    if (!scanNumber.match(NumberS)) {
+                        that.openDialog("Please enter a valid Scan Account Number");
+                    } else if (!scanDate.checkValidity()) {
+                        that.openDialog("Please enter a valid Transaction Date");
+                    } else if (chkNumber !== "" && !(chkNumber.match(NumberS))) {
+                        that.openDialog("Please enter a valid Check Number");
+                    } else {
+
+                        scanParam = scanNumber + "|" + scanDate.value + "|" + chkNumber;
+                        $('#loading').show();
+                        console.log("scanparam: " + scanParam);
+                        $.ajax({
+                            type: 'GET',
+                            url: host + "/api/searchEngine/searchIWOW/scanAcctNo/" + scanParam,
+                            success: function (blob) {
+                                $('#loading').hide();
+                                var jsonParseC = JSON.parse(blob);
+
+                                if (jsonParseC.length !== 0) {
+                                    $scope.isVisible = true;
+                                    //download if date range is used
+                                    if (scanDateRange.value.indexOf("to") != -1) {
+                                        $scope.isVisible = false;
+                                        $scope.tblIWOWDetailsDownload = jsonParseC;
+                                        $scope.$apply();
+                                        that.extractExcel("tblIWOWDetailsDownload", "Inward Scan Details - Export All.xls");
+>>>>>>> Stashed changes
 
             } else {
 
+<<<<<<< Updated upstream
                 if (document.getElementById('input-date1').value !== "") {
                     date = document.getElementById('input-date1').value;
 
+=======
+                                    } else {
+                                        //display only if not range;
+                                        $scope.IWOWDetails = jsonParseC;
+                                    }
+                                    $scope.$apply();
+                                } else {
+                                    $scope.isVisible = false;
+                                    that.openDialog("No records found! Kindly check the details entered.");
+                                }
+                            },
+                            error: function (a, b, c) {
+                                $('#loading').hide();
+                            }
+                        });
+                    }
+                } else if (radioSearchScanAccountNo.checked && document.getElementById('txtScanAcctNumber').value == "") {
+                    that.openDialog("Please enter Scan Account Number");
+                } else if (radioSearchScanAccountNo.checked && document.getElementById('input-date2').value == "") {
+                    that.openDialog("Please enter Transaction Date");
+>>>>>>> Stashed changes
                 }
+            },
+            $scope.btnSearchOutwardClick = function () {
+                console.log("SearchOutwardClick");
+                console.log("batchIDOut:" + batchIDOut.checkValidity());
+                var that = this;
+                $scope.tblIWOWDetailsOuward = [];
+                var radioSearchBRSTNOutward = document.getElementById('radioSearchBRSTNOutward');
+                var radioSearchBatchOutward = document.getElementById('radioSearchBatchOutward');
+                var radioSearchIclFileNameOutward = document.getElementById('radioSearchIclFileNameOutward');
 
+<<<<<<< Updated upstream
                 if (document.getElementById('textUserCheck').value !== "") {
                     userId = document.getElementById('textUserCheck').value;
 
@@ -332,9 +599,104 @@
                         }
                     });
                 }
+=======
+                if (radioSearchBRSTNOutward.checked) {
+
+                    if (!brstnOut.checkValidity()) {
+
+                        that.openDialog("Please enter a valid BRSTN.");
+
+                    } else if (!dateFieldOut.checkValidity()) {
+                        that.openDialog("Please enter a valid date(mm/dd/yyyy)");
+
+                    } else {
+
+                        var checkNumber = document.getElementById('txtCheckNoOutwardR1').value;
+                        var NumberS = /^[0-9]+$/;
+                        var letterNumber = /^[0-9a-zA-Z]+$/;
+                        var param = brstnOut.value + "|" + dateFieldOut.value;
+                        var isCheckNumber = true;
+
+                        if (checkNumber !== "") {
+                            if (!(checkNumber.match(NumberS))) {
+
+                                that.openDialog("Please enter a valid number on Check Number Field.");
+                                isCheckNumber = false;
+
+                            }
+                        }
+                        if (brstnOut.value !== "") {
+                            if (!(brstnOut.value.match(letterNumber))) {
+
+                                that.openDialog("Please enter a valid BRSTN.");
+                                isCheckNumber = false;
+
+                            }
+                        }
+
+                        param += "|" + checkNumber;
+
+                        console.log(param);
+
+                        if (isCheckNumber) {
+                            $('#loading').show();
+                            $.ajax({
+                                type: 'GET',
+                                url: host + "/api/searchEngine/searchILO/brstn/" + param,
+                                success: function (blob) {
+
+                                    var jsonParseOut = JSON.parse(blob);
+                                    //console.log("jsonParse", jsonParse);
+                                    if (jsonParseOut.length !== 0) {
+                                        $scope.isVisible = true;
+                                        $scope.IWOWDetailsOutward = jsonParseOut;
+
+                                        //document.getElementById("btnSearch").disabled = false;
+                                        //document.getElementById("btnReset").disabled = false;
+                                        $scope.$apply();
+                                        var fDate = dateFieldOut.value.replace(/-/gi, "");
+                                        that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBRSTN (" + brstnOut.value + "_" + fDate + ").xls");
+                                        $('#loading').hide();
+                                    } else {
+                                        $scope.isVisible = false;
+                                        $('#loading').hide();
+                                        that.openDialog("No records found!");
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    $('#loading').hide();
+                                    //$('#loading').hide();
+                                    //console.log("Nim in ajax erroor ", a);
+                                }
+                            });
+                        }
 
 
 
+                    }
+                } else if (radioSearchBatchOutward.checked) {
+                    if (!batchIDOut.checkValidity()) {
+
+                        that.openDialog("Please enter a valid Batch ID.");
+
+                    } else if (!dateFieldOut2.checkValidity()) {
+                        that.openDialog("Please enter a valid date(mm/dd/yyyy)");
+
+                    } else {
+                        //that.openDialog("Chorva!" + batchIDOut.value + "~~~" + dateFieldOut.value);
+
+                        console.log('Start search by Batch ID');
+>>>>>>> Stashed changes
+
+                        var checkNumber = document.getElementById('txtCheckNoOutwardR2').value;
+                        var NumberS = /^[0-9]+$/;
+                        var param = batchIDOut.value + "|" + dateFieldOut2.value;
+                        var isCheckNumber = true;
+
+                        if (checkNumber !== "") {
+                            if (!(checkNumber.match(NumberS))) {
+
+<<<<<<< Updated upstream
             }
         }
         else if (radioSearchBatchOutward.checked) {
@@ -361,9 +723,72 @@
                         that.openDialog("Please enter a valid number on Check Number Field.");
                         isCheckNumber = false;
 
+=======
+                                that.openDialog("Please enter a valid number on Check Number Field.");
+                                isCheckNumber = false;
+
+                            }
+                        }
+
+                        param += "|" + checkNumber;
+
+                        console.log(param);
+
+                        if (isCheckNumber) {
+                            $('#loading').show();
+                            $.ajax({
+                                type: 'GET',
+                                url: host + "/api/searchEngine/searchILO/batchID/" + param,
+                                success: function (blob) {
+
+                                    var jsonParseOut = JSON.parse(blob);
+                                    //console.log("jsonParse", jsonParse);
+                                    if (jsonParseOut.length !== 0) {
+                                        $scope.isVisible = true;
+                                        $scope.IWOWDetailsOutward = jsonParseOut;
+                                        $scope.$apply();
+                                        var fDate = dateFieldOut2.value.replace(/-/gi, "");
+                                        that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ByBatchID (" + batchIDOut.value + "_" + fDate + ").xls");
+                                        $('#loading').hide();
+                                    } else {
+                                        $scope.isVisible = false;
+                                        $('#loading').hide();
+                                        that.openDialog("No records found!");
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    //$('#loading').hide();
+                                    $('#loading').hide();
+                                    //console.log("Nim in ajax erroor ", a);
+                                }
+                            });
+                        }
+
+
+
+                    }
+                } else if (radioSearchIclFileNameOutward.checked) {
+
+                    var specialCharsFileRegex = /^[A-Z0-9,_.]+$/i;
+                    var txtICLFnameOutwardR3 = document.getElementById('txtICLFnameOutwardR3').value;
+                    var dateOutwardR4 = document.getElementById('input-dateOutwardR4').value;
+                    var isAllChars = false;
+                    var isCorrectSpecial = false;
+                    var that = this;
+                    var param = "";
+                    var icls = "";
+
+                    for (var i = 0; i < iclFileNames.length; i++) {
+                        if (i == iclFileNames.length - 1) {
+                            icls += iclFileNames[i].iclFilename;
+                        } else {
+                            icls += iclFileNames[i].iclFilename + ",";
+                        }
+>>>>>>> Stashed changes
                     }
                 }
 
+<<<<<<< Updated upstream
                 param += "|" + checkNumber;
 
                 console.log(param);
@@ -412,17 +837,83 @@
 
 
     $scope.extractExcel = function (tableName, fileName) {
+=======
+                    icls = icls.toUpperCase().replace(/\n|\r| /g, "");
+
+                    isCorrectSpecial = specialCharsFileRegex.test(icls) ? true : false;
+                    
+                    if (isCorrectSpecial && dateOutwardR4.trim() !== "") {
+                        if (itemListIclFileName.length > 0 && (dateOutwardR4 !== "" || dateOutwardR4 !== null)) {
+                            //that.openDialog("will proceed to search here.. under construction...");
+                            icls = encodeURIComponent(icls.replace(/\./g, '!!!'));
+                            console.log("icls: " + icls);
+                            param = icls + "|" + dateOutwardR4;
+
+                            $('#loading').show();
+                            $.ajax({
+                                type: 'GET',
+                                url: host + "/api/searchEngine/searchILO/iclFile/" + param,
+                                success: function (blob) {
+
+                                    var jsonParseOut = JSON.parse(blob);
+                                    //console.log("jsonParse", jsonParse);
+                                    if (jsonParseOut.length !== 0) {
+                                        $scope.isVisible = true;
+                                        $scope.IWOWDetailsOutward = jsonParseOut;
+                                        $scope.$apply();
+                                        var fDate = dateOutwardR4.replace(/-/g, "");
+                                        that.extractExcel("tblIWOWDetailsOuward", "Outward Details Report_ICLFileName (" + fDate + ").xls");
+                                        $('#loading').hide();
+                                    } else {
+                                        $scope.isVisible = false;
+                                        $('#loading').hide();
+                                        that.openDialog("No records found!");
+                                    }
+                                },
+                                error: function (a, b, c) {
+                                    //$('#loading').hide();
+                                    $('#loading').hide();
+                                    //console.log("Nim in ajax erroor ", a);
+                                }
+                            });
+                        }
+                    } else if (isCorrectSpecial == false) {
+                        that.openDialog("Please enter a valid ICL filename (X_XXXXXXXX_XXX_XXXXXXXXXX.ICL) \n and separate multiple filenames using 'comma ( , )'");
+                    } else if (dateOutwardR4.trim() == "") {
+                        that.openDialog("Date is required.");
+                    } else {
+                        that.openDialog("Input invalid! Please try again.");
+                    }
+                }
+
+
+            },
+
+            $scope.extractExcel = function (tableName, fileName) {
+
+                var fileNameAcc = "";
+                var that = this;
+                fileNameAcc = fileName //"Inward Check Details - Export All.xls";
+                tab = document.getElementById(tableName); // id of table
+>>>>>>> Stashed changes
 
         var fileNameAcc = "";
         var that = this;
         fileNameAcc = fileName //"Inward Check Details - Export All.xls";
         tab = document.getElementById(tableName); // id of table
 
+<<<<<<< Updated upstream
+=======
+                var tab_text = "<table border='2px'><tr>";
+                var textRange;
+                var j = 0;
+>>>>>>> Stashed changes
 
         var tab_text = "<table border='2px'><tr>";
         var textRange;
         var j = 0;
 
+<<<<<<< Updated upstream
 
         for (j = 0; j < tab.rows.length; j++) {
             tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
@@ -475,6 +966,59 @@
         return total;
 
     };
+=======
+                for (j = 0; j < tab.rows.length; j++) {
+                    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                    //tab_text=tab_text+"</tr>";
+                }
+
+                tab_text = tab_text + "</table>";
+                tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //remove if u want links in your table
+                tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+                tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+                var ua = window.navigator.userAgent;
+                var msie = ua.indexOf("MSIE ");
+
+                if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer
+                {
+                    txtArea1.document.open("txt/html", "replace");
+                    txtArea1.document.write(tab_text);
+                    txtArea1.document.close();
+                    txtArea1.focus();
+                    a = txtArea1.document.execCommand("SaveAs", true, "excel.xls");
+                } else {
+                    var blob = new Blob([tab_text], {
+                        type: 'application/vnd.ms-excel'
+                    });
+                    var downloadUrl = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = downloadUrl;
+                    a.download = fileNameAcc;
+                    document.body.appendChild(a);
+                    a.click();
+                }
+                that.openDialog("Done Extract");
+                //console.log("$scope.IWOWDetailsEx", $scope.IWOWDetailsEx);
+                return (a);
+
+            },
+            $scope.getTotal = function () {
+                var total = 0;
+
+                if ($scope.IWOWDetailsOutward !== undefined) {
+                    for (var i = 0; i < $scope.IWOWDetailsOutward.length; i++) {
+                        var x = $scope.IWOWDetailsOutward[i];
+                        // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
+                        total = total + parseFloat(x.AMOUNT);
+                        //console.log("total: " + total);
+                    }
+                }
+
+                return total;
+
+            };
+>>>>>>> Stashed changes
     $scope.openDialog = function (message) {
         var a = BootstrapDialog.show({
             message: message,
@@ -489,6 +1033,7 @@
     },
 
     /*Inward*/
+<<<<<<< Updated upstream
     $scope.radioSearchBatchClick = function () {
         //console.logs("batchClick1");
         $scope.radioDisabled1 = true;
@@ -606,6 +1151,222 @@
 
         document.getElementById("btnSearch").disabled = false;
     }
+=======
+            $scope.radioSearchBatchClick = function () {
+                //console.logs("batchClick1");
+                $scope.radioDisabled1 = true;
+                $scope.radioDisabled2 = false;
+                $scope.radioDisabled3 = true;
+                $scope.isVisible = false;
+                $scope.IWOWDetails = [];
+                document.getElementById('radioSearchCheckNo').checked = false;
+                document.getElementById('radioSearchScanAccountNo').checked = false;
+                document.getElementById('txtCheckNumber').value = "";
+                document.getElementById('textUserCheck').value = "";
+                document.getElementById('input-date1').value = "";
+                document.getElementById('txtCheckNumber1').value = "";
+                document.getElementById('txtScanAcctNumber').value = "";
+                document.getElementById('input-date2').value = "";
+            },
+            $scope.radioSearchBatchClick1 = function () {
+                $scope.isVisible = false;
+                $scope.IWOWDetails = [];
+                $scope.radioDisabled2 = true;
+                $scope.radioDisabled3 = true;
+                $scope.radioDisabled1 = false;
+                document.getElementById('radioSearchUserID').checked = false;
+                document.getElementById('radioSearchScanAccountNo').checked = false;
+                document.getElementById('txtUserId').value = "";
+                document.getElementById('input-time').value = "";
+                document.getElementById('input-date').value = "";
+                document.getElementById('txtCheckNumber1').value = "";
+                document.getElementById('txtScanAcctNumber').value = "";
+                document.getElementById('input-date2').value = "";
+
+            },
+
+            $scope.radioSearchScanNoClick = function () {
+                $scope.isVisible = false;
+                $scope.IWOWDetails = [];
+                $scope.radioDisabled2 = true;
+                $scope.radioDisabled3 = false;
+                $scope.radioDisabled1 = true;
+                document.getElementById('radioSearchUserID').checked = false;
+                document.getElementById('radioSearchCheckNo').checked = false;
+                document.getElementById('txtUserId').value = "";
+                document.getElementById('input-time').value = "";
+                document.getElementById('input-date').value = "";
+                document.getElementById('txtCheckNumber').value = "";
+                document.getElementById('textUserCheck').value = "";
+                document.getElementById('input-date1').value = "";
+
+            },
+
+    /*Outward*/
+            $scope.radioSearchBRSTNOutwardClick = function () {
+                //console.logs("batchClick1");
+                $scope.radioDisabled1 = true;
+                $scope.radioDisabled2 = false;
+                $scope.radioDisabled3 = true;
+                $scope.isVisible = false;
+                $scope.IWOWDetailsOutward = [];
+                dateOutwardR4.disabled = true;
+                $scope.itemListIclFileNameX = [];
+                iclFileNames = [];
+                document.getElementById('radioSearchBatchOutward').checked = false;
+                document.getElementById('radioSearchIclFileNameOutward').checked = false;
+                document.getElementById('txtBatchIDOutwardR2').value = "";
+                document.getElementById('txtCheckNoOutwardR2').value = "";
+                document.getElementById('input-dateOutwardR2').value = "";
+                document.getElementById('input-dateOutwardR4').value = "";
+
+
+                document.getElementById('radioSearchIclFileNameOutward').value = "";
+            },
+            $scope.radioSearchBatchOutwardClick = function () {
+                //console.logs("batchClick1");
+                $scope.radioDisabled1 = false;
+                $scope.radioDisabled3 = true;
+                $scope.radioDisabled2 = true;
+                $scope.isVisible = false;
+                $scope.IWOWDetailsOutward = [];
+                $scope.itemListIclFileNameX = [];
+                dateOutwardR4.disabled = true;
+                iclFileNames = [];
+                document.getElementById('radioSearchBRSTNOutward').checked = false;
+                document.getElementById('radioSearchIclFileNameOutward').checked = false;
+                document.getElementById('txtBRSTNOutwardR1').value = "";
+                document.getElementById('txtCheckNoOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR4').value = "";
+                document.getElementById('radioSearchIclFileNameOutward').value = "";
+            },
+            $scope.radioSearchIclFileNameOutwardClick = function () {
+                $scope.radioDisabled1 = true;
+                $scope.radioDisabled2 = true;
+                $scope.radioDisabled3 = false;
+                $scope.isVisible = false;
+                $scope.IWOWDetailsOutward = [];
+                $scope.itemListIclFileNameX = [];
+                iclFileNames = [];
+                dateOutwardR4.disabled = false;
+                document.getElementById('radioSearchBRSTNOutward').checked = false;
+                document.getElementById('radioSearchBatchOutward').checked = false;
+                document.getElementById('txtBRSTNOutwardR1').value = "";
+                document.getElementById('txtCheckNoOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR4').value = "";
+            },
+
+            $scope.btnResetClick = function () {
+                //location.reload();
+                $scope.isVisible = false;
+                $scope.IWOWDetails = [];
+                document.getElementById('radioSearchUserID').checked = true;
+                document.getElementById('radioSearchCheckNo').checked = false;
+                document.getElementById('radioSearchScanAccountNo').checked = false;
+                document.getElementById('txtUserId').value = "";
+                document.getElementById('textUserCheck').value = "";
+                document.getElementById('txtCheckNumber').value = "";
+                document.getElementById('input-time').value = "";
+                document.getElementById('input-date1').value = "";
+                document.getElementById('input-date').value = "";
+                document.getElementById('txtCheckNumber1').value = "";
+                document.getElementById('txtScanAcctNumber').value = "";
+                document.getElementById('input-date2').value = "";
+
+
+                document.getElementById('radioSearchBRSTNOutward').checked = true;
+                document.getElementById('radioSearchBatchOutward').checked = false;
+
+
+                document.getElementById('txtBRSTNOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR1').value = "";
+                document.getElementById('txtCheckNoOutwardR1').value = "";
+                document.getElementById('txtBatchIDOutwardR2').value = "";
+                document.getElementById('input-dateOutwardR2').value = "";
+                document.getElementById('txtCheckNoOutwardR2').value = "";
+
+                $scope.radioDisabled2 = false;
+                $scope.radioDisabled1 = true;
+                $scope.radioDisabled3 = true;
+
+                document.getElementById('modal-date-exact').value = "";
+                document.getElementById('modal-date-from').value = "";
+                document.getElementById('modal-date-to').value = "";
+
+
+
+
+                //$scope.isChecked = true;
+                //document.getElementById("btnSearch").disabled = true;
+            },
+            $scope.btnResetOutwardClick = function () {
+                $scope.isVisible = false;
+                $scope.IWOWDetailsOutward = [];
+                document.getElementById('radioSearchBRSTNOutward').checked = true;
+                document.getElementById('radioSearchBatchOutward').checked = false;
+                document.getElementById('txtBRSTNOutwardR1').value = "";
+                document.getElementById('txtBatchIDOutwardR2').value = "";
+                document.getElementById('input-dateOutwardR1').value = "";
+                document.getElementById('input-dateOutwardR2').value = "";
+                document.getElementById('txtCheckNoOutwardR1').value = "";
+                document.getElementById('txtCheckNoOutwardR2').value = "";
+
+                $scope.radioDisabled2 = false;
+                $scope.radioDisabled1 = true;
+                $scope.radioDisabled4 = true;
+                $scope.radioDisabled3 = true;
+                document.getElementById('modal-date-exact').value = "";
+                document.getElementById('modal-date-from').value = "";
+                document.getElementById('modal-date-to').value = "";
+
+
+
+                document.getElementById('txtICLFnameOutwardR3').value = "";
+                document.getElementById('radioSearchIclFileNameOutward').checked = false;
+                $scope.itemListIclFileNameX = [];
+                iclFileNames = [];
+                document.getElementById('input-dateOutwardR4').value = "";
+
+                //$scope.isChecked = true;
+                //document.getElementById("btnSearch").disabled = true;
+            },
+
+            $scope.searchByFocus = function (isBy) {
+                //console.log(isBy);
+
+                if (isBy == "1") {
+                    document.getElementById('radioSearchUserID').checked = true;
+                    document.getElementById('radioSearchCheckNo').checked = false;
+                    document.getElementById('radioSearchScanAccountNo').checked = false;
+                    $scope.radioDisabled1 = true;
+                    $scope.radioDisabled2 = false;
+                    $scope.radioDisabled3 = true;
+
+
+                } else if (isBy == "2") {
+                    document.getElementById('radioSearchUserID').checked = false;
+                    document.getElementById('radioSearchCheckNo').checked = true;
+                    document.getElementById('radioSearchScanAccountNo').checked = false;
+
+                    $scope.radioDisabled1 = false;
+                    $scope.radioDisabled2 = true;
+                    $scope.radioDisabled3 = true;
+                    $scope.isRequired = false;
+
+                } else {
+                    document.getElementById('radioSearchUserID').checked = false;
+                    document.getElementById('radioSearchCheckNo').checked = false;
+                    document.getElementById('radioSearchScanAccountNo').checked = true;
+                    $scope.radioDisabled1 = true;
+                    $scope.radioDisabled2 = true;
+                    $scope.radioDisabled3 = false;
+                }
+
+                document.getElementById("btnSearch").disabled = false;
+            }
+>>>>>>> Stashed changes
     $scope.searchByFocusOut = function (isBy) {
 
         $scope.isRequired = true;
@@ -614,20 +1375,236 @@
         if (isBy == "1") {
             document.getElementById('radioSearchBRSTNOutward').checked = true;
             document.getElementById('radioSearchBatchOutward').checked = false;
+            document.getElementById('radioSearchIclFileNameOutward').checked = false;
             $scope.radioDisabled1 = true;
+            $scope.radioDisabled3 = true;
             $scope.radioDisabled2 = false;
 
 
+        } else if (isBy == "3") {
+            document.getElementById('radioSearchIclFileNameOutward').checked = true;
+            document.getElementById('radioSearchBRSTNOutward').checked = false;
+            document.getElementById('radioSearchBatchOutward').checked = false;
+            $scope.radioDisabled1 = true;
+            $scope.radioDisabled2 = true;
+            $scope.radioDisabled3 = false;
         } else {
             document.getElementById('radioSearchBRSTNOutward').checked = false;
             document.getElementById('radioSearchBatchOutward').checked = true;
-
-            $scope.radioDisabled1 = false;
+            document.getElementById('radioSearchIclFileNameOutward').checked = false;
+            $scope.radioDisabled3 = true;
             $scope.radioDisabled2 = true;
+            $scope.radioDisabled1 = false;
         }
 
         document.getElementById("btnSearch").disabled = false;
+<<<<<<< Updated upstream
     }
 
 
 }]);
+=======
+    },
+            $scope.radioModalExactDateClick = function () {
+                document.getElementById("modal-date-exact").disabled = false;
+                document.getElementById("modal-date-from").disabled = true;
+                document.getElementById("modal-date-to").disabled = true;
+                document.getElementById("modal-date-from").value = "";
+                document.getElementById("modal-date-to").value = "";
+                $scope.isErrorVisible = false;
+                $scope.isErrorVisible1 = false;
+            },
+
+            $scope.radioModalDateRangeClick = function () {
+                document.getElementById("modal-date-exact").disabled = true;
+                document.getElementById("modal-date-from").disabled = false;
+                document.getElementById("modal-date-to").disabled = false;
+                document.getElementById("modal-date-exact").value = "";
+            },
+
+            $scope.btnModalClick = function () {
+                var dateModal = "";
+                var dateModalFrom = "";
+                var dateModalTo = "";
+
+                $scope.isErrorVisible = false;
+                $scope.isErrorVisible1 = false;
+
+                if (document.getElementById('radioModalExactDate').checked) {
+
+                    if (document.getElementById('modal-date-exact').value !== "") {
+
+                        dateModal = document.getElementById('modal-date-exact').value;
+                        //document.getElementById($scope.txtDateRange).style.fontSize = "120%";
+                    }
+
+                } else if (document.getElementById('radioModalDateRange').checked) {
+
+                    if (document.getElementById('modal-date-from').value !== "" && document.getElementById('modal-date-to').value !== "") {
+
+                        dateModalFrom = document.getElementById('modal-date-from').value;
+                        dateModalTo = document.getElementById('modal-date-to').value;
+
+                        //var find = '-';
+                        //var re = new RegExp(find, 'g');
+
+                        //a = a.replace(re, '/');
+
+                        if (dateModalFrom <= dateModalTo) {
+
+                            $scope.isErrorVisible = false
+                            $scope.isErrorVisible1 = false;
+                            //dateModal = dateModalFrom.replace(re, "/") + " to " + dateModalTo.replace(re, "/");
+                            dateModal = dateModalFrom + " to " + dateModalTo;
+                            //document.getElementById($scope.txtDateRange).style.fontSize = "100%";
+                        } else {
+
+                            $scope.isErrorVisible1 = false;
+                            $scope.isErrorVisible = true;
+
+                        }
+                    } else if (document.getElementById('modal-date-from').value !== "" || document.getElementById('modal-date-to').value !== "") {
+
+                        $scope.isErrorVisible1 = true;
+                        $scope.isErrorVisible = false;
+                    }
+                }
+
+                if (!$scope.isErrorVisible && !$scope.isErrorVisible1) {
+
+                    document.getElementById("close").click();
+                }
+                document.getElementById($scope.txtDateRange).value = dateModal;
+                //$scope.$apply();
+
+            },
+
+            $scope.mymodalshow = function (id) {
+                document.getElementById('modal-date-exact').value = "";
+                document.getElementById('modal-date-from').value = "";
+                document.getElementById('modal-date-to').value = "";
+
+
+
+                $scope.isErrorVisible = false;
+                $scope.isErrorVisible1 = false;
+
+                $scope.isRangeVisible = false;
+
+                console.log(id);
+                if (id !== "input-date") {
+                    $scope.isRangeVisible = true;
+                }
+                $('#myModal').modal('show');
+                $scope.txtDateRange = id;
+
+            },
+            $scope.itemListIclFileNameXDblClick = function (x) {
+                console.log("xxx", x);
+                iclFileNames.splice(document.getElementById("itemListIclFileName").selectedIndex, 1);
+            },
+            $scope.rowSummaryClickInwardScanAccountNumber = function (x) {
+                var scanNumberCh = document.getElementById('txtScanAcctNumber').value.trim();
+                var scanDateCh = document.getElementById('input-date2').value.trim();
+
+                if (document.getElementById("radioSearchScanAccountNo").checked==true) { // will only download if scan account number and exact date is user's input
+                    console.log(x);
+                    
+                    
+                    var param = scanNumberCh + "|" + scanDateCh + "|" + x.INSTRUMENT_NUMBER + "|" + x.ZP_AMOUNT.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')  + "|" + x.CHECK_BRSTN;
+                    BootstrapDialog.show({
+                        message: "Download Check Image Details?",
+                        buttons: [{
+                            label: 'Yes',
+                            action: function (dialogItself) {
+                                $('#loading').show();
+                                dialogItself.close();
+                                $.ajax({
+
+                                    type: 'GET',
+                                    url: host + "/api/searchEngine/searchIWOW/getImageCheck/" + param,
+                                    success: function (blob) {
+                                        $('#loading').hide();
+
+                                        var byte64 = blob.split("FILENAME:")[0];
+                                        var fileName = blob.split("FILENAME:")[1];
+
+                                        var byteCharacters = atob(byte64);
+                                        var byteNumbers = new Array(byteCharacters.length);
+                                        for (var i = 0; i < byteCharacters.length; i++) {
+                                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                        }
+                                        var byteArray = new Uint8Array(byteNumbers);
+
+                                        var file = new Blob([byteArray], { type: 'application/pdf' });
+                                        //trick to download store a file having its URL
+                                        var fileURL = URL.createObjectURL(file);
+                                        var a = document.createElement('a');
+                                        a.href = fileURL;
+                                        a.target = '_blank';
+                                        a.download = fileName;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        
+                                    },
+                                    error: function (a, b, c) {
+                                        console.log("Nim in ajax erroor ", a);
+                                        $('#loading').hide();
+                                    }
+
+                                });
+                            }
+                        },
+                            {
+                                label: 'No',
+                                action: function (dialogItself) {
+                                    dialogItself.close();
+                                }
+                            }
+                        ]
+                    });
+                }
+            },
+            $("#txtICLFnameOutwardR3").keyup(function (event) {
+                var txtAreaFileNameVal = document.getElementById("txtICLFnameOutwardR3");
+                
+                if (event.keyCode === 13 && txtAreaFileNameVal.value.trim() !== "") {
+
+                    var txtFileNamesArr = txtAreaFileNameVal.value.split(",");
+                    var allClearFileNames = true;
+                    for (var i = 0 ; i < txtFileNamesArr.length; i++) {
+                        if (txtFileNamesArr[i].trim() != "") {
+                            if (txtFileNamesArr[i].toUpperCase().indexOf(".ICL") == -1) {
+                                BootstrapDialog.show({
+                                    message: "Please enter a valid ICL filename (X_XXXXXXXX_XXX_XXXXXXXXXX.ICL) \n and separate multiple filenames using 'comma ( , )' ",
+                                    buttons: [{
+                                        label: 'Close',
+                                        action: function (dialogItself) {
+                                            dialogItself.close();
+                                        }
+                                    }]
+                                });
+                                allClearFileNames = false;
+                                break;
+                            }
+                            
+                        }
+                    }
+                    if (allClearFileNames) {
+                        for (var i = 0 ; i < txtFileNamesArr.length; i++) {
+                            iclFileNames.push({ iclFilename: txtFileNamesArr[i] });
+                        }
+                        txtAreaFileNameVal.value = "";
+                    }
+                    
+                    $scope.itemListIclFileNameX = iclFileNames;
+                    $scope.itemListIclFileNameSize = iclFileNames.length + 1; //to remove initial dropdown arrow when adding only one icl filename
+
+                    console.log("iclFileNames");
+                    console.log(iclFileNames);
+                    $scope.$apply();
+
+                }
+            });
+}]);
+>>>>>>> Stashed changes

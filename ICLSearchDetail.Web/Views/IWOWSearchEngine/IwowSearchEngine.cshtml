@@ -1,5 +1,4 @@
 ﻿@{ ViewBag.Title = "Search Inward/Outward Check Details"; }
-
 <script src="~/ScriptsNg/Controller/IWOW/searchEngineIWOW.js"></script>
 <head>
     <link rel="stylesheet" href="~/ScriptsNg/styles.css" type="text/css">
@@ -8,7 +7,7 @@
     <form name="yourId" id="yourId" class="form" ng-controller="searchEngineIWOW" ng-app="indexApp" autocomplete="off">
 
         <!--     <div class="header">
-           </div>-->
+        </div>-->
         <br />
         <br />
         <br />
@@ -38,9 +37,9 @@
                 <div>
                     <div class="radio">
                         <fieldset>
-                            <table @*style="width:100%" *@ border="0" class="modalTr">
+                            <table border="0" class="modalTr">
                                 <tr>
-                                    <td col title="mandatory field" width="100%">
+                                    <td col title="mandatory field">
                                         User ID<span style="font-size:18px;color:red"><sup>*</sup></span>
 
                                     </td>
@@ -55,7 +54,7 @@
                                     </td>
                                     <td>
                                         <!--<span style="font-size:9px;color:red"> *REQUIRED </span>-->
-                                        <input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;"*@ ng-focus="searchByFocus(1)" max="9999-12-31" ng-required="isRequired2" />
+                                        <input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" placeholder="mm-dd-yyyy" style="border-left-width:2px; background-color:powderblue" ng-focus="searchByFocus(1)" max="9999-12-31" ng-required="isRequired2" />
                                     </td>
 
                                 </tr>
@@ -82,7 +81,7 @@
                     <tr>
                         <td style="padding-right:15px">
                             <label for="radioSearchCheckNo">
-                                <input type="radio" name="radioCheckNo" id="radioSearchCheckNo" value="true" ng-model="radioCheckNo" ng-click="radioSearchBatchClick1()">
+                                <input type="radio" name="radioCheckNo" id="radioSearchCheckNo" ng-model="radioCheckNo" ng-click="radioSearchBatchClick1()">
                             </label>
                         </td>
 
@@ -91,10 +90,10 @@
                 </table>
                 <div class="radio">
                     <fieldset>
-                        <table @*style="width:100%" *@ border="0" class="modalTr">
+                        <table @*style="width:100%"*@ border="0" class="modalTr">
 
                             <tr>
-                                <td title="mandatory field" width="100%">
+                                <td title="mandatory field">
                                     Check Number<span style="font-size:18px;color:red"><sup>*</sup></span>
                                 </td>
                                 <td>
@@ -112,13 +111,62 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Verification Date
+                                    Verification Date &nbsp;
                                 </td>
                                 <td>
-                                    <input id="input-date1" type="date" ng-disabled="radioDisabled1" class="form-control" ng-focus="searchByFocus(2)" max="9999-12-31" style="width:100%;float:right;" />
+                                    <input id="input-date1" type="text" ng-disabled="radioDisabled1" placeholder="mm-dd-yyyy" class="form-control" ng-focus="searchByFocus(2);mymodalshow('input-date1')" max="9999-12-31" style="width:100%;float:right;" ng-click="mymodalshow('input-date1')" />
                                 </td>
 
 
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </div>
+                <br />
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchScanAccountNo">
+                                <input type="radio" name="radioScanNo" id="radioSearchScanAccountNo" ng-model="radioSearchScanAccountNo" ng-click="radioSearchScanNoClick()">
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>By Scan Account Number</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table border="0" class="modalTr">
+                            <tr>
+                                <td title="mandatory field">
+                                    Scan Account #<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input type="text" title="accepts numeric char(s) only" name="txtScanAcctNumber" id="txtScanAcctNumber" ng-disabled="radioDisabled3" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Scan Acc. No." maxlength="13" ng-required="isRequired2" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td title="mandatory field">
+                                    Verification Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input id="input-date2" name="input-date2" type="text" ng-disabled="radioDisabled3" class="form-control" placeholder="mm-dd-yyyy" style="border-left-width:2px; background-color:powderblue" ng-focus="searchByFocus(3);mymodalshow('input-date2')" max="9999-12-31" ng-required="isRequired2" ng-click="mymodalshow('input-date2')" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Check Number
+                                </td>
+                                <td>
+                                    <input type="text" title="accepts numeric char(s) only" name="txtCheckNumber1" id="txtCheckNumber1" ng-disabled="radioDisabled3" class="form-control" style="border-left-width:2px;" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Check Number" maxlength="10" />
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -135,10 +183,8 @@
                                     <button type="button" style="width:50%; float:right" class="btn btn-danger" name="btnReset" id="btnReset" ng-model="btnReset" ng-click="btnResetClick()">Reset</button>
                                 </td>
                             </tr>
-
                         </table>
                     </fieldset>
-
                 </div>
             </div>
             <div id="sidebarMid"></div>
@@ -166,7 +212,7 @@
                             <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClickInwardScanAccountNumber(x)">
                                 <td align="left" width="1%">{{ $index +1 }}</td>
                                 <td>{{ x.TRANSACTION_DATE }}</td>
-                                <td>{{ x.INSTRUMENT_NUMBER }}</td>
+                                <td>&nbsp;{{ x.INSTRUMENT_NUMBER }}</td>
                                 <td> {{ x.ZP_AMOUNT }}</td>
                                 <td> {{ x.ZP_AMT_CREATOR }}</td>
                                 <td>{{ x.SVSFV_TIME}}</td>
@@ -177,9 +223,47 @@
                             </tr>
                         </tbody>
                     </table>
+
+
                 </div>
             </div>
         </div>
+
+        @*start -- DIV HIDDEN DOWNLOAD FOR SCANNED REPORT*@
+        <table hidden id="tblIWOWDetailsDownload" name="tblIWOWDetailsDownload" ng-model="tblIWOWDetailsDownload" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
+            <thead id="tableHeader">
+                <tr>
+                    <th width="1%">#</th>
+                    <th>TRANSACTION DATE </th>
+                    <th>
+                        CHECK
+                        <br /> NUMBER
+                    </th>
+                    <th>AMOUNT</th>
+                    <th>AMOUNT WISE<br />USER</th>
+                    <th>SVS VERIFICATION<br />TIME</th>
+                    <th>SVS VERIFY BY<br />USER ID</th>
+                    <th>SVS VERIFY BY<br />USER NAME</th>
+                    <th>CHECK BRSTN</th>
+                    <th>CHECK BRANCH<br />NAME</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr align="center" ng-repeat="x in tblIWOWDetailsDownload" track by $index ng-click="rowSummaryClick(x)">
+                    <td align="left" width="1%">{{ $index +1 }}</td>
+                    <td>{{ x.TRANSACTION_DATE }}</td>
+                    <td>&nbsp;{{ x.INSTRUMENT_NUMBER }}</td>
+                    <td> {{ x.ZP_AMOUNT | number:2 }}</td>
+                    <td> {{ x.ZP_AMT_CREATOR }}</td>
+                    <td>{{ x.SVSFV_TIME}}</td>
+                    <td> {{x.SVS_FIRST }}</td>
+                    <td>{{ x.FNAME }}</td>
+                    <td>{{ x.CHECK_BRSTN}}</td>
+                    <td>{{ x.BRANCH_NAME}}</td>
+                </tr>
+            </tbody>
+        </table>
+        @*ed --DIV HIDDEN DOWNLOAD FOR SCANNED REPORT*@
 
         @*OUTWARD TAB*@
         <div id="Outward" class="tabcontent">
@@ -200,7 +284,7 @@
                         <fieldset>
                             <table @*style="width:100%" *@ border="0" class="modalTr">
                                 <tr>
-                                    <td col title="mandatory field" width="100%">
+                                    <td col title="mandatory field">
                                         BRSTN<span style="font-size:18px;color:red"><sup>*</sup></span>
 
                                     </td>
@@ -215,13 +299,13 @@
                                         Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
                                     </td>
                                     <td>
-                                        <input id="input-dateOutwardR1" ng-disabled="radioDisabled2" name="input-dateOutwardR1" type="date" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;"*@ max="9999-12-31" ng-required="isRequired" />
+                                        <input id="input-dateOutwardR1" ng-disabled="radioDisabled2" placeholder="mm-dd-yyyy" name="input-dateOutwardR1" type="text" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;"*@ max="9999-12-31" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR1')" ng-focus="mymodalshow('input-dateOutwardR1')" />
                                     </td>
 
                                 </tr>
 
                                 <tr>
-                                    <td col title="mandatory field" width="100%">
+                                    <td col title="mandatory field">
                                         Check Number
 
                                     </td>
@@ -256,7 +340,7 @@
                         <table @*style="width:100%" *@ border="0" class="modalTr">
 
                             <tr>
-                                <td col title="mandatory field" width="100%">
+                                <td col title="mandatory field">
                                     Batch ID<span style="font-size:18px;color:red"><sup>*</sup></span>
 
                                 </td>
@@ -269,12 +353,12 @@
                                     Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
                                 </td>
                                 <td>
-                                    <input id="input-dateOutwardR2" type="date" ng-disabled="radioDisabled1" class="form-control" max="9999-12-31" style="width:100%;float:right; background-color:powderblue" ng-required="isRequired" />
+                                    <input id="input-dateOutwardR2" type="text" placeholder="mm-dd-yyyy" ng-disabled="radioDisabled1" class="form-control" max="9999-12-31" style="width:100%;float:right; background-color:powderblue" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR2')" ng-focus="mymodalshow('input-dateOutwardR2')" />
                                 </td>
 
                             </tr>
                             <tr>
-                                <td col title="mandatory field" width="100%">
+                                <td col title="mandatory field">
                                     Check Number
 
                                 </td>
@@ -430,8 +514,6 @@
                 </div>
             </div> @*end div content container*@
         </div>
-<<<<<<< Updated upstream
-=======
         <!-- Modal content -->
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -482,7 +564,6 @@
                 </div>
             </div>
         </div>
->>>>>>> Stashed changes
 
         <div id="loading">
             <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />

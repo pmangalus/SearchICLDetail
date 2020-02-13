@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using ICLSearchDetail.Web.DBManager.Model.SearchEngineModels;
 using ICLSearchDetail.Web.DBManager.Service;
 
 namespace ICLSearchDetail.Web.Controllers
@@ -32,5 +33,35 @@ namespace ICLSearchDetail.Web.Controllers
 
             return Ok(returnCheckDetails);
         }
+<<<<<<< Updated upstream
+=======
+
+        [System.Web.Http.Route("api/searchEngine/searchIWOW/scanAcctNo/{scanAcctNo}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetByAcctNo(String scanAcctNo)
+        {
+
+            SearchEngineIWOWService searchEngineService = new SearchEngineIWOWService();
+
+            string returnCheckDetails = searchEngineService.getByAcctNo(scanAcctNo);
+
+            return Ok(returnCheckDetails);
+        }
+
+        [System.Web.Http.Route("api/searchEngine/searchIWOW/getImageCheck/{instrumentIdAndDate}")]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult ConvertToImage(String instrumentIdAndDate)
+        {
+            CheckImageModel checkImageModel = new CheckImageModel();
+
+            SearchEngineIWOWService searchEngineService = new SearchEngineIWOWService();
+            checkImageModel = searchEngineService.ManageCheckImage(instrumentIdAndDate);
+            //byte[] file = GetFile(id);
+            //HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK);
+            string content = Convert.ToBase64String(checkImageModel.fileByte64) + "FILENAME:" + checkImageModel.fileName;
+
+            return Ok(content);
+        }
+>>>>>>> Stashed changes
     }
 }
