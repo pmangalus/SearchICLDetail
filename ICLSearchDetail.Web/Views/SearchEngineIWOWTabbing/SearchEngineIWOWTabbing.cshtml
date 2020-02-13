@@ -1,0 +1,409 @@
+﻿@{ ViewBag.Title = "Search Inward/Outward Check Details"; }
+
+<script src="~/ScriptsNg/Controller/IWOW/searchEngineIWOWTabbing.js"></script>
+
+<style type='text/css'>
+    #container {
+        /*width: 100%;
+        float: right;*/
+        /*margin-right: -390px;*/
+    }
+
+    #content {
+        padding-left: 2%;
+        height: 500px;
+        width: 70%;
+        overflow-x: hidden;
+    }
+
+    #sidebar {
+        width: 30%;
+        float: left;
+        height: 100%;
+    }
+
+    #sidebar-bottom {
+        width: 30%;
+        bottom: 0;
+        position: absolute;
+        padding-bottom: 9%;
+    }
+
+    #loading {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        display: block;
+        opacity: 0.7;
+        background-color: #fff;
+        z-index: 99;
+        text-align: center;
+    }
+
+    .modalTr td,
+    tr {
+        padding: 4px
+    }
+
+    .table-hover td {
+        font-size: small;
+    }
+
+    .table-hover th {
+        border: 1px thin;
+        border-radius: 5px;
+        border-spacing: 0;
+    }
+
+    .table tbody tr:hover td,
+    .table tbody tr:hover th {
+        background-color: lightgreen;
+    }
+
+    .radio label,
+    .radio1 label {
+        font-size: 14px;
+        margin: 10px
+    }
+
+    radio1 {
+        font-size: 14px;
+        margin: 10px;
+    }
+
+    .error {
+        position: relative;
+        height: 250px;
+        padding-top: 30px;
+        margin-left: 10px
+    }
+
+    .options {
+        position: fixed;
+        height: 250px;
+        width: 100%;
+    }
+
+    .radio {
+        position: relative;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: relative;
+        background-color: burlywood;
+        min-width: 220px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+
+    .dropdown-content {
+        display: block;
+    }
+
+    .testingCSS {
+        font-size: smaller;
+        text-align: center;
+        color: whitesmoke;
+    }
+
+    .less {
+        border-radius: 15px;
+        background-color: red;
+    }
+
+    .equal {
+        border-radius: 15px;
+        background-color: blue;
+    }
+
+    input::-webkit-calendar-picker-indicator {
+        opacity: 100;
+    }
+
+    input-date {
+        font-size: 14px;
+        margin: 10px;
+    }
+
+    input {
+    }
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-color: deeppink;
+        
+    }
+</style>
+<form name="yourId" id="yourId" class="form" ng-controller="searchEngineIWOWTabbing" ng-app="indexApp" autocomplete="off">
+    <!--     <div class="header">
+       </div>-->
+
+
+    <br />
+    <br />
+    <br />
+    
+    <h2>Tabs</h2>
+    <p>Click on the buttons inside the tabbed menu:</p>
+
+    <div class="tab">
+        <button class="tablinks" ng-click="openCity(scope, 'Inward')">Inward</button>
+        <button class="tablinks" ng-click="openCity(this, 'Outward')">Outward</button>
+    </div>
+
+    <div id="Inward" class="tabcontent" style="width:100%">
+        <div class="header">
+            <h1>SEARCH ENGINE - IW and OW Details</h1>
+            <p><i>Search engine that will display inward and outward details corresponds to user search criteria.</i></p>
+
+        </div>
+        <div class="sidebar" id="sidebar" style="border:thin;">
+            <div>
+                <div class="radio">
+
+                    <fieldset>
+                        <legend><b>By User and Verification Date(time)</b></legend>
+                        <table style="width:100%" border="0">
+                            @*<tr>
+                                <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
+                            </tr>*@
+                            <tr>
+                                <td col title="mandatory field">
+                                    <label for="radioSearchUserID">
+                                        <input type="radio" name="radioUserID" id="radioSearchUserID" ng-model="radioUserID" ng-click="radioSearchBatchClick()" checked="isChecked">
+                                        User ID<span style="font-size:15px;color:red"><sup>*</sup></span>
+                                    </label>
+
+                                </td>
+                                <td>
+                                    <input type="text" name="txtUserId" id="txtUserId" ng-disabled="radioDisabled2" class="form-control" style="width:100%;align-self:auto" placeholder="Enter User ID" ng-focus="searchByFocus(1)" />
+                                    <span style="font-size:9px"><span style="font-size:9px;color:red">*REQUIRED </span> accepts alphanumeric char(s) only</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td title="mandatory field">
+                                    <label for="input-date" id="optDate">
+                                        Verification Date<span style="font-size:15px;color:red"><sup>*</sup></span>
+
+                                    </label>
+                                </td>
+                                <td>
+                                    <input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" ng-focus="searchByFocus(1)" max="9999-12-31" />
+
+                                    <span style="font-size:9px;color:red"> *REQUIRED </span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Verification Time</label>
+                                </td>
+                                <td> <input id="input-time" name="input-time" type="time" ng-disabled="radioDisabled2" class="form-control" ng-focus="searchByFocus(1)" /></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+
+                    @*<b>By User or Verification Time</b>*@
+
+                </div>
+            </div>
+            @*</div>*@
+
+            @*<div class="sidebar-bottom" id="sidebar-bottom">*@
+            <div class="radio">
+                @*<b>By Check Number</b>*@
+                <fieldset>
+                    <legend><b>By Check Number</b></legend>
+
+                    <table style="width:100%" border="0">
+                        @*<tr>
+                            <td colspan="2" style="padding-bottom:6%">&nbsp;</td>
+                        </tr>*@
+                        <tr>
+                            <td title="mandatory field">
+                                <label for="radioSearchCheckNo">
+                                    <input type="radio" name="radioCheckNo" id="radioSearchCheckNo" value="true" ng-model="radioCheckNo" ng-click="radioSearchBatchClick1()">
+                                    Check Number<span style="font-size:15px;color:red"><sup>*</sup></span>
+                                </label>
+
+                            </td>
+                            <td>
+                                <!--<input type="number" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1"  class="form-control" style="width:100%" placeholder="Enter Check Number" max="10" ng-focus= "searchByFocus(2)"/> -->
+                                <input type="text" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1" class="form-control" style="width:100%" placeholder="Enter Check Number" maxlength="10" />
+                                <span style="font-size:9px"> <span style="font-size:9px;color:red">*REQUIRED </span> accepts numeric char(s) only</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="input-date1" id="optDate">
+                                    User ID
+                                </label>
+                            </td>
+                            <td>
+                                <input type="text" name="textUserCheck" ng-disabled="radioDisabled1" id="textUserCheck" class="form-control" style="width:100%" placeholder="Enter User ID" ng-focus="searchByFocus(2)">
+                                <span style="font-size:9px"> accepts alphanumeric char(s) only</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>
+                                    Date
+
+                                </label>
+                            </td>
+                            <td>
+                                <input id="input-date1" type="date" ng-disabled="radioDisabled1" class="form-control" ng-focus="searchByFocus(2)" max="9999-12-31" />
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td colspan="2">
+                                <button type="button" style="float:right; width: 30%" class="btn btn-info" name="btnSearch" id="btnSearch" ng-model="btnSearch" ng-click="btnSearchClick()">Search</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="button" style="float:right; width: 30%" class="btn btn-warning" name="btnReset" id="btnReset" ng-model="btnReset" ng-click="btnResetClick()">Reset</button>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+            </div>
+        </div>
+        <div id="container" ng-show="isVisible">
+            <div id="content">
+                <table id="tblIWOWDetails" name="tblIWOWDetails" ng-model="tblIWOWDetails" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
+                    <thead id="tableHeader">
+                        <tr>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">TRANSACTION DATE </th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT WISE USER</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFICATION TIME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER ID</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER NAME</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRSTN</th>
+                            <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRANCH NAME</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClick(x)">
+                            <td align="left" width="1%">{{ $index +1 }}</td>
+                            <td>{{ x.TRANSACTION_DATE }}</td>
+                            <td>{{ x.INSTRUMENT_NUMBER  }}</td>
+                            <td> {{ x.ZP_AMOUNT  }}</td>
+                            <td> {{ x.ZP_AMT_CREATOR }}</td>
+                            <td>{{ x.SVSFV_TIME}}</td>
+                            <td> {{x.SVS_FIRST }}</td>
+                            <td>{{ x.FNAME  }}</td>
+                            <td>{{ x.CHECK_BRSTN}}</td>
+                            <td>{{ x.BRANCH_NAME}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="Outward" class="tabcontent">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p>
+    </div>
+
+
+
+    <table id="tblIWOWDetailsEx" name="tblIWOWDetailsEx" ng-model="tblIWOWDetailsEx" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+        <thead id="tableHeader">
+            <tr>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;" width="1%">#</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">TRANSACTION DATE </th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK<br /> NUMBER</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">AMOUNT WISE USER</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFICATION TIME</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER ID</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">SVS VERIFY BY USER NAME</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRSTN</th>
+                <th style="font-size:smaller; text-align:center; color:whitesmoke;background-color:cornflowerblue;">CHECK BRANCH NAME</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr align="center" ng-repeat="x in IWOWDetailsEx" track by $index ng-click="rowSummaryClick(x)">
+                <td align="left" width="1%">{{ $index +1 }}</td>
+                <td>{{ x.TRANSACTION_DATE }}</td>
+                <td>&nbsp; {{ x.INSTRUMENT_NUMBER  }}</td>
+                <td> {{ x.ZP_AMOUNT | number:2 }}</td>
+                <td> {{ x.ZP_AMT_CREATOR }}</td>
+                <td>{{ x.SVSFV_TIME}}</td>
+                <td> {{x.SVS_FIRST }}</td>
+                <td>{{ x.FNAME  }}</td>
+                <td>{{ x.CHECK_BRSTN}}</td>
+                <td>{{ x.BRANCH_NAME}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</form>
+
+@*<script src="~/ScriptsNg/Controller/Reference/searchEngineIWOWTabbing.js"></script>*@

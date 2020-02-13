@@ -1,8 +1,8 @@
 ﻿app.controller('lateCheckSummary', ['$scope', '$timeout', function ($scope, $timeout) {
 
     //console.log("#1 lateCheckSummary controller JS");
-    //var host = 'http://10.200.1.39:9862';
-    var host = 'http://localhost:53325';
+    var host = 'http://10.200.1.39:9867';
+    //var host = 'http://localhost:53325';
 
     var that = this;
 
@@ -25,18 +25,18 @@
             ////console.log("Nim in ajax erroor ", blob);
             var jsonParse = JSON.parse(blob);
             ////console.log("jsonParse", jsonParse);
-            if (jsonParse.length !== 0 && jsonParse[0].ERROR_MSG == null) {
+            if (jsonParse.length !== 0 && jsonParse[0].ERROR_MSG === null) {
                 //var jsonReply = JSON.parse(reply);
 
                 for (var i = 0; i < jsonParse.length; i++) {
 
-                    if (jsonParse[i].BATCH_ID.length == 10) {
+                    if (jsonParse[i].BATCH_ID.length === 10) {
                         jsonParse[i].BATCH_ID = jsonParse[i].BATCH_ID.trim().padEnd(12, '-');
                     } else {
                         jsonParse[i].BATCH_ID = jsonParse[i].BATCH_ID.trim().padEnd(13, '-');
                     }
 
-                    if (jsonParse[i].fldNotEqual == "1") {
+                    if (jsonParse[i].fldNotEqual === "1") {
                         listInconsistentCountArr.push(jsonParse[i]);
                     }
                 }
@@ -73,7 +73,7 @@
         //console.log('displaying batch details');
         var result;
         var that = this;
-        if (radioSearchBatch.checked && document.getElementById('listBatch').value != "" && $scope.listBatch !== undefined) {
+        if (radioSearchBatch.checked && document.getElementById('listBatch').value !== "" && $scope.listBatch !== undefined) {
             //console.log('searching');
 
             result = document.getElementById('listBatch').value.split("-")[0];
@@ -290,25 +290,25 @@
                     return total;
                 }
 
-                else if (radioExport.checked && radioSearchBatch.checked == false) {
+                else if (radioExport.checked && radioSearchBatch.checked === false) {
                     //console.log("extract all export");
-                    if ($scope.tblSummaryHidden != undefined) {
+                    if ($scope.tblSummaryHidden !== undefined) {
                         $scope.tblSummaryHiddenlength = $scope.tblSummaryHidden.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                         //console.log("$scope.tblSummaryHiddenlength: ", $scope.tblSummaryHiddenlength);
-                        for (var i = 0; i < $scope.tblSummaryHidden.length; i++) {
-                            var x = $scope.tblSummaryHidden[i];
+                        for (var ii = 0; ii < $scope.tblSummaryHidden.length; ii++) {
+                            var xx = $scope.tblSummaryHidden[ii];
                             // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
-                            total = total + parseFloat(x.CAR_AMOUNT);
+                            total = total + parseFloat(xx.CAR_AMOUNT);
                             //console.log("total: ", total);
                         }
                     }
                     return total;
                 } else {
                     if ($scope.batchDetails !== undefined) {
-                        for (var i = 0; i < $scope.batchDetails.length; i++) {
-                            var x = $scope.batchDetails[i];
+                        for (var k = 0; k < $scope.batchDetails.length; k++) {
+                            var j = $scope.batchDetails[k];
                             // x.CAR_AMOUNT = x.CAR_AMOUNT == "" ? 0 : x.CAR_AMOUNT;
-                            total = total + parseFloat(x.CAR_AMOUNT);
+                            total = total + parseFloat(j.CAR_AMOUNT);
                             //console.log("total: " + total);
                         }
                         return total;
@@ -336,7 +336,7 @@
             $scope.validateBatchID = function (batchValue) {
                 var isValidBatch = false;
                 for (var i = 0; i < $scope.listBatch.length; i++) {
-                    if (document.getElementById('listBatch').value.split(" ")[0] == $scope.listBatch[i].BATCH_ID) {
+                    if (document.getElementById('listBatch').value.split(" ")[0] === $scope.listBatch[i].BATCH_ID) {
                         isValidBatch = true;
                     }
                 }

@@ -1,0 +1,607 @@
+﻿@{ ViewBag.Title = "Search Inward/Outward Check Details"; }
+<script src="~/ScriptsNg/Controller/IWOW/searchEngineIWOW.js"></script>
+<head>
+    <link rel="stylesheet" href="~/ScriptsNg/styles.css" type="text/css">
+</head>
+<body onload="document.getElementById('btnInward').click(); ">
+    <form name="yourId" id="yourId" class="form" ng-controller="searchEngineIWOW" ng-app="indexApp" autocomplete="off">
+
+        <!--     <div class="header">
+        </div>-->
+        <br />
+        <br />
+        <br />
+
+        <div class="header">
+            <h1>SEARCH ENGINE - IW and OW Details</h1>
+            <p><i>Search engine that will display inward and outward details corresponds to user search criteria.</i></p>
+        </div>
+        <button type="button" class="tablink active" ng-focus="myFunction()" ng-click="openPage('Inward', 'btnInward', '#4169e1')" id="btnInward" style="">Inward</button>
+        <button type="button" class="tablink2" ng-focus="myFunction()" ng-click="openPage('Outward', 'btnOutward', '#4169e1')" id="btnOutward" style="">Outward</button>
+        <br /><br />
+
+        @*inward tab*@
+        <div id="Inward" class="tabcontent">
+            <div class="sidebar" id="sidebar" style="border:thin;">
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchUserID">
+                                <input type="radio" name="radioUserID" id="radioSearchUserID" ng-model="radioUserID" ng-click="radioSearchBatchClick()" checked="isChecked">
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>By User and Verification Date(time)</b></td>
+                    </tr>
+                </table>
+                <div>
+                    <div class="radio">
+                        <fieldset>
+                            <table border="0" class="modalTr">
+                                <tr>
+                                    <td col title="mandatory field">
+                                        User ID<span style="font-size:18px;color:red"><sup>*</sup></span>
+
+                                    </td>
+                                    <td>
+                                        <!-- <span style="font-size:9px;color:red">*REQUIRED </span> -->
+                                        <input type="text" title="accepts alphanumeric char(s) only" name="txtUserId" id="txtUserId" ng-model="txtUserId" ng-disabled="radioDisabled2" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter User ID" ng-focus="searchByFocus(1)" ng-required="isRequired2" ng-change="ngChangeRequired(txtUserId)" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td title="mandatory field">
+                                        Verification Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                    </td>
+                                    <td>
+                                        <!--<span style="font-size:9px;color:red"> *REQUIRED </span>-->
+                                        <input id="input-date" name="input-date" type="date" ng-disabled="radioDisabled2" class="form-control" placeholder="mm-dd-yyyy" style="border-left-width:2px; background-color:powderblue" ng-focus="searchByFocus(1)" max="9999-12-31" ng-required="isRequired2" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Verification Time
+                                    </td>
+                                    <td>
+                                        <input id="input-time" name="input-time" type="time" ng-disabled="radioDisabled2" class="form-control" ng-focus="searchByFocus(1)" style="width:100%;float:right;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+
+                    </div>
+                </div>
+                <br />
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchCheckNo">
+                                <input type="radio" name="radioCheckNo" id="radioSearchCheckNo" ng-model="radioCheckNo" ng-click="radioSearchBatchClick1()">
+                            </label>
+                        </td>
+
+                        <td><b>By Check Number</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table @*style="width:100%"*@ border="0" class="modalTr">
+
+                            <tr>
+                                <td title="mandatory field">
+                                    Check Number<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input type="text" title="accepts numeric char(s) only" name="txtCheckNumber" id="txtCheckNumber" ng-disabled="radioDisabled1" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Check Number" maxlength="10" ng-required="isRequired2" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    User ID
+                                </td>
+                                <td>
+                                    <!-- <span style="font-size:9px"> accepts alphanumeric char(s) only</span> -->
+                                    <input type="text" title="accepts alphanumeric char(s) only" name="textUserCheck" ng-disabled="radioDisabled1" id="textUserCheck" class="form-control" style="width:100%;float:right;" placeholder="Enter User ID" ng-focus="searchByFocus(2)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Verification Date &nbsp;
+                                </td>
+                                <td>
+                                    <input id="input-date1" type="text" ng-disabled="radioDisabled1" placeholder="mm-dd-yyyy" class="form-control" ng-focus="searchByFocus(2);mymodalshow('input-date1')" max="9999-12-31" style="width:100%;float:right;" ng-click="mymodalshow('input-date1')" />
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </div>
+                <br />
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchScanAccountNo">
+                                <input type="radio" name="radioScanNo" id="radioSearchScanAccountNo" ng-model="radioSearchScanAccountNo" ng-click="radioSearchScanNoClick()">
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>By Scan Account Number</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table border="0" class="modalTr">
+                            <tr>
+                                <td title="mandatory field">
+                                    Scan Account #<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input type="text" title="accepts numeric char(s) only" name="txtScanAcctNumber" id="txtScanAcctNumber" ng-disabled="radioDisabled3" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Scan Acc. No." maxlength="13" ng-required="isRequired2" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td title="mandatory field">
+                                    Verification Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input id="input-date2" name="input-date2" type="text" ng-disabled="radioDisabled3" class="form-control" placeholder="mm-dd-yyyy" style="border-left-width:2px; background-color:powderblue" ng-focus="searchByFocus(3);mymodalshow('input-date2')" max="9999-12-31" ng-required="isRequired2" ng-click="mymodalshow('input-date2')" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Check Number
+                                </td>
+                                <td>
+                                    <input type="text" title="accepts numeric char(s) only" name="txtCheckNumber1" id="txtCheckNumber1" ng-disabled="radioDisabled3" class="form-control" style="border-left-width:2px;" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Check Number" maxlength="10" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" style="width:50%;float:right" class="btn btn-success" name="btnSearch" id="btnSearch" ng-model="btnSearch" ng-click="btnSearchClick()">Search</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" style="width:50%; float:right" class="btn btn-danger" name="btnReset" id="btnReset" ng-model="btnReset" ng-click="btnResetClick()">Reset</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </div>
+            <div id="sidebarMid"></div>
+            <div id="container">
+                <div id="content">
+                    <table id="tblIWOWDetails" name="tblIWOWDetails" ng-model="tblIWOWDetails" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" ng-show="isVisible">
+                        <thead id="tableHeader">
+                            <tr>
+                                <th width="1%">#</th>
+                                <th>TRANSACTION DATE </th>
+                                <th>
+                                    CHECK
+                                    <br /> NUMBER
+                                </th>
+                                <th>AMOUNT</th>
+                                <th>AMOUNT WISE<br />USER</th>
+                                <th>SVS VERIFICATION<br />TIME</th>
+                                <th>SVS VERIFY BY<br />USER ID</th>
+                                <th>SVS VERIFY BY<br />USER NAME</th>
+                                <th>CHECK BRSTN</th>
+                                <th>CHECK BRANCH<br />NAME</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr align="center" ng-repeat="x in IWOWDetails" track by $index ng-click="rowSummaryClickInwardScanAccountNumber(x)">
+                                <td align="left" width="1%">{{ $index +1 }}</td>
+                                <td>{{ x.TRANSACTION_DATE }}</td>
+                                <td>&nbsp;{{ x.INSTRUMENT_NUMBER }}</td>
+                                <td> {{ x.ZP_AMOUNT }}</td>
+                                <td> {{ x.ZP_AMT_CREATOR }}</td>
+                                <td>{{ x.SVSFV_TIME}}</td>
+                                <td> {{x.SVS_FIRST }}</td>
+                                <td>{{ x.FNAME }}</td>
+                                <td>{{ x.CHECK_BRSTN}}</td>
+                                <td>{{ x.BRANCH_NAME}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+        @*start -- DIV HIDDEN DOWNLOAD FOR SCANNED REPORT*@
+        <table hidden id="tblIWOWDetailsDownload" name="tblIWOWDetailsDownload" ng-model="tblIWOWDetailsDownload" class="table table-hover" border="0" style="border-width:thin; max-width: inherit">
+            <thead id="tableHeader">
+                <tr>
+                    <th width="1%">#</th>
+                    <th>TRANSACTION DATE </th>
+                    <th>
+                        CHECK
+                        <br /> NUMBER
+                    </th>
+                    <th>AMOUNT</th>
+                    <th>AMOUNT WISE<br />USER</th>
+                    <th>SVS VERIFICATION<br />TIME</th>
+                    <th>SVS VERIFY BY<br />USER ID</th>
+                    <th>SVS VERIFY BY<br />USER NAME</th>
+                    <th>CHECK BRSTN</th>
+                    <th>CHECK BRANCH<br />NAME</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr align="center" ng-repeat="x in tblIWOWDetailsDownload" track by $index ng-click="rowSummaryClick(x)">
+                    <td align="left" width="1%">{{ $index +1 }}</td>
+                    <td>{{ x.TRANSACTION_DATE }}</td>
+                    <td>&nbsp;{{ x.INSTRUMENT_NUMBER }}</td>
+                    <td> {{ x.ZP_AMOUNT | number:2 }}</td>
+                    <td> {{ x.ZP_AMT_CREATOR }}</td>
+                    <td>{{ x.SVSFV_TIME}}</td>
+                    <td> {{x.SVS_FIRST }}</td>
+                    <td>{{ x.FNAME }}</td>
+                    <td>{{ x.CHECK_BRSTN}}</td>
+                    <td>{{ x.BRANCH_NAME}}</td>
+                </tr>
+            </tbody>
+        </table>
+        @*ed --DIV HIDDEN DOWNLOAD FOR SCANNED REPORT*@
+
+        @*OUTWARD TAB*@
+        <div id="Outward" class="tabcontent">
+            <div class="sidebar" id="sidebar" style="border:thin;">
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchBRSTNOutward">
+                                <input type="radio" name="radioSearchBRSTNOutward" id="radioSearchBRSTNOutward" ng-model="radioSearchBRSTNOutward" ng-click="radioSearchBRSTNOutwardClick()" checked="isChecked">
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>Search by BRSTN:</b></td>
+                    </tr>
+                </table>
+                <div>
+                    <div class="radio" novalidate>
+                        <fieldset>
+                            <table @*style="width:100%" *@ border="0" class="modalTr">
+                                <tr>
+                                    <td col title="mandatory field">
+                                        BRSTN<span style="font-size:18px;color:red"><sup>*</sup></span>
+
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-disabled="radioDisabled2" title="accepts alphanumeric char(s) only" name="txtBRSTNOutwardR1" id="txtBRSTNOutwardR1" class="form-control" style="width:100%;float:right;color: black; background-color:powderblue" placeholder="Enter BRSTN" ng-required="isRequired" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td title="mandatory field">
+                                        Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                    </td>
+                                    <td>
+                                        <input id="input-dateOutwardR1" ng-disabled="radioDisabled2" placeholder="mm-dd-yyyy" name="input-dateOutwardR1" type="text" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;"*@ max="9999-12-31" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR1')" ng-focus="mymodalshow('input-dateOutwardR1')" />
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td col title="mandatory field">
+                                        Check Number
+
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-disabled="radioDisabled2" title="accepts numeric char(s) only" name="txtCheckNoOutwardR1" id="txtCheckNoOutwardR1" class="form-control" style="width:100%;float:right;color: black;" placeholder="Enter Check Number" ng-focus="searchByFocusOut(1)" maxlength="10" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+
+                    </div>
+                </div>
+                <br />
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchBatchOutward">
+                                <input type="radio" name="radioSearchBatchOutward" value="true" id="radioSearchBatchOutward" ng-model="radioSearchBatchOutward" ng-click="radioSearchBatchOutwardClick()" />
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>Search by Batch ID:</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table @*style="width:100%" *@ border="0" class="modalTr">
+
+                            <tr>
+                                <td col title="mandatory field">
+                                    Batch ID<span style="font-size:18px;color:red"><sup>*</sup></span>
+
+                                </td>
+                                <td>
+                                    <input type="text" ng-disabled="radioDisabled1" title="accepts alphanumeric char(s) only" name="txtBatchIDOutwardR2" id="txtBatchIDOutwardR2" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;" *@ ng-focus="searchByFocusOut(2)" placeholder="Enter Batch ID" ng-required="isRequired" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input id="input-dateOutwardR2" type="text" placeholder="mm-dd-yyyy" ng-disabled="radioDisabled1" class="form-control" max="9999-12-31" style="width:100%;float:right; background-color:powderblue" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR2')" ng-focus="mymodalshow('input-dateOutwardR2')" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td col title="mandatory field">
+                                    Check Number
+
+                                </td>
+                                <td>
+                                    <input type="text" ng-disabled="radioDisabled1" title="accepts alphanumeric char(s) only" name="txtCheckNoOutwardR2" id="txtCheckNoOutwardR2" class="form-control" style="border-left-width:2px;" @*style="width:100%;float:right; background-color: #b5f5c6;color: black;"*@ placeholder="Enter Check Number" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span style="font-size:10px;color:red">*REQUIRED fields</span>
+                                </td>
+                            </tr>
+
+
+
+
+                        </table>
+                    </fieldset>
+
+                </div>
+
+                <br />
+
+                <table>
+                    <tr>
+                        <td style="padding-right:15px">
+                            <label for="radioSearchIclFileNameOutward">
+                                <input type="radio" name="radioSearchIclFileNameOutward" value="true" id="radioSearchIclFileNameOutward" ng-model="radioSearchIclFileNameOutward" ng-click="radioSearchIclFileNameOutwardClick()" />
+                            </label>
+                        </td>
+                        <td></td>
+                        <td><b>Search by ICL File Name/s:</b></td>
+                    </tr>
+                </table>
+                <div class="radio">
+                    <fieldset>
+                        <table style="width:100%" border="0" class="modalTr">
+
+                            <tr>
+                                <td title="mandatory field">
+                                    Transaction Date<span style="font-size:18px;color:red"><sup>*</sup></span>
+                                </td>
+                                <td>
+                                    <input id="input-dateOutwardR4" ng-disabled="radioDisabled4" placeholder="mm-dd-yyyy" name="input-dateOutwardR4" type="text" class="form-control" style="border-left-width:2px; background-color:powderblue" @*style="width:100%;float:right;background-color: #b5f5c6;color: black;"*@ max="9999-12-31" ng-required="isRequired" ng-click="mymodalshow('input-dateOutwardR4')" ng-focus="mymodalshow('input-dateOutwardR4')" />
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td col title="mandatory field" style="padding-right:10px" colspan="2">
+                                    ICL File Name/s: <span style="font-size:18px;color:red"><sup>*</sup></span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100%" colspan="2">
+                                    <textarea ng-model="myTextarea" class="form-control" background-color:powderblue" ng-disabled="radioDisabled3" title="Accepts 1 or more ICL File Name/s separated with comma (,). Press [enter] to add." name="txtICLFnameOutwardR3" id="txtICLFnameOutwardR3" style="border-left-width:2px; background-color:powderblue; resize: none; height: 50px;max-height: 50px;  overflow-y: auto" ng-focus="searchByFocusOut(3)" placeholder="Enter ICL Filename/s" ng-required="isRequired"></textarea>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <table style="width:100%" border="0" class="modalTr">
+                            <tr>
+                                <td>
+                                    <select name="itemListIclFileName" id="itemListIclFileName" size={{itemListIclFileNameSize}} class="form-control" style=" height: 100px;max-height: 100px;  overflow-y: no-display">
+                                        <option ng-repeat="x in itemListIclFileNameX" ng-dblclick="itemListIclFileNameXDblClick(x)"> {{x.iclFilename}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table style="width:100%" border="0" class="modalTr">
+                            <tr>
+                                <td>
+                                    <br />
+                                    <button type="button" style="width:50%;float:right" class="btn btn-success" name="btnSearchOutward" id="btnSearchOutward" ng-model="btnSearchOutward" ng-click="btnSearchOutwardClick()">Search</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" style="width:50%; float:right" class="btn btn-danger" name="btnResetOutward" id="btnResetOutward" ng-model="btnResetOutward" ng-click="btnResetOutwardClick()">Reset</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                </div>
+            </div>
+            <div id="sidebarMid"></div>
+            <div id="container">
+                <div id="content">
+
+                    <span style="font-size:20px;color:maroon"><sup>*</sup>No available view, module for extraction report only<sup>*</sup></span>
+                    <table id="tblIWOWDetailsOuward" name="tblIWOWDetailsOuward" ng-model="tblIWOWDetailsOuward" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+                        <thead id="tableHeader">
+                            <tr>
+                                <th width="1%">#</th>
+                                <th>BUSINESS DATE</th>
+                                <th>MODULE</th>
+                                <th>BATCH ID</th>
+                                <th>CHECK NUMBER</th>
+                                <th>CHECK STATUS</th>
+                                <th>AMOUNT</th>
+                                <th>SCAN ACCOUNT NO.</th>
+                                <th>SCAN BRSTN</th>
+                                <th>SCAN BY</th>
+                                <th>SCAN TIME</th>
+                                <th>AMOUNT KEYING/PDC PROCESSING USER</th>
+                                <th>AMOUNT KEYING/PDC PROCESSING TIME</th>
+                                <th>ACCOUNT NO. KEYING USER</th>
+                                <th>ACCOUNT NO. KEYING TIME</th>
+                                <th>PDC VERIFICATION USER</th>
+                                <th>PDC VERIFICATION TIME</th>
+                                <th>PDC ALLOW/HOLD USER</th>
+                                <th>PDC ALLOW/HOLD TIME</th>
+                                <th>BRANCH NAME</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr align="center" ng-repeat="x in IWOWDetailsOutward | orderBy: 'SCANNED_TIME'" track by $index>
+                                <td align="left" width="1%">{{ $index +1 }}</td>
+                                <td>&nbsp; {{ x.BUSINESS_DATE }}</td>
+                                <td>{{ x.MODULE }}</td>
+                                <td>&nbsp; {{ x.BATCH_ID }}</td>
+                                <td>&nbsp; {{ x.CHECK_NUMBER }}</td>
+                                <td>{{ x.CHECK_STATUS }}</td>
+                                <td>{{ x.AMOUNT  | number:2 }}</td>
+                                <td>&nbsp; {{ x.SCAN_ACCOUNT }}</td>
+                                <td>&nbsp; {{ x.SCAN_BRSTN }}</td>
+                                <td>&nbsp; {{ x.SCANNED_BY}}</td>
+                                <td>&nbsp; {{ x.SCANNED_TIME }}</td>
+                                <td>&nbsp; {{ x.AMOUNT_KEYING_USR}}</td>
+                                <td>&nbsp; {{ x.AMOUNT_KEYING_TIME }}</td>
+                                <td>&nbsp; {{ x.ACCOUNT_NO_KEYING_USR }}</td>
+                                <td>&nbsp; {{ x.ACCOUNT_NO_KEYING_TIME }}</td>
+                                <td>&nbsp; {{ x.PDC_VERIFICATION_USER }}</td>
+                                <td>&nbsp; {{ x.PDC_VERIFICATION_TIME }}</td>
+                                <td>&nbsp; {{ x.PDC_ALLOW_HOLD_USER }}</td>
+                                <td>&nbsp; {{ x.PDC_ALLOW_HOLD_TIME }}</td>
+                                <td>{{ x.BRANCH_NAME}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot id="tableFooter">
+                            <tr>
+                                <td>TOTAL COUNT : </td>
+                                <td colspan="3">{{ IWOWDetailsOutward.length }}</td>
+                                <td>TOTAL AMOUNT : </td>
+                                <td colspan="3">{{ getTotal() | number:2 }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div> @*end div content container*@
+        </div>
+        <!-- Modal content -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" @*style="background-color:maroon"*@>
+                        <button type="button" id="close" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Please select date/dates below:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label for="radioModalExactDate">
+                                        <input type="radio" name="radioModalDate" id="radioModalExactDate" ng-model="radioModalExactDate" ng-click="radioModalExactDateClick()"> Exact Date:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input id="modal-date-exact" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px" max="9999-12-31" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="radioModalDateRange" style="margin-top:10px">
+                                        <input type="radio" name="radioModalDate" id="radioModalDateRange" ng-model="radioModalDateRange" ng-click="radioModalDateRangeClick()"> Date Range:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input id="modal-date-from" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px;margin-top:10px" max="9999-12-31" />
+                                </td>
+                                <td style="padding-left:35px">
+                                    <p style="margin-top:20px"><b>To:</b></p>
+                                </td>
+                                <td>
+                                    <input id="modal-date-to" name="modal-date" type="date" class="form-control" style="border-left-width:2px;background-color:powderblue;margin-left:20px;margin-top:10px" max="9999-12-31" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <span style="color:red;float:left;" ng-show="isErrorVisible">Start Date is greater than the End Date.</span>
+                        <span style="color:red;float:left;" ng-show="isErrorVisible1">Start/End Date is empty.</span>
+                        <button type="button" class="btn btn-success" ng-click="btnModalClick()">Okay</button>
+                        @*<button type="button" class="btn btn-default" data-dismiss="modal">Close </button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading">
+            <img id="loading-image" src="~/Content/loading.gif" alt="Loading..." />
+        </div>
+        <table id="tblIWOWDetailsEx" name="tblIWOWDetailsEx" ng-model="tblIWOWDetailsEx" class="table table-hover" border="0" style="border-width:thin; max-width: inherit" hidden>
+            <thead id="tableHeader">
+                <tr>
+                    <th width="1%">#</th>
+                    <th>TRANSACTION DATE </th>
+                    <th>
+                        CHECK <br /> NUMBER
+                    </th>
+                    <th>AMOUNT</th>
+                    <th>AMOUNT WISE<br />USER</th>
+                    <th>SVS VERIFICATION<br />TIME</th>
+                    <th>SVS VERIFY BY<br />USERID</th>
+                    <th>SVS VERIFY BY<br />USER NAME</th>
+                    <th>CHECK BRSTN</th>
+                    <th>CHECK BRANCH<br />NAME</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr align="center" ng-repeat="x in IWOWDetailsEx" track by $index ng-click="rowSummaryClick(x)">
+                    <td align="left" width="1%">{{ $index +1 }}</td>
+                    <td>{{ x.TRANSACTION_DATE }}</td>
+                    <td>&nbsp; {{ x.INSTRUMENT_NUMBER }}</td>
+                    <td> {{ x.ZP_AMOUNT | number:2 }}</td>
+                    <td> {{ x.ZP_AMT_CREATOR }}</td>
+                    <td>{{ x.SVSFV_TIME}}</td>
+                    <td> {{x.SVS_FIRST }}</td>
+                    <td>{{ x.FNAME }}</td>
+                    <td>{{ x.CHECK_BRSTN}}</td>
+                    <td>{{ x.BRANCH_NAME}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</body>
+@*
+    <script src="~/ScriptsNg/Controller/Reference/searchEngineIWOW.js"></script>*@
